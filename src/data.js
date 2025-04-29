@@ -1,27 +1,12 @@
 export const navItems = [
-    {
-      title: 'Início',
-      link: '/home',
-      active: true,
-    },
-    {
-      title: 'Produtos',
-      link: '/produtos',
-      active: false,
-    },
-    {
-      title: 'Serviços',
-      link: '/servicos',
-      active: false,
-    },
-    {
-      title: 'Sobre Nós',
-      link: '/sobre',
-      active: false,
-    },
-    {
-      title: 'Contato',
-      link: '/contato',
-      active: false,
-    },
-  ];
+  {
+    id: 1,
+    title: 'Início',
+    link: '/home',
+    active: true,
+  },
+  { id: 2, title: 'Produtos', link: '/produtos', active: false },
+  { id: 3, title: 'Serviços', link: '/servicos', active: false },
+  { id: 4, title: 'Sobre Nós', link: '/sobre', active: false },
+  { id: 5, title: 'Contato', link: '/contato', active: false },
+];

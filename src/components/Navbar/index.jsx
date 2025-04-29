@@ -3,11 +3,11 @@ import { navItems } from '../../data';
 export default function Navbar() {
   return (
     <div className='bg-black'>
-      <div className=' text-gray-300 text-sm py-2 px-2 max-w-7xl mx-auto'>
+      <div className=' text-gray-400 text-sm py-2 px-2 max-w-7xl mx-auto'>
         Don't miss our <u className='cursor-pointer hover:text-white'>holiday offer</u> - up to 50% OFF!
       </div>
 
-      <nav className='bg-white py-6 px-8 text-gray-600 '>
+      <nav className='bg-white py-6 px-8 text-gray-600 hidden md:block'>
         <div className='flex justify-between items-center max-w-7xl mx-auto'>
           <img src='../images/logo-ecommerce.png' alt='Logo' className='h-10 cursor-pointer' />
 
