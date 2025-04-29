@@ -1,5 +1,5 @@
-import { navItems } from '../../data';
-import { Link } from "react-router";
+import { navItems } from '../../../data';
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (

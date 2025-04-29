@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LayoutContainer from '../ui/LayoutContainer';
+import LayoutContainer from '../../components/layout/LayoutContainer';
 
 const Categories = () => {
   // State to track hover status for each category card

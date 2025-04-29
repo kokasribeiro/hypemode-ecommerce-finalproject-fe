@@ -1,5 +1,5 @@
 import React from 'react';
-import LayoutContainer from '../ui/LayoutContainer';
+import LayoutContainer from '../../components/layout/LayoutContainer';
 
 const NewsletterUpdates = () => {
   return (

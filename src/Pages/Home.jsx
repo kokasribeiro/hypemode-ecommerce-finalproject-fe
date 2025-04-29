@@ -1,27 +1,26 @@
-import NavBar from '../components/NavBar';
-import Header from '../components/Header';
-import Benefits from '../components/Benefits';
-import NewArrivals from '../components/NewArrivals';
-import Categories from '../components/Categories';
-import PopularProducts from '../components/PopularProducts';
-import TrendInsights from '../components/TrendInsights';
-import HighlightsProducts from '../components/HighlightsProducts';
-import NewsletterUpdates from '../components/NewsletterUpdates';
-import FinalSale from '../components/FinalSale';
-
+// import NavBar from '../components/ui/Navbar';
+// import HeaderMain from '../components/layout/HeaderMain';
+import Benefits from '../sections/Benefits';
+import NewArrivals from '../sections/NewArrivals';
+import Categories from '../sections/Categories';
+import PopularProducts from '../sections/PopularProducts';
+import TrendInsights from '../sections/TrendInsights';
+import HighlightsProducts from '../sections/HighlightsProducts';
+import NewsletterUpdates from '../sections/NewsletterUpdates';
+import FinalSale from '../sections/FinalSale';
+import HeaderMain from '../components/layout/HeaderMain';
 export default function Home() {
   return (
-    <main className='min-h-screen bg-white'>
-    <NavBar />
-    <Header />
-    <Benefits />
-    <NewArrivals />
-    <Categories />
-    <PopularProducts />
-    <TrendInsights />
-    <HighlightsProducts />
-    <NewsletterUpdates />
-    <FinalSale />
-  </main>
+    <>
+      <HeaderMain />
+      <Benefits />
+      <NewArrivals />
+      <Categories />
+      <PopularProducts />
+      <TrendInsights />
+      <HighlightsProducts />
+      <NewsletterUpdates />
+      <FinalSale />
+    </>
   );
 }

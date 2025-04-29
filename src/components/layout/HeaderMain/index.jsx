@@ -1,8 +1,8 @@
 import React from 'react';
-import ButtonPrimary from '../ui/ButtonPrimary';
-import LayoutContainer from '../ui/LayoutContainer';
+import ButtonPrimary from '../../ui/ButtonPrimary';
+import LayoutContainer from '../LayoutContainer';
 
-const Header = () => {
+const HeaderMain = () => {
   return (
     <LayoutContainer>
       <header>
@@ -64,4 +64,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderMain;

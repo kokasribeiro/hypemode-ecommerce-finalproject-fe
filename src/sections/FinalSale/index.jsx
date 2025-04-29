@@ -1,6 +1,6 @@
 import React from 'react';
-import LayoutContainer from '../ui/LayoutContainer';
-import ProductCard from '../ui/ProductCard';
+import LayoutContainer from '../../components/layout/LayoutContainer';
+import ProductCard from '../../components/ui/ProductCard';
 
 const FinalSale = () => {
   const textContent = (
