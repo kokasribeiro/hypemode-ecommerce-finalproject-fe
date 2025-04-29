@@ -1,9 +1,9 @@
 import React from 'react';
 import ButtonPrimary from '../ButtonPrimary';
 
-const ProductCard = () => {
+const ProductCard = ({ className }) => {
   return (
-    <div className='w-full'>
+    <div className={`w-full ${className}`}>
       <div className=''>
         <img
           src='./images/tshirt.png '

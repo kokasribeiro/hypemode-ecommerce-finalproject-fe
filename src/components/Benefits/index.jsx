@@ -6,31 +6,44 @@ import { MdOutlineSupportAgent } from 'react-icons/md';
 import { TbTruckDelivery } from 'react-icons/tb';
 import LayoutContainer from '../ui/LayoutContainer';
 
+// Define the benefit data in an array
+const benefitsData = [
+  {
+    title: 'Secure Payment',
+    subtitle: '100% secure payment',
+    icon: <FaCreditCard className='text-5xl' />,
+  },
+  {
+    title: '30 Days Return',
+    subtitle: 'If goods have problems',
+    icon: <RiMoneyDollarCircleFill className='text-5xl' />,
+  },
+  {
+    title: '24/7 Support',
+    subtitle: 'Dedicated support',
+    icon: <MdOutlineSupportAgent className='text-5xl' />,
+  },
+  {
+    title: 'Free Delivery',
+    subtitle: 'For all order over 80$',
+    icon: <TbTruckDelivery className='text-5xl' />,
+  },
+];
+
 const Benefits = () => {
   return (
     <section className='bg-black'>
       <LayoutContainer>
-        <div className='flex justify-between'>
-          <BenefitCard
-            title='Secure Payment'
-            subtitle='100% secure payment'
-            icon={<FaCreditCard className='text-5xl' />}
-          />
-          <BenefitCard
-            title='30 Days Return'
-            subtitle='If goods have problems'
-            icon={<RiMoneyDollarCircleFill className='text-5xl' />}
-          />
-          <BenefitCard
-            title='24/7 Support'
-            subtitle='Dedicated support'
-            icon={<MdOutlineSupportAgent className='text-5xl' />}
-          />
-          <BenefitCard
-            title='Free Delivery'
-            subtitle='For all order over 80$'
-            icon={<TbTruckDelivery className='text-5xl' />}
-          />
+        <div className='flex flex-wrap justify-between'> {/* Added flex-wrap for responsiveness */}
+          {/* Map over the benefits data */}
+          {benefitsData.map((benefit, index) => (
+            <BenefitCard
+              key={index} // Use index or a unique ID if available as key
+              title={benefit.title}
+              subtitle={benefit.subtitle}
+              icon={benefit.icon}
+            />
+          ))}
         </div>
       </LayoutContainer>
     </section>
