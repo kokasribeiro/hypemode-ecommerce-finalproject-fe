@@ -5,12 +5,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import MainLayout from './components/layout/MainLayout';
 
-import Home from './pages/Home.jsx';
-import Products from './pages/Products.jsx';
-import Contact from './pages/Contact.jsx';
-import Services from './pages/Services.jsx';
-import AboutUs from './pages/AboutUs.jsx';
-import News from './pages/News.jsx';
+import Home from './pages/Home';
+import Products from './pages/Products';
+import Contact from './pages/Contact';
+import Services from './pages/Services';
+import AboutUs from './pages/AboutUs';
+import News from './pages/News';
 
 const router = createBrowserRouter([
   {
