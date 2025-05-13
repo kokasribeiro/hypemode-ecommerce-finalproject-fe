@@ -17,31 +17,31 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <Home />,
       },
       {
-        path: "/products",
+        path: '/products',
         element: <Products />,
       },
       {
-        path: "/contact",
+        path: '/contact',
         element: <Contact />,
       },
       {
-        path: "/services",
+        path: '/services',
         element: <Services />,
       },
       {
-        path: "/about",
+        path: '/about',
         element: <AboutUs />,
       },
       {
-        path: "/news",
+        path: '/news',
         element: <News />,
       },
-    ]
-  }
+    ],
+  },
 ]);
 
 createRoot(document.getElementById('root')).render(
