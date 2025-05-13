@@ -6,7 +6,6 @@ import { MdOutlineSupportAgent } from 'react-icons/md';
 import { TbTruckDelivery } from 'react-icons/tb';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 
-// Define the benefit data in an array
 const benefitsData = [
   {
     title: 'Secure Payment',
@@ -34,10 +33,10 @@ const Benefits = () => {
   return (
     <section className='bg-black'>
       <LayoutContainer>
-        <div className='flex flex-wrap justify-between'> 
+        <div className='flex flex-wrap justify-between'>
           {benefitsData.map((benefit, index) => (
             <BenefitCard
-              key={index} 
+              key={index}
               title={benefit.title}
               subtitle={benefit.subtitle}
               icon={benefit.icon}

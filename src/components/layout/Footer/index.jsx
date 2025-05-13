@@ -1,7 +1,5 @@
 import React from 'react';
 import LayoutContainer from '../LayoutContainer';
-// Assuming you have a logo image file (e.g., logo.svg or logo.png)
-// import Logo from '../../assets/logo.svg'; // Adjust the path as needed
 
 const Footer = () => {
   return (
@@ -42,7 +40,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 4: Contact Us */}
           <div>
             <h5 className="font-bold mb-4">Contact Us</h5>
             <address className="not-italic text-gray-600 text-sm">
@@ -56,9 +53,8 @@ const Footer = () => {
 
         </div>
 
-        {/* Logo Section */}
         <div className="text-center pt-9 border-t border-gray-200"> 
-          <img src="/imagens/logo-ecommerce.png" alt="HypeMode Logo" className="h-6 mx-auto" />
+          <img src="/images/logo-ecommerce.png" alt="HypeMode Logo" className="h-15 mx-auto" />
            <span className="text-xl font-semibold">HypeMode</span> 
         </div>
 

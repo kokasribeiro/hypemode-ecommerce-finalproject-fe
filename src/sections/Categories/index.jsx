@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 
 const Categories = () => {
-  // State to track hover status for each category card
   const [hoveredCard, setHoveredCard] = useState(null);
 
-  // Categories data
   const categories = [
     {
       id: 1,

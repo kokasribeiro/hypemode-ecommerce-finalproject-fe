@@ -9,18 +9,28 @@ import HighlightsProducts from '../sections/HighlightsProducts';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import FinalSale from '../sections/FinalSale';
 import HeaderMain from '../components/layout/HeaderMain';
+import { useState, useEffect } from 'react';
+
 export default function Home() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products')
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
+
   return (
     <>
       <HeaderMain />
       <Benefits />
-      <NewArrivals />
+      <NewArrivals products={products} />
       <Categories />
-      <PopularProducts />
+      <PopularProducts products={products} />
       <TrendInsights />
-      <HighlightsProducts />
+      <HighlightsProducts products={products} />
       <NewsletterUpdates />
-      <FinalSale />
+      <FinalSale products={products} />
     </>
   );
 }

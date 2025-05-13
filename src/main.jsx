@@ -3,10 +3,8 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-// Import Layout
 import MainLayout from './components/layout/MainLayout';
 
-// Import Pages
 import Home from './pages/Home.jsx';
 import Products from './pages/Products.jsx';
 import Contact from './pages/Contact.jsx';
