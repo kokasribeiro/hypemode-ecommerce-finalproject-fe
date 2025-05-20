@@ -24,16 +24,21 @@ const ProductCard = ({ className, product, titleWhite }) => {
   const handleProductClick = () => {
     navigate(`/products/${product.id}`);
   };
-
+  console.log(product.sale);
   return (
     <div className={`w-full ${className}`}>
-      <div className=''>
+      <div className='relative'>
         <img
           src={product.image}
           alt={product.name}
           className='w-full h-92 object-cover cursor-pointer transition-transform duration-500 ease-in-out hover:scale-110'
           onClick={handleProductClick}
         />
+        {product.sale && (
+          <div className='absolute top-0 right-0 bg-red-600 border border-black p-1 m-2'>
+            <p className='text-white text-sm font-bold'>ON SALE</p>
+          </div>
+        )}
         <div className='mt-8'>
           <h2
             className={`text-lg font-semibold ${
@@ -43,6 +48,7 @@ const ProductCard = ({ className, product, titleWhite }) => {
           >
             {product.name}
           </h2>
+
           <div className={`flex items-center mt-2 ${titleWhite ? 'text-white' : ''}`}>{renderStars()}</div>
           <p className='text-gray-400 text-sm font-bold mt-3'>{product.price} €</p>
           <p className='text-gray-500 text-sm mt-2'>{product.category}</p>

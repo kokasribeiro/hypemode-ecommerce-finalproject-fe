@@ -1,53 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
-
+import { categories } from '../../data';
 const Categories = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const navigate = useNavigate();
-
-  const categories = [
-    {
-      id: 1,
-      image: './public/images/home/categories/hypemode-jacket.png',
-      alt: 'jacket category',
-      count: '61 articles',
-      title: 'Jackets',
-      category: 'Jackets',
-    },
-    {
-      id: 2,
-      image: './public/images/home/categories/sweater-hypemode.png',
-      alt: 'sweater category',
-      count: '89 articles',
-      title: 'Sweaters',
-      category: 'Sweaters',
-    },
-    {
-      id: 3,
-      image: '/public/images/Home/Categories/TshirtCategory.png',
-      alt: 'T-shirts category',
-      count: '45 articles',
-      title: 'T-Shirts',
-      category: 'T-Shirts',
-    },
-    {
-      id: 4,
-      image: './public/images/home/categories/acessories-hypemode.png',
-      alt: 'Accessories category',
-      count: '20 articles',
-      title: 'Accessories',
-      category: 'Accessories',
-    },
-    {
-      id: 5,
-      image: '/public/images/Home/Categories/ShoesCategory.png',
-      alt: 'Shoes category',
-      count: '30 articles',
-      title: 'Shoes',
-      category: 'Shoes',
-    },
-  ];
 
   const handleCategoryClick = (categoryName) => {
     console.log(`Navigating to category: ${categoryName}`);

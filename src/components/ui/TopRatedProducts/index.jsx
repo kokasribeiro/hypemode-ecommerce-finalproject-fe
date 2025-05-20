@@ -6,7 +6,6 @@ const TopRatedProducts = ({ products = [] }) => {
   const navigate = useNavigate();
   const isLoading = products.length === 0;
 
-  // Sort and take top 5 products based on displayRating
   const ratedProducts = [...products].sort((a, b) => (b.displayRating || 0) - (a.displayRating || 0)).slice(0, 5);
 
   const handleProductClick = (productId) => {

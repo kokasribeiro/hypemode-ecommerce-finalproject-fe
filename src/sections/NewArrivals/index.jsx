@@ -1,16 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 import ProductCard from '../../components/ui/ProductCard';
 
 const NewArrivals = ({ showViewAll = false, products = [] }) => {
+  const navigate = useNavigate();
+
   const recentProducts = [...products]
     .sort((a, b) => b.id - a.id)
     .slice(0, 4)
     .map((product) => {
-      // Generate random rating between 3 and 5
       const randomRating = Math.floor(Math.random() * 3) + 3; // 3, 4, or 5
       return { ...product, displayRating: randomRating };
     });
+
+  const handleViewAll = () => {
+    // Navigate to products page with recent sort option
+    navigate('/products?sort=recent');
+  };
 
   return (
     <LayoutContainer className='my-20'>
@@ -21,7 +28,10 @@ const NewArrivals = ({ showViewAll = false, products = [] }) => {
         </div>
         {showViewAll && (
           <div className='flex justify-between items-center mb-6'>
-            <button className='border border-gray-400 text-gray-700 py-2 px-5 text-sm font-medium hover:bg-red-500 transition duration-200'>
+            <button
+              onClick={handleViewAll}
+              className='border border-gray-400 text-gray-700 py-2 px-5 text-sm font-medium hover:bg-red-500 transition duration-200'
+            >
               VIEW ALL
             </button>
           </div>

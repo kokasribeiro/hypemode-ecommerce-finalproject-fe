@@ -35,7 +35,7 @@ export default function ProductDetail() {
       stars.push(
         <Star
           key={`star-${i}`}
-          className={`h-5 w-5 ${i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
+          className={`h-4 w-4 md:h-5 md:w-5 ${i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
         />,
       );
     }
@@ -47,7 +47,7 @@ export default function ProductDetail() {
       <>
         <SecondaryHeader title='Product Detail' />
         <LayoutContainer>
-          <div className='flex justify-center items-center min-h-[400px]'>
+          <div className='flex justify-center items-center min-h-[200px] md:min-h-[400px] p-4'>
             <p>Loading product details...</p>
           </div>
         </LayoutContainer>
@@ -60,7 +60,7 @@ export default function ProductDetail() {
       <>
         <SecondaryHeader title='Product Not Found' />
         <LayoutContainer>
-          <div className='flex justify-center items-center min-h-[400px]'>
+          <div className='flex justify-center items-center min-h-[200px] md:min-h-[400px] p-4'>
             <p>Product not found</p>
           </div>
         </LayoutContainer>
@@ -72,22 +72,29 @@ export default function ProductDetail() {
     <>
       <SecondaryHeader title={product.name || 'Product Detail'} />
       <LayoutContainer>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-10 my-10'>
-          <div className='flex justify-center'>
-            <img src={product.image} alt={product.name} className='max-h-[500px] object-contain' />
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 my-6 md:my-10 px-4 md:px-0'>
+          <div className='flex justify-center items-center bg-gray-50 rounded-lg p-4'>
+            <img
+              src={product.image}
+              alt={product.name}
+              className='max-h-[250px] md:max-h-[500px] object-contain'
+              loading='lazy'
+            />
           </div>
-          <div className='space-y-4'>
-            <h1 className='text-3xl font-bold'>{product.name}</h1>
+          <div className='space-y-3 md:space-y-4'>
+            <h1 className='text-2xl md:text-3xl font-bold'>{product.name}</h1>
             <div className='flex items-center space-x-2'>
               <div className='flex'>{renderStars()}</div>
-              <span className='text-gray-500'>(5 reviews)</span>
+              <span className='text-gray-500 text-sm'>(5 reviews)</span>
             </div>
-            <p className='text-2xl font-bold'>€{Number(product.price).toFixed(2)}</p>
-            <div className='my-6'>
-              <h3 className='text-lg font-semibold mb-2'>Description</h3>
-              <p className='text-gray-600'>{product.description || 'No description available for this product.'}</p>
+            <p className='text-xl md:text-2xl font-bold'>€{Number(product.price).toFixed(2)}</p>
+            <div className='my-4 md:my-6'>
+              <h3 className='text-base md:text-lg font-semibold mb-2'>Description</h3>
+              <p className='text-gray-600 text-sm md:text-base'>
+                {product.description || 'No description available for this product.'}
+              </p>
             </div>
-            <div className='pt-4'>
+            <div className='pt-2 md:pt-4'>
               <ButtonPrimary buttonText='Add to Cart' />
             </div>
           </div>

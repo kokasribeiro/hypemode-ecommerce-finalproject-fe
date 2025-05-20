@@ -10,20 +10,30 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
   const minPos = ((minValue - minPrice) / (maxPrice - minPrice)) * 100;
   const maxPos = ((maxValue - minPrice) / (maxPrice - minPrice)) * 100;
 
-  useEffect(() => {
+  // Don't trigger onFilterChange on every value change
+  // Only update when user finishes interacting with the slider
+  const updateFilterOnComplete = useCallback(() => {
     if (onFilterChange) {
       onFilterChange({ min: minValue, max: maxValue });
     }
   }, [minValue, maxValue, onFilterChange]);
 
+  // Initial setup - just once
+  useEffect(() => {
+    setMinValue(minPrice);
+    setMaxValue(maxPrice);
+  }, [minPrice, maxPrice]);
+
   const handleMinChange = (e) => {
     const value = Math.min(Number(e.target.value), maxValue - 1);
     setMinValue(value);
+    updateFilterOnComplete();
   };
 
   const handleMaxChange = (e) => {
     const value = Math.max(Number(e.target.value), minValue + 1);
     setMaxValue(value);
+    updateFilterOnComplete();
   };
 
   const handleMinInputChange = (e) => {
@@ -38,6 +48,11 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
     if (value <= maxPrice && value > minValue) {
       setMaxValue(value);
     }
+  };
+
+  // Apply filter when input field is done editing
+  const handleInputBlur = () => {
+    updateFilterOnComplete();
   };
 
   const handleMouseDown = (e, dot) => {
@@ -69,7 +84,8 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
     setActiveDot(null);
-  }, []);
+    updateFilterOnComplete();
+  }, [updateFilterOnComplete]);
 
   useEffect(() => {
     if (isDragging) {
@@ -134,25 +150,29 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
       </div>
 
       <div className='flex justify-between gap-2 mt-2'>
-        <div className='border rounded p-2 w-24 text-center'>
+        <div className='border rounded p-2 w-24 text-center relative'>
           <input
             type='number'
             value={minValue}
             onChange={handleMinInputChange}
-            className='w-full text-center focus:outline-none'
+            onBlur={handleInputBlur}
+            className='w-full text-center focus:outline-none pr-4'
             min={minPrice}
             max={maxValue - 1}
           />
+          <span className='absolute right-2 top-1/2 transform -translate-y-1/2'>€</span>
         </div>
-        <div className='border rounded p-2 w-24 text-center'>
+        <div className='border rounded p-2 w-24 text-center relative'>
           <input
             type='number'
             value={maxValue}
             onChange={handleMaxInputChange}
-            className='w-full text-center focus:outline-none'
+            onBlur={handleInputBlur}
+            className='w-full text-center focus:outline-none pr-4'
             min={minValue + 1}
             max={maxPrice}
           />
+          <span className='absolute right-2 top-1/2 transform -translate-y-1/2'>€</span>
         </div>
       </div>
     </div>

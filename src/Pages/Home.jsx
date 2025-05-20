@@ -22,9 +22,9 @@ export default function Home() {
     <>
       <HeaderMain />
       <Benefits />
-      <NewArrivals products={products} />
+      <NewArrivals showViewAll={true} products={products} />
       <Categories />
-      <PopularProducts products={products} />
+      <PopularProducts showViewAll={true} products={products} />
       <TrendInsights />
       <HighlightsProducts products={products} />
       <NewsletterUpdates />
