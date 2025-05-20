@@ -1,7 +1,7 @@
 export const navItems = [
   {
     id: 1,
-    title: 'Início',
+    title: 'Home',
     link: '/',
     active: true,
   },

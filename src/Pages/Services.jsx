@@ -63,37 +63,38 @@ export default function Services() {
           </div>
         </div>
         <div className='flex flex-wrap justify-center gap-4 md:gap-8 my-6 md:my-8'>
-          <img src='/images/logo-nike-sponsers1.png' alt='Logo Nike' className='h-30 mx-auto' />
-          <img src='/images/urbancore-sponser2.png' alt='Logo Lv' className='h-30 mx-auto' />
-          <img src='/images/badbunny-logo-sponser3.png' alt='Logo BadBunny' className='h-30 mx-auto' />
-          <img src='/images/hypemode-sponser4.png' alt='Logo Adidas' className='h-30 mx-auto' />
+          <img src='public/images/services/logo-nike-sponsers1.png' alt='Logo Nike' className='h-30 mx-auto' />
+          <img src='public/images/services/urbancore-sponser2.png' alt='Logo Lv' className='h-30 mx-auto' />
+          <img src='public/images/services/badbunny-logo-sponser3.png' alt='Logo BadBunny' className='h-30 mx-auto' />
+          <img src='public/images/services/hypemode-sponser4.png' alt='Logo Adidas' className='h-30 mx-auto' />
         </div>
         <div className='max-w-6xl mx-auto my-10 md:my-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start px-2 md:px-0'>
           <div className='flex flex-col items-center md:items-start w-full'>
             <img
-              src='/images/WomenPhoto-ServicesCard.png'
+              src='public/images/services/WomenPhoto-ServicesCard.png'
               alt='Serviço'
               className='rounded w-full object-cover max-h-[300px] md:max-h-[400px] mb-6'
             />
             <h2 className='text-3xl md:text-4xl font-bold mb-2 text-left w-full'>
-              Condimentum Mattis Pellentesque Bibendum
+              Style That Delivers More Than Just Looks
             </h2>
             <p className='mb-4 text-gray-600 text-left w-full'>
-              Integer at faucibus urna. Nullam condimentum leo id elit sagittis auctor. Curabitur elementum nunc a leo
-              imperdiet, nec elementum diam elementum. Etiam elementum euismod commodo.
+              We don’t just sell clothes—we build the experience. From exclusive drops to reliable support, we’re here
+              to bring you quality, confidence, and culture. Explore how we’ve got your back, from first click to final
+              fit.
             </p>
             <div className='w-full'>
-              <AccordionItem title='Pellentesque tincidunt tristique neque?'>
-                Description for this block. Use this space for describing your block. Any text will do. Description for
-                this block. You can use this space for describing your block.
+              <AccordionItem title='How do I know if a product will fit me?'>
+                Every product page includes a detailed size guide. If you're between sizes, we recommend sizing up for
+                that perfect streetwear fit.
               </AccordionItem>
-              <AccordionItem title='Suspendisse sed ultricies nisl, pharetra rutrum mauris?'>
-                Description for this block. Use this space for describing your block. Any text will do. Description for
-                this block. You can use this space for describing your block.
+              <AccordionItem title='Can I return or exchange items if they don’t work out?'>
+                Yes! You have 14 days to return or exchange any unworn items. Just keep the tags on and use the return
+                form in your package or online.
               </AccordionItem>
-              <AccordionItem title='Fusce at egestas libero convallis egestasullamcorper?'>
-                Description for this block. Use this space for describing your block. Any text will do. Description for
-                this block. You can use this space for describing your block.
+              <AccordionItem title='Do you offer limited edition or exclusive drops?'>
+                Absolutely. We regularly launch exclusive drops and collabs—sign up for our newsletter or follow us on
+                Instagram so you never miss out.
               </AccordionItem>
             </div>
             <button className='mt-6 border border-black px-6 py-2 font-medium hover:bg-red-500 hover:text-white transition self-start'>
@@ -104,15 +105,15 @@ export default function Services() {
             <h3 className='text-red-500 font-bold mb-4 md:mb-6'>OUR MISSION</h3>
             <h2 className='text-3xl md:text-4xl font-bold mb-4'>Your Personal Styling Team Always Here</h2>
             <p className='mb-6 md:mb-8 text-gray-600 text-base md:text-lg'>
-              Integer at faucibus urna. Nullam condimentum leo id elit sagittis auctor. Curabitur elementum nunc a leo
-              imperdiet, nec elementum diam elementum. Etiam elementum euismod commodo. Proin eleifend eget quam ut
-              efficitur. Mauris a accumsan mauris. Phasellus egestas et risus sit amet hendrerit. Nulla facilisi.
+              We’re here to do more than deliver clothes—we help you craft your identity. Whether you're chasing trends
+              or defining your own, our mission is to bring confidence, culture, and comfort to every fit. Style isn’t
+              just what you wear—it’s how you wear it.
             </p>
             <button className='border border-black px-6 py-2 font-medium hover:bg-red-500 hover:text-white transition mb-6'>
               MORE DETAILS
             </button>
             <img
-              src='/images/clothes-ServicesCard.png'
+              src='public/images/services/clothes-ServicesCard.png'
               alt='Other Service'
               className='rounded w-full object-cover max-h-[350px] md:max-h-[470px] mt-2'
             />

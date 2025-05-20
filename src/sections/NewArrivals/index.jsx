@@ -3,7 +3,14 @@ import LayoutContainer from '../../components/layout/LayoutContainer';
 import ProductCard from '../../components/ui/ProductCard';
 
 const NewArrivals = ({ showViewAll = false, products = [] }) => {
-  const recentProducts = [...products].sort((a, b) => b.id - a.id).slice(0, 4);
+  const recentProducts = [...products]
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 4)
+    .map((product) => {
+      // Generate random rating between 3 and 5
+      const randomRating = Math.floor(Math.random() * 3) + 3; // 3, 4, or 5
+      return { ...product, displayRating: randomRating };
+    });
 
   return (
     <LayoutContainer className='my-20'>

@@ -2,20 +2,28 @@ import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
+import { useState, useEffect } from 'react';
 
 export default function Contact() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products')
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
+
   return (
     <>
       <SecondaryHeader title='Contact' />
       <LayoutContainer>
-        <h1 className='text-2xl font-bold'>My contacts</h1>
         <div className='container mx-auto px-4 py-12'>
           <div className='flex flex-col md:flex-row items-start justify-center gap-8 md:gap-16'>
             <div className='md:w-1/2 flex justify-center md:justify-end'>
               <div className='relative max-w-md w-full'>
                 <div className='absolute inset-0 transform -translate-x-4 -translate-y-4 z-0'></div>
                 <img
-                  src='/images/contact-image.png'
+                  src='public/images/contact/contact-image.png'
                   alt='Woman with headphones'
                   className='relative z-10 w-full h-auto object-cover'
                 />
@@ -83,7 +91,7 @@ export default function Contact() {
           </div>
         </div>
         <div className='container mx-auto px-4 py-8'>
-          <NewArrivals showViewAll={true} />
+          <NewArrivals showViewAll={true} products={products} />
         </div>
         <div className='container mx-auto px-4 py-12'>
           <NewsletterUpdates />

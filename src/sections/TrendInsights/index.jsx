@@ -5,7 +5,7 @@ const TrendInsights = () => {
   return (
     <LayoutContainer className='my-20'>
       <div className='flex justify-end relative'>
-        <img src='./images/insightDress.png' alt='WomenInsightDress' className='md:w-200 h-auto' />
+        <img src='./public/images/home/insight/insightDress.png' alt='WomenInsightDress' className='md:w-200 h-auto' />
 
         {/* <div class='absolute top-70 left-1 bg-black bg-opacity-70 text-white p-20'>
           <h3 class='text-5xl font-semibold '>

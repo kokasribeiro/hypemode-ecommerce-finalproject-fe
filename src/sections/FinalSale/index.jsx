@@ -13,8 +13,9 @@ const FinalSale = ({ products = [] }) => {
         <h1 className='text-red-500 text-2xl font-bold'>50€ ONLY! </h1>
         <h1 className='text-white text-4xl font-bold pt-8'>Final Sale</h1>
         <p className='text-white pt-8'>
-          Mauris vitae ultricies leo integer malesuada cursus. Odio tempor orci dapibus ultrices in. Egestas diam in
-          arcu cursus euismod dictum purus viverra accumsan.
+          This is your last chance to grab the pieces you've been eyeing. Our Final Sale is all about no restocks,
+          and no second chances. From everyday essentials to standout statement pieces, it’s now or never. Stock is limited—and once it’s gone,
+          it’s gone for good. Don’t sleep on it
         </p>
       </div>
       <div className='mt-8'>

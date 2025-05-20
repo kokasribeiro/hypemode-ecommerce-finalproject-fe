@@ -1,5 +1,3 @@
-// import NavBar from '../components/ui/Navbar';
-// import HeaderMain from '../components/layout/HeaderMain';
 import Benefits from '../sections/Benefits';
 import NewArrivals from '../sections/NewArrivals';
 import Categories from '../sections/Categories';

@@ -33,14 +33,9 @@ const Benefits = () => {
   return (
     <section className='bg-black'>
       <LayoutContainer>
-        <div className='flex flex-wrap justify-between'>
+        <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
           {benefitsData.map((benefit, index) => (
-            <BenefitCard
-              key={index}
-              title={benefit.title}
-              subtitle={benefit.subtitle}
-              icon={benefit.icon}
-            />
+            <BenefitCard key={index} title={benefit.title} subtitle={benefit.subtitle} icon={benefit.icon} />
           ))}
         </div>
       </LayoutContainer>

@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
 
         <div className="text-center pt-9 border-t border-gray-200"> 
-          <img src="/images/logo-ecommerce.png" alt="HypeMode Logo" className="h-15 mx-auto" />
+          <img src="public/images/officiallogopage/logo-ecommerce.png" alt="HypeMode Logo" className="h-15 mx-auto" />
            <span className="text-xl font-semibold">HypeMode</span> 
         </div>
 
