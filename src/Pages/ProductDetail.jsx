@@ -25,6 +25,13 @@ export default function ProductDetail() {
       });
   }, [id]);
 
+  const calculateSalePrice = (originalPrice) => {
+    const productIdNumber = parseInt(product.id, 10);
+    const discountBase = productIdNumber ? (productIdNumber % 11) / 100 + 0.1 : 0.15;
+    const discountedPrice = originalPrice * (1 - discountBase);
+    return Number(discountedPrice.toFixed(2));
+  };
+
   const renderStars = () => {
     if (!product) return null;
 
@@ -87,7 +94,16 @@ export default function ProductDetail() {
               <div className='flex'>{renderStars()}</div>
               <span className='text-gray-500 text-sm'>(5 reviews)</span>
             </div>
-            <p className='text-xl md:text-2xl font-bold'>€{Number(product.price).toFixed(2)}</p>
+            {product.sale ? (
+              <div className='flex items-center space-x-3'>
+                <span className='text-red-600 text-xl md:text-2xl font-bold'>€{calculateSalePrice(product.price)}</span>
+                <span className='text-gray-500 text-lg md:text-xl line-through'>
+                  €{Number(product.price).toFixed(2)}
+                </span>
+              </div>
+            ) : (
+              <p className='text-xl md:text-2xl font-bold'>€{Number(product.price).toFixed(2)}</p>
+            )}
             <div className='my-4 md:my-6'>
               <h3 className='text-base md:text-lg font-semibold mb-2'>Description</h3>
               <p className='text-gray-600 text-sm md:text-base'>

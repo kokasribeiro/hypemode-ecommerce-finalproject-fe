@@ -21,10 +21,16 @@ const ProductCard = ({ className, product, titleWhite }) => {
     return stars;
   };
 
+  const calculateSalePrice = (originalPrice) => {
+    const productIdNumber = parseInt(product.id, 10);
+    const discountBase = productIdNumber ? (productIdNumber % 11) / 100 + 0.1 : 0.15;
+    const discountedPrice = originalPrice * (1 - discountBase);
+    return Number(discountedPrice.toFixed(2));
+  };
+
   const handleProductClick = () => {
     navigate(`/products/${product.id}`);
   };
-  console.log(product.sale);
   return (
     <div className={`w-full ${className}`}>
       <div className='relative'>
@@ -50,7 +56,14 @@ const ProductCard = ({ className, product, titleWhite }) => {
           </h2>
 
           <div className={`flex items-center mt-2 ${titleWhite ? 'text-white' : ''}`}>{renderStars()}</div>
-          <p className='text-gray-400 text-sm font-bold mt-3'>{product.price} €</p>
+          {product.sale ? (
+            <div className='flex items-center space-x-2 mt-3'>
+              <span className='text-red-600 text-sm font-bold'>{calculateSalePrice(product.price)} €</span>
+              <span className='text-gray-400 text-sm font-medium line-through'>{product.price} €</span>
+            </div>
+          ) : (
+            <p className='text-gray-400 text-sm font-bold mt-3'>{product.price} €</p>
+          )}
           <p className='text-gray-500 text-sm mt-2'>{product.category}</p>
         </div>
         <ButtonPrimary buttonText='Add to cart' />

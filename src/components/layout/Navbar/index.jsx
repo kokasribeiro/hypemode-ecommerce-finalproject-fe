@@ -26,6 +26,10 @@ export default function Navbar() {
     }
   };
 
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -87,7 +91,7 @@ export default function Navbar() {
               </div>
               <FaSearch className='text-xl hover:text-red-500 ml-2' onClick={() => setShowSearch(!showSearch)} />
             </div>
-            <FaUser className='text-xl hover:text-red-500' />
+            <FaUser className='text-xl hover:text-red-500' onClick={handleLoginClick} />
             <FaShoppingCart className='text-xl hover:text-red-500' />
           </div>
         </div>

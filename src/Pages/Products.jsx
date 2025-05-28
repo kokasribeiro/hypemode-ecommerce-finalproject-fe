@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ProductCard from '../components/ui/ProductCard';
+import ProductCardSkeleton from '../components/ui/SkeletonUiLoading/ProductCardSkeleton';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import FilterPrice from '../components/ui/FilterPrice';
@@ -11,6 +12,7 @@ import { useLocation } from 'react-router-dom';
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [priceRange, setPriceRange] = useState({ min: 20, max: 800 });
   const [searchTerm, setSearchTerm] = useState('');
   const [localSearch, setLocalSearch] = useState('');
@@ -54,6 +56,7 @@ export default function Products() {
   }, [location.search]);
 
   useEffect(() => {
+    setLoading(true);
     fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products')
       .then((response) => response.json())
       .then((data) => {
@@ -68,15 +71,35 @@ export default function Products() {
         });
 
         setAllProducts(productsWithRatings);
-
+        setLoading(false);
         console.log('Total products fetched:', productsWithRatings.length);
+      })
+      .catch((error) => {
+        console.error('Error fetching products:', error);
+        setLoading(false);
       });
   }, []);
 
   useEffect(() => {
     if (allProducts.length === 0) return;
 
-    let filtered = allProducts.filter((product) => product.price >= priceRange.min && product.price <= priceRange.max);
+    let filtered = allProducts.filter((product) => {
+      const regularPriceInRange = product.price >= priceRange.min && product.price <= priceRange.max;
+      if (product.sale) {
+        const calculateSalePrice = (originalPrice) => {
+          const discountRate = Math.random() * 0.1 + 0.1;
+          const discountedPrice = originalPrice * (1 - discountRate);
+          return Number(discountedPrice.toFixed(2));
+        };
+
+        const salePrice = calculateSalePrice(product.price);
+        const salePriceInRange = salePrice >= priceRange.min && salePrice <= priceRange.max;
+
+        return regularPriceInRange || salePriceInRange;
+      }
+
+      return regularPriceInRange;
+    });
 
     if (searchTerm) {
       const term = searchTerm.toUpperCase();
@@ -245,7 +268,11 @@ export default function Products() {
             </div>
           </div>
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full'>
-            {products.length > 0 ? (
+            {loading ? (
+              Array(9)
+                .fill()
+                .map((_, index) => <ProductCardSkeleton key={index} />)
+            ) : products.length > 0 ? (
               products.map((product) => <ProductCard key={product.id} product={product} />)
             ) : (
               <p className='col-span-full text-center py-10 md:py-20 font-bold text-xl md:text-3xl'>

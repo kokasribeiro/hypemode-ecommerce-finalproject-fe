@@ -12,6 +12,8 @@ import Services from './Pages/Services';
 import AboutUs from './Pages/AboutUs';
 import News from './Pages/News';
 import ProductDetail from './Pages/ProductDetail';
+import Login from './Pages/Login';
+import Register from './Pages/Register';
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: '/news',
         element: <News />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
       },
     ],
   },
