@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import LayoutContainer from '../../components/layout/LayoutContainer';
+import { validateEmail } from '../../data';
 
 const NewsletterUpdates = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
 
   const handleSubscribe = () => {
     setSuccess(false);

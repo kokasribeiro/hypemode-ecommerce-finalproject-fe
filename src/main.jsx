@@ -14,6 +14,7 @@ import News from './Pages/News';
 import ProductDetail from './Pages/ProductDetail';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
+import Cart from './Pages/Cart';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: '/products/:id',
         element: <ProductDetail />,
+      },
+      {
+        path: '/cart',
+        element: <Cart />,
       },
       {
         path: '/contact',

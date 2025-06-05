@@ -3,6 +3,7 @@ import SecondaryHeader from '../components/layout/SecondaryHeader';
 import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import { useState, useEffect } from 'react';
+import { validateEmail } from '../data';
 
 export default function Contact() {
   const [products, setProducts] = useState([]);
@@ -15,11 +16,6 @@ export default function Contact() {
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
-
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;

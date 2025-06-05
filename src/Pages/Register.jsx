@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import LayoutContainer from '../components/layout/LayoutContainer';
+import { VALIDATION, FORM_FIELDS, ERROR_MESSAGES, validateEmail, validatePassword, validateAge } from '../data';
 
 const addShakeAnimationStyle = () => {
   const styleEl = document.createElement('style');
@@ -51,22 +52,8 @@ export default function Register() {
     confirmPassword: useRef(),
   };
 
-  const validatePassword = (password) => {
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/.test(password);
-    const hasMinLength = password.length >= 8;
-
-    if (!hasMinLength) {
-      return 'Password must be at least 8 characters';
-    }
-    if (!hasUpperCase) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!hasSpecialChar) {
-      return 'Password must contain at least one special character';
-    }
-
-    return null;
+  const validatePasswordLocal = (password) => {
+    return validatePassword(password);
   };
 
   const handleChange = (e) => {
@@ -77,54 +64,45 @@ export default function Register() {
     }));
 
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: null }));
-    }
-
-    if (generalError) {
-      setGeneralError('');
-    }
-
-    if (name === 'password') {
-      const passwordError = validatePassword(value);
-      setErrors((prev) => ({ ...prev, password: passwordError }));
-
-      if (formData.confirmPassword && value !== formData.confirmPassword) {
-        setErrors((prev) => ({ ...prev, confirmPassword: 'Passwords do not match' }));
-      } else if (formData.confirmPassword) {
-        setErrors((prev) => ({ ...prev, confirmPassword: null }));
-      }
-    }
-
-    if (name === 'confirmPassword') {
-      if (value !== formData.password) {
-        setErrors((prev) => ({ ...prev, confirmPassword: 'Passwords do not match' }));
-      } else {
-        setErrors((prev) => ({ ...prev, confirmPassword: null }));
-      }
+      setErrors((prev) => ({
+        ...prev,
+        [name]: '',
+      }));
     }
 
     if (name === 'email' && value) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        setErrors((prev) => ({ ...prev, email: 'Please enter a valid email address' }));
+      if (!validateEmail(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          email: ERROR_MESSAGES.INVALID_EMAIL,
+        }));
       } else {
-        setErrors((prev) => ({ ...prev, email: null }));
+        setErrors((prev) => ({
+          ...prev,
+          email: '',
+        }));
       }
     }
 
-    if (name === 'dateOfBirth' && value) {
-      const birthDate = new Date(value);
-      const today = new Date();
-      const age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (name === 'password' && value) {
+      const passwordError = validatePasswordLocal(value);
+      setErrors((prev) => ({
+        ...prev,
+        password: passwordError || '',
+      }));
+    }
 
-      const isBeforeBirthday = monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate());
-      const calculatedAge = isBeforeBirthday ? age - 1 : age;
-
-      if (calculatedAge < 16) {
-        setErrors((prev) => ({ ...prev, dateOfBirth: 'You must be at least 16 years old to register' }));
+    if (name === 'confirmPassword' && value && formData.password) {
+      if (value !== formData.password) {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: ERROR_MESSAGES.PASSWORDS_DONT_MATCH,
+        }));
       } else {
-        setErrors((prev) => ({ ...prev, dateOfBirth: null }));
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: '',
+        }));
       }
     }
   };
@@ -142,19 +120,18 @@ export default function Register() {
   const validateForm = () => {
     const newErrors = {};
     let isValid = true;
-    const requiredFields = ['firstName', 'lastName', 'dateOfBirth', 'email', 'username', 'password', 'confirmPassword'];
     const emptyFields = [];
 
-    requiredFields.forEach((field) => {
+    FORM_FIELDS.REQUIRED_REGISTRATION_FIELDS.forEach((field) => {
       if (!formData[field]) {
-        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')} is required`;
+        newErrors[field] = ERROR_MESSAGES.REQUIRED_FIELD(field);
         emptyFields.push(field);
         isValid = false;
       }
     });
 
     if (formData.password) {
-      const passwordError = validatePassword(formData.password);
+      const passwordError = validatePasswordLocal(formData.password);
       if (passwordError) {
         newErrors.password = passwordError;
         isValid = false;
@@ -162,29 +139,20 @@ export default function Register() {
     }
 
     if (formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = ERROR_MESSAGES.PASSWORDS_DONT_MATCH;
       isValid = false;
     }
 
     if (formData.email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email address';
+      if (!validateEmail(formData.email)) {
+        newErrors.email = ERROR_MESSAGES.INVALID_EMAIL;
         isValid = false;
       }
     }
 
     if (formData.dateOfBirth) {
-      const birthDate = new Date(formData.dateOfBirth);
-      const today = new Date();
-      const age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-
-      const isBeforeBirthday = monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate());
-      const calculatedAge = isBeforeBirthday ? age - 1 : age;
-
-      if (calculatedAge < 16) {
-        newErrors.dateOfBirth = 'You must be at least 16 years old to register';
+      if (!validateAge(formData.dateOfBirth)) {
+        newErrors.dateOfBirth = ERROR_MESSAGES.UNDERAGE;
         isValid = false;
       }
     }
@@ -205,7 +173,7 @@ export default function Register() {
       console.log('Registration attempt with:', formData);
       setRegistrationSuccess(true);
     } else {
-      setGeneralError('Please fill all the required details and correct any errors.');
+      setGeneralError(ERROR_MESSAGES.FORM_VALIDATION_ERROR);
     }
   };
 

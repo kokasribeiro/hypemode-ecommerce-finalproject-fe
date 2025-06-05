@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import LayoutContainer from '../components/layout/LayoutContainer';
+import { validatePassword } from '../data';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -37,28 +38,9 @@ export default function Login() {
       [name]: value,
     }));
 
-    // Clear error when typing in password field
     if (name === 'password') {
       setPasswordError('');
     }
-  };
-
-  const validatePassword = (password) => {
-    const hasMinimumLength = password.length >= 8;
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
-
-    if (!hasMinimumLength) {
-      return 'Password must be at least 8 characters long';
-    }
-    if (!hasUppercase) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!hasSpecialChar) {
-      return 'Password must contain at least one special character';
-    }
-
-    return '';
   };
 
   const handleSubmit = (e) => {
@@ -97,7 +79,6 @@ export default function Login() {
                 );
               })}
 
-              {/* Big dot spinning around */}
               <div className='spinning-dot'></div>
             </div>
           </div>

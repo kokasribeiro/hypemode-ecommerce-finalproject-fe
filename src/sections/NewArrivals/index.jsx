@@ -15,7 +15,6 @@ const NewArrivals = ({ showViewAll = false, products = [] }) => {
     });
 
   const handleViewAll = () => {
-    // Navigate to products page with recent sort option
     navigate('/products?sort=recent');
   };
 
@@ -23,8 +22,8 @@ const NewArrivals = ({ showViewAll = false, products = [] }) => {
     <LayoutContainer className='my-20'>
       <div className='flex justify-between items-center'>
         <div>
-          <p className='text-gray-400'>Check out latest products </p>
           <h1 className='text-4xl font-bold'>New Arrivals</h1>
+          <p className='text-gray-400'>Check out latest products </p>
         </div>
         {showViewAll && (
           <div className='flex justify-between items-center mb-6'>

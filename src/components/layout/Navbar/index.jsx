@@ -1,13 +1,18 @@
 import { navItems } from '../../../data';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSearch, FaUser, FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart, FaBars, FaTimes, FaUser, FaSearch } from 'react-icons/fa';
 import { useState, useEffect, useRef } from 'react';
+import { useCart } from '../../../../useCart';
+import CartDropdown from '../../ui/CartDropdown';
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
+  const [showCartDropdown, setShowCartDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const searchRef = useRef(null);
+  const cartRef = useRef(null);
+  const { getCartItemsCount } = useCart();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -30,10 +35,21 @@ export default function Navbar() {
     navigate('/login');
   };
 
+  const handleCartClick = () => {
+    setShowCartDropdown(!showCartDropdown);
+  };
+
+  const handleCloseCartDropdown = () => {
+    setShowCartDropdown(false);
+  };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setShowSearch(false);
+      }
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        setShowCartDropdown(false);
       }
     }
 
@@ -42,6 +58,8 @@ export default function Navbar() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const cartItemsCount = getCartItemsCount();
 
   return (
     <div className='bg-black'>
@@ -92,7 +110,19 @@ export default function Navbar() {
               <FaSearch className='text-xl hover:text-red-500 ml-2' onClick={() => setShowSearch(!showSearch)} />
             </div>
             <FaUser className='text-xl hover:text-red-500' onClick={handleLoginClick} />
-            <FaShoppingCart className='text-xl hover:text-red-500' />
+
+            <div className='relative' ref={cartRef}>
+              <div className='relative cursor-pointer' onClick={handleCartClick}>
+                <FaShoppingCart className='text-xl hover:text-red-500 transition-colors' />
+                {cartItemsCount > 0 && (
+                  <span className='absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]'>
+                    {cartItemsCount > 99 ? '99+' : cartItemsCount}
+                  </span>
+                )}
+              </div>
+
+              <CartDropdown isOpen={showCartDropdown} onClose={handleCloseCartDropdown} />
+            </div>
           </div>
         </div>
       </nav>

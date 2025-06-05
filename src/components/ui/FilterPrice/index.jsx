@@ -10,15 +10,13 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
   const minPos = ((minValue - minPrice) / (maxPrice - minPrice)) * 100;
   const maxPos = ((maxValue - minPrice) / (maxPrice - minPrice)) * 100;
 
-  // Don't trigger onFilterChange on every value change
-  // Only update when user finishes interacting with the slider
+
   const updateFilterOnComplete = useCallback(() => {
     if (onFilterChange) {
       onFilterChange({ min: minValue, max: maxValue });
     }
   }, [minValue, maxValue, onFilterChange]);
 
-  // Initial setup - just once
   useEffect(() => {
     setMinValue(minPrice);
     setMaxValue(maxPrice);
@@ -50,7 +48,6 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
     }
   };
 
-  // Apply filter when input field is done editing
   const handleInputBlur = () => {
     updateFilterOnComplete();
   };

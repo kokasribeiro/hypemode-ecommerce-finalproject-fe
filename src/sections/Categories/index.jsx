@@ -14,6 +14,12 @@ const Categories = () => {
   return (
     <section className='bg-black flex items-center justify-center'>
       <LayoutContainer className='my-20 !px-2'>
+        <div className='flex justify-between items-center mb-8'>
+          <div>
+            <h1 className='text-4xl font-bold text-white'>Categories</h1>
+            <p className='text-gray-400'>Explore our product collections</p>
+          </div>
+        </div>
         <div className='grid md:grid-cols-5 my-16 w-full'>
           {categories.map((category) => (
             <div

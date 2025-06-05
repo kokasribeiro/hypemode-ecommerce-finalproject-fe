@@ -48,6 +48,10 @@ export default function Products() {
       setSortOption('recent');
     }
 
+    if (sortParam === 'best-sellers') {
+      setSortOption('best-sellers');
+    }
+
     if (saleParam === 'true') {
       setShowSaleOnly(true);
     } else {
@@ -135,6 +139,9 @@ export default function Products() {
       case 'recent':
         filtered = [...filtered].sort((a, b) => b.id - a.id);
         break;
+      case 'best-sellers':
+        filtered = [...filtered].sort((a, b) => b.displayRating - a.displayRating);
+        break;
       case 'relevance':
       default:
         break;
@@ -196,6 +203,8 @@ export default function Products() {
               ? 'Sale Items'
               : sortOption === 'recent'
               ? 'New Arrivals'
+              : sortOption === 'best-sellers'
+              ? 'Best Sellers'
               : 'All Products'}
           </h1>
           <div className='flex items-center gap-3 mt-3 md:mt-0'>
@@ -216,6 +225,7 @@ export default function Products() {
                 >
                   <option value='relevance'>Relevance</option>
                   <option value='recent'>Most Recent</option>
+                  <option value='best-sellers'>Best Sellers</option>
                   <option value='price-low-high'>Price, low to high</option>
                   <option value='price-high-low'>Price, high to low</option>
                 </select>

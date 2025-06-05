@@ -2,58 +2,48 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 import ProductCard from '../../components/ui/ProductCard';
+import { getSaleProducts, shuffleArray } from '../../utils';
 
 const FinalSale = ({ products = [] }) => {
   const navigate = useNavigate();
 
-  const allSaleProducts = [...products].filter((product) => product.sale === true);
+  const allSaleProducts = getSaleProducts(products);
 
-  const getRandomSaleProducts = () => {
-    const shuffled = [...allSaleProducts].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 3);
-  };
-
-  const saleProducts = getRandomSaleProducts();
+  const shuffled = shuffleArray(allSaleProducts);
+  const displayProducts = shuffled.slice(0, 3);
 
   const handleAllDealsClick = () => {
     navigate('/products?sale=true');
   };
 
-  const textContent = (
-    <div className='flex flex-col h-full'>
-      <div>
-        <h1 className='text-red-500 text-4xl font-bold pt-8'>Final Sale</h1>
-        <p className='text-white pt-8'>
-          This is your last chance to grab the pieces you've been eyeing. Our Final Sale is all about no restocks, and
-          no second chances. From everyday essentials to standout statement pieces, it's now or never. Stock is
-          limited—and once it's gone, it's gone for good. Don't sleep on it
-        </p>
-      </div>
-      <div className='mt-8'>
-        <button
-          onClick={handleAllDealsClick}
-          className='
-            border border-white text-white
-            font-semibold
-            py-2 px-6
-            hover:bg-red-500 hover:border-red-500 hover:text-white
-            transition-colors duration-200 ease-in-out'
-        >
-          ALL DEALS
-        </button>
-      </div>
-    </div>
-  );
-
   return (
-    <div className='bg-black'>
+    <div className='bg-black py-11'>
       <LayoutContainer>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-20 '>
-          {saleProducts.map((product) => (
-            <ProductCard key={product.id} product={product} titleWhite />
-          ))}
-          <div className='hidden md:block lg:hidden'>{textContent}</div>
-          <div className='block md:hidden lg:block'>{textContent}</div>
+        <div className='flex flex-col lg:flex-row gap-16 items-center'>
+          <div className='flex-[2]'>
+            <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8'>
+              {displayProducts.map((product) => (
+                <ProductCard key={product.id} product={product} titleWhite={true} />
+              ))}
+            </div>
+          </div>
+
+          <div className='flex-[1] lg:max-w-xs text-center lg:text-left lg:ml-8'>
+            <div className='text-red-500 text-xl font-bold mb-2'>$50 ONLY!</div>
+            <h2 className='text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight'>Final Sale</h2>
+            <p className='text-gray-300 mb-4 leading-relaxed text-sm'>
+              Limited-time clearance on premium streetwear pieces.
+            </p>
+            <p className='text-gray-300 mb-8 leading-relaxed text-sm'>
+              All sales final - no returns, just pure savings on authentic HypeMode gear.
+            </p>
+            <button
+              onClick={handleAllDealsClick}
+              className='bg-transparent border-2 border-white text-white px-6 py-3 font-semibold hover:bg-red-500 hover:border-red-500 transition-colors duration-300'
+            >
+              ALL DEALS
+            </button>
+          </div>
         </div>
       </LayoutContainer>
     </div>

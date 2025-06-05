@@ -2,9 +2,11 @@ import React from 'react';
 import ButtonPrimary from '../ButtonPrimary';
 import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../../../useCart';
 
 const ProductCard = ({ className, product, titleWhite }) => {
   const navigate = useNavigate();
+  const { addItem } = useCart();
 
   const renderStars = () => {
     const rating = product.displayRating || 5;
@@ -31,6 +33,12 @@ const ProductCard = ({ className, product, titleWhite }) => {
   const handleProductClick = () => {
     navigate(`/products/${product.id}`);
   };
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    addItem(product);
+  };
+
   return (
     <div className={`w-full ${className}`}>
       <div className='relative'>
@@ -59,14 +67,16 @@ const ProductCard = ({ className, product, titleWhite }) => {
           {product.sale ? (
             <div className='flex items-center space-x-2 mt-3'>
               <span className='text-red-600 text-sm font-bold'>{calculateSalePrice(product.price)} €</span>
-              <span className='text-gray-400 text-sm font-medium line-through'>{product.price} €</span>
+              <span className={`text-sm font-medium line-through ${titleWhite ? 'text-white' : 'text-gray-400'}`}>
+                {product.price} €
+              </span>
             </div>
           ) : (
-            <p className='text-gray-400 text-sm font-bold mt-3'>{product.price} €</p>
+            <p className={`text-sm font-bold mt-3 ${titleWhite ? 'text-white' : 'text-gray-400'}`}>{product.price} €</p>
           )}
-          <p className='text-gray-500 text-sm mt-2'>{product.category}</p>
+          <p className={`text-sm mt-2 ${titleWhite ? 'text-white' : 'text-gray-500'}`}>{product.category}</p>
         </div>
-        <ButtonPrimary buttonText='Add to cart' />
+        <ButtonPrimary buttonText='Add to cart' onClick={handleAddToCart} />
       </div>
     </div>
   );

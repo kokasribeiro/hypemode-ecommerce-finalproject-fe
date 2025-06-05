@@ -4,11 +4,13 @@ import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import { Star } from 'lucide-react';
 import ButtonPrimary from '../components/ui/ButtonPrimary';
+import { useCart } from '../../useCart';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { addItem } = useCart();
 
   useEffect(() => {
     setLoading(true);
@@ -49,6 +51,12 @@ export default function ProductDetail() {
     return stars;
   };
 
+  const handleAddToCart = () => {
+    if (product) {
+      addItem(product);
+    }
+  };
+
   if (loading) {
     return (
       <>
@@ -65,10 +73,10 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <>
-        <SecondaryHeader title='Product Not Found' />
+        <SecondaryHeader title='Product Detail' />
         <LayoutContainer>
           <div className='flex justify-center items-center min-h-[200px] md:min-h-[400px] p-4'>
-            <p>Product not found</p>
+            <p>Product not found.</p>
           </div>
         </LayoutContainer>
       </>
@@ -77,15 +85,14 @@ export default function ProductDetail() {
 
   return (
     <>
-      <SecondaryHeader title={product.name || 'Product Detail'} />
+      <SecondaryHeader title='Product Detail' />
       <LayoutContainer>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 my-6 md:my-10 px-4 md:px-0'>
-          <div className='flex justify-center items-center bg-gray-50 rounded-lg p-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 p-4 md:p-6 max-w-6xl mx-auto'>
+          <div className='w-full'>
             <img
               src={product.image}
               alt={product.name}
-              className='max-h-[250px] md:max-h-[500px] object-contain'
-              loading='lazy'
+              className='w-full h-auto max-h-[400px] md:max-h-[600px] object-cover rounded-lg shadow-lg'
             />
           </div>
           <div className='space-y-3 md:space-y-4'>
@@ -111,7 +118,7 @@ export default function ProductDetail() {
               </p>
             </div>
             <div className='pt-2 md:pt-4'>
-              <ButtonPrimary buttonText='Add to Cart' />
+              <ButtonPrimary buttonText='Add to Cart' onClick={handleAddToCart} />
             </div>
           </div>
         </div>
