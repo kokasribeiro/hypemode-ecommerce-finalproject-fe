@@ -7,7 +7,7 @@ const HeaderMain = () => {
   const navigate = useNavigate();
 
   const handleExploreClick = () => {
-    navigate('/products');
+    navigate('/products?clearFilters=true');
   };
 
   return (

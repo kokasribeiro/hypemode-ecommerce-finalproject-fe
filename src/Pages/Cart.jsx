@@ -1,12 +1,12 @@
 import React from 'react';
 import { FaMinus, FaPlus, FaTrash, FaShoppingBag, FaArrowLeft } from 'react-icons/fa';
-import { useCart } from '../../useCart';
+import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 
 const Cart = () => {
-  const { items, removeItem, updateQuantity, getCartTotal, calculateSalePrice, clearCart } = useCart();
+  const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -18,17 +18,17 @@ const Cart = () => {
   };
 
   const handleQuantityIncrease = (item) => {
-    updateQuantity(item.id, item.quantity + 1);
+    updateQuantity(item.id, item.selectedSize, item.quantity + 1);
   };
 
   const handleQuantityDecrease = (item) => {
     if (item.quantity > 1) {
-      updateQuantity(item.id, item.quantity - 1);
+      updateQuantity(item.id, item.selectedSize, item.quantity - 1);
     }
   };
 
-  const handleRemoveItem = (itemId) => {
-    removeItem(itemId);
+  const handleRemoveItem = (itemId, selectedSize) => {
+    removeFromCart(itemId, selectedSize);
   };
 
   const handleClearCart = () => {
@@ -42,7 +42,7 @@ const Cart = () => {
       <SecondaryHeader title='Shopping Cart' />
       <LayoutContainer>
         <div className='py-8 px-4 max-w-6xl mx-auto'>
-          {items.length === 0 ? (
+          {cart.length === 0 ? (
             <div className='text-center py-16'>
               <FaShoppingBag className='mx-auto text-6xl text-gray-300 mb-6' />
               <h2 className='text-3xl font-bold text-gray-800 mb-4'>Your cart is empty</h2>
@@ -59,7 +59,7 @@ const Cart = () => {
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
               <div className='lg:col-span-2'>
                 <div className='flex justify-between items-center mb-6'>
-                  <h2 className='text-2xl font-bold text-gray-800'>Cart Items ({items.length})</h2>
+                  <h2 className='text-2xl font-bold text-gray-800'>Cart Items ({cart.length})</h2>
                   <button
                     onClick={handleClearCart}
                     className='text-red-500 hover:text-red-700 font-medium transition-colors'
@@ -69,12 +69,15 @@ const Cart = () => {
                 </div>
 
                 <div className='space-y-4'>
-                  {items.map((item) => {
-                    const itemPrice = calculateSalePrice(item);
+                  {cart.map((item) => {
+                    const itemPrice = item.sale ? Number(item.price) * 0.85 : Number(item.price);
                     const itemTotal = (itemPrice * item.quantity).toFixed(2);
 
                     return (
-                      <div key={item.id} className='bg-white border border-gray-200 rounded-lg p-6 shadow-sm'>
+                      <div
+                        key={`${item.id}-${item.selectedSize || 'no-size'}`}
+                        className='bg-white border border-gray-200 rounded-lg p-4 shadow-sm'
+                      >
                         <div className='flex items-center space-x-4'>
                           <div className='w-24 h-24 flex-shrink-0'>
                             <img src={item.image} alt={item.name} className='w-full h-full object-cover rounded-md' />
@@ -82,18 +85,25 @@ const Cart = () => {
 
                           <div className='flex-1'>
                             <h3 className='text-lg font-semibold text-gray-800 mb-2'>{item.name}</h3>
-
+                            {item.selectedSize && (
+                              <div className='flex items-center space-x-2 mb-3'>
+                                <span className='text-sm text-gray-600'>Size:</span>
+                                <span className='px-3 py-1 bg-gray-100 rounded-md text-sm font-medium'>
+                                  {item.selectedSize}
+                                </span>
+                              </div>
+                            )}
                             <div className='flex items-center space-x-3 mb-3'>
                               {item.sale ? (
                                 <>
-                                  <span className='text-red-600 text-lg font-bold'>€{itemPrice}</span>
+                                  <span className='text-red-600 text-lg font-bold'>€{itemPrice.toFixed(2)}</span>
                                   <span className='text-gray-400 text-sm line-through'>€{item.price}</span>
                                   <span className='bg-red-100 text-red-600 px-2 py-1 text-xs font-semibold rounded'>
                                     SALE
                                   </span>
                                 </>
                               ) : (
-                                <span className='text-gray-800 text-lg font-bold'>€{itemPrice}</span>
+                                <span className='text-gray-800 text-lg font-bold'>€{itemPrice.toFixed(2)}</span>
                               )}
                             </div>
 
@@ -131,7 +141,7 @@ const Cart = () => {
 
                           <div className='flex-shrink-0'>
                             <button
-                              onClick={() => handleRemoveItem(item.id)}
+                              onClick={() => handleRemoveItem(item.id, item.selectedSize)}
                               className='text-red-500 hover:text-red-700 p-2 rounded transition-colors'
                               title='Remove item'
                             >
@@ -162,10 +172,10 @@ const Cart = () => {
                   <div className='space-y-3 mb-6'>
                     <div className='flex justify-between text-gray-600'>
                       <span>
-                        Subtotal ({items.reduce((total, item) => total + item.quantity, 0)}{' '}
-                        {items.reduce((total, item) => total + item.quantity, 0) === 1 ? 'item' : 'items'}):
+                        Subtotal ({cart.reduce((total, item) => total + item.quantity, 0)}{' '}
+                        {cart.reduce((total, item) => total + item.quantity, 0) === 1 ? 'item' : 'items'}):
                       </span>
-                      <span>€{getCartTotal()}</span>
+                      <span>€{Number(cartTotal).toFixed(2)}</span>
                     </div>
                     <div className='flex justify-between text-gray-600'>
                       <span>Shipping:</span>
@@ -174,7 +184,7 @@ const Cart = () => {
                     <hr className='border-gray-300' />
                     <div className='flex justify-between text-lg font-bold text-gray-800'>
                       <span>Total:</span>
-                      <span className='text-red-600'>€{getCartTotal()}</span>
+                      <span className='text-red-600'>€{Number(cartTotal).toFixed(2)}</span>
                     </div>
                   </div>
 

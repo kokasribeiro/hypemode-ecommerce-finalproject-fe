@@ -1,2 +1,35 @@
-@import "tailwindcss";
-@plugin "daisyui";
+@import 'tailwindcss';
+
+html,
+body {
+  cursor: default;
+}
+
+button:not(:disabled),
+a,
+input[type='button']:not(:disabled),
+input[type='submit']:not(:disabled),
+input[type='file'],
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled,
+input[type='button']:disabled,
+input[type='submit']:disabled {
+  cursor: not-allowed;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

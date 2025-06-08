@@ -1,297 +1,320 @@
-import { useState, useEffect } from 'react';
-import ProductCard from '../components/ui/ProductCard';
-import ProductCardSkeleton from '../components/ui/SkeletonUiLoading/ProductCardSkeleton';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
-import SecondaryHeader from '../components/layout/SecondaryHeader';
-import FilterPrice from '../components/ui/FilterPrice';
+import ProductCard from '../components/ui/ProductCard';
 import FilterCategory from '../components/ui/FilterCategory';
 import FilterSale from '../components/ui/FilterSale';
+import FilterPrice from '../components/ui/FilterPrice';
 import TopRatedProducts from '../components/ui/TopRatedProducts';
-import { useLocation } from 'react-router-dom';
+import { addRatingToProducts, assignProductRating } from '../utils';
 
-export default function Products() {
+// Skeleton component for loading state
+const ProductSkeleton = () => (
+  <div className='animate-pulse'>
+    <div className='bg-gray-300 h-64 w-full rounded-lg mb-4'></div>
+    <div className='space-y-2'>
+      <div className='h-4 bg-gray-300 rounded w-3/4'></div>
+      <div className='h-4 bg-gray-300 rounded w-1/2'></div>
+      <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+    </div>
+  </div>
+);
+
+const Products = () => {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
-  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [priceRange, setPriceRange] = useState({ min: 20, max: 800 });
-  const [searchTerm, setSearchTerm] = useState('');
-  const [localSearch, setLocalSearch] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [categoryFromUrl, setCategoryFromUrl] = useState(null);
-  const [sortOption, setSortOption] = useState('relevance');
-  const [showFilters, setShowFilters] = useState(false);
-  const [showSaleOnly, setShowSaleOnly] = useState(false);
+  const [displayCount, setDisplayCount] = useState(9);
 
-  const location = useLocation();
+  // Check if we should clear filters (from footer navigation)
+  const shouldClearFilters = searchParams.get('clearFilters') === 'true';
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const query = params.get('search') || '';
-    const categoryParam = params.get('category');
-    const sortParam = params.get('sort');
-    const saleParam = params.get('sale');
-
-    setSearchTerm(query);
-    setLocalSearch(query);
-
-    if (categoryParam) {
-      console.log('Category from URL:', categoryParam);
-      setCategoryFromUrl(categoryParam);
-      setSelectedCategories([categoryParam]);
+  // Initialize state from localStorage and URL params
+  const initialCategories = () => {
+    // If clearFilters is true, ignore localStorage and only use URL category
+    if (shouldClearFilters) {
+      const urlCategory = searchParams.get('category');
+      return urlCategory ? [urlCategory] : [];
     }
 
-    if (sortParam === 'recent') {
-      setSortOption('recent');
+    const savedCategories = localStorage.getItem('selectedCategories');
+    const urlCategory = searchParams.get('category');
+    const parsedCategories = savedCategories ? JSON.parse(savedCategories) : [];
+    return urlCategory && !parsedCategories.includes(urlCategory)
+      ? [...parsedCategories, urlCategory]
+      : parsedCategories;
+  };
+
+  const initialSortOption = () => {
+    const urlSort = searchParams.get('sort');
+    // If clearFilters is true, use URL sort or default, ignore localStorage
+    if (shouldClearFilters) {
+      return urlSort || 'recent';
     }
 
-    if (sortParam === 'best-sellers') {
-      setSortOption('best-sellers');
+    const savedSort = localStorage.getItem('sortOption');
+    return urlSort || savedSort || 'recent';
+  };
+
+  const initialSaleFilter = () => {
+    // If clearFilters is true, only use URL sale parameter
+    if (shouldClearFilters) {
+      return searchParams.get('sale') === 'true';
     }
 
-    if (saleParam === 'true') {
-      setShowSaleOnly(true);
-    } else {
-      setShowSaleOnly(false);
-    }
-  }, [location.search]);
+    const saved = localStorage.getItem('showSaleOnly');
+    const urlSale = searchParams.get('sale') === 'true';
+    return urlSale || (saved ? JSON.parse(saved) : false);
+  };
 
+  const initialPriceRange = () => {
+    // If clearFilters is true, use default price range
+    if (shouldClearFilters) {
+      return { min: 5, max: 200 };
+    }
+
+    const savedPriceRange = localStorage.getItem('priceRange');
+    return savedPriceRange ? JSON.parse(savedPriceRange) : { min: 5, max: 200 };
+  };
+
+  const [selectedCategories, setSelectedCategories] = useState(initialCategories);
+  const [showSaleOnly, setShowSaleOnly] = useState(initialSaleFilter);
+  const [sortOption, setSortOption] = useState(initialSortOption);
+  const [priceRange, setPriceRange] = useState(initialPriceRange);
+
+  // Clear localStorage when clearFilters parameter is present
   useEffect(() => {
-    setLoading(true);
-    fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products')
-      .then((response) => response.json())
-      .then((data) => {
-        const productsWithRatings = data.map((product) => {
-          const randomRating = Math.floor(Math.random() * 3) + 3;
-          const normalizedProduct = {
-            ...product,
-            displayRating: randomRating,
-            category: product.category || '',
-          };
-          return normalizedProduct;
-        });
+    if (shouldClearFilters) {
+      localStorage.removeItem('selectedCategories');
+      localStorage.removeItem('showSaleOnly');
+      localStorage.removeItem('sortOption');
+      localStorage.removeItem('priceRange');
+    }
+  }, [shouldClearFilters]);
 
-        setAllProducts(productsWithRatings);
-        setLoading(false);
-        console.log('Total products fetched:', productsWithRatings.length);
-      })
-      .catch((error) => {
-        console.error('Error fetching products:', error);
-        setLoading(false);
-      });
-  }, []);
+  // Function to randomly update ratings for some products
+  const updateRandomRatings = useCallback(() => {
+    setProducts((prevProducts) => {
+      const updatedProducts = [...prevProducts];
+      // Select 20-30% of products randomly to update
+      const numberOfProductsToUpdate = Math.floor(updatedProducts.length * 0.25);
+      const productsToUpdate = [];
 
-  useEffect(() => {
-    if (allProducts.length === 0) return;
-
-    let filtered = allProducts.filter((product) => {
-      const regularPriceInRange = product.price >= priceRange.min && product.price <= priceRange.max;
-      if (product.sale) {
-        const calculateSalePrice = (originalPrice) => {
-          const discountRate = Math.random() * 0.1 + 0.1;
-          const discountedPrice = originalPrice * (1 - discountRate);
-          return Number(discountedPrice.toFixed(2));
-        };
-
-        const salePrice = calculateSalePrice(product.price);
-        const salePriceInRange = salePrice >= priceRange.min && salePrice <= priceRange.max;
-
-        return regularPriceInRange || salePriceInRange;
+      // Randomly select products to update
+      while (productsToUpdate.length < numberOfProductsToUpdate) {
+        const randomIndex = Math.floor(Math.random() * updatedProducts.length);
+        if (!productsToUpdate.includes(randomIndex)) {
+          productsToUpdate.push(randomIndex);
+        }
       }
 
-      return regularPriceInRange;
-    });
-
-    if (searchTerm) {
-      const term = searchTerm.toUpperCase();
-      filtered = filtered.filter((product) => product.name.toUpperCase().startsWith(term));
-    }
-
-    if (selectedCategories.length > 0) {
-      console.log('Filtering by categories:', selectedCategories);
-      filtered = filtered.filter((product) => {
-        if (!product.category) return false;
-
-        const isIncluded = selectedCategories.some(
-          (selectedCat) => product.category.toLowerCase() === selectedCat.toLowerCase(),
-        );
-
-        return isIncluded;
+      // Update ratings for selected products
+      productsToUpdate.forEach((index) => {
+        const possibleRatings = [2, 3, 4, 5];
+        const newRating = possibleRatings[Math.floor(Math.random() * possibleRatings.length)];
+        updatedProducts[index] = {
+          ...updatedProducts[index],
+          displayRating: newRating,
+        };
       });
 
-      filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
-    }
+      console.log(`Updated ratings for ${numberOfProductsToUpdate} products`);
+      return updatedProducts;
+    });
+  }, []);
 
-    if (showSaleOnly) {
-      filtered = filtered.filter((product) => product.sale === true);
-    }
+  // Fetch products only once when component mounts
+  useEffect(() => {
+    let isMounted = true;
 
-    switch (sortOption) {
-      case 'price-low-high':
-        filtered = [...filtered].sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high-low':
-        filtered = [...filtered].sort((a, b) => b.price - a.price);
-        break;
-      case 'recent':
-        filtered = [...filtered].sort((a, b) => b.id - a.id);
-        break;
-      case 'best-sellers':
-        filtered = [...filtered].sort((a, b) => b.displayRating - a.displayRating);
-        break;
-      case 'relevance':
-      default:
-        break;
-    }
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products');
+        if (!isMounted) return;
+        const data = await response.json();
+        if (isMounted) {
+          // Add consistent ratings to all products
+          const productsWithRatings = addRatingToProducts(data);
+          setProducts(productsWithRatings);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
 
-    console.log('Filtered products count:', filtered.length);
-    setProducts(filtered);
-  }, [priceRange, allProducts, searchTerm, selectedCategories, sortOption, showSaleOnly]);
+    fetchProducts();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
-  const handleFilterPrice = (range) => {
-    setPriceRange(range);
-  };
+  // Set up 20-minute interval for rating updates
+  useEffect(() => {
+    if (products.length === 0) return;
 
-  const handleFilterCategory = (categories) => {
-    console.log('Filter categories changed to:', categories);
-    if (categoryFromUrl && categories.length === 0) {
-      setCategoryFromUrl(null);
-    }
-    setSelectedCategories(categories);
-  };
+    const interval = setInterval(() => {
+      updateRandomRatings();
+    }, 20 * 60 * 1000); // 20 minutes in milliseconds
 
-  const handleFilterSale = (showSale) => {
-    setShowSaleOnly(showSale);
-  };
+    return () => clearInterval(interval);
+  }, [products.length, updateRandomRatings]);
 
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value);
-  };
+  // Reset display count when filters change
+  useEffect(() => {
+    setDisplayCount(9);
+  }, [selectedCategories, showSaleOnly, sortOption, priceRange]);
 
-  const handleSearchInputChange = (e) => {
-    setLocalSearch(e.target.value);
-  };
+  // Save to localStorage whenever filters change
+  useEffect(() => {
+    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
+    localStorage.setItem('showSaleOnly', JSON.stringify(showSaleOnly));
+    localStorage.setItem('sortOption', sortOption);
+    localStorage.setItem('priceRange', JSON.stringify(priceRange));
+  }, [selectedCategories, showSaleOnly, sortOption, priceRange]);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    setSearchTerm(localSearch);
-  };
+  const handleCategoryChange = useCallback((newCategories) => {
+    setSelectedCategories(newCategories);
+  }, []);
 
-  const handleClearSearch = () => {
-    setLocalSearch('');
-    setSearchTerm('');
-  };
+  const handleSaleFilterChange = useCallback((isChecked) => {
+    setShowSaleOnly(isChecked);
+  }, []);
 
-  const toggleFilters = () => {
-    setShowFilters(!showFilters);
-  };
+  const handleSortChange = useCallback((event) => {
+    setSortOption(event.target.value);
+  }, []);
+
+  const handlePriceFilterChange = useCallback((newPriceRange) => {
+    setPriceRange(newPriceRange);
+  }, []);
+
+  const handleClearFilters = useCallback(() => {
+    setSelectedCategories([]);
+    setShowSaleOnly(false);
+    setSortOption('recent');
+    setPriceRange({ min: 5, max: 200 });
+  }, []);
+
+  const handleShowMore = useCallback(() => {
+    setDisplayCount((prev) => prev + 9);
+  }, []);
+
+  const filteredProducts = products
+    .filter((product) => {
+      const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+      const saleMatch = !showSaleOnly || product.sale;
+      const priceMatch = product.price >= priceRange.min && product.price <= priceRange.max;
+      return categoryMatch && saleMatch && priceMatch;
+    })
+    .sort((a, b) => {
+      switch (sortOption) {
+        case 'price-low-high':
+          return a.price - b.price;
+        case 'price-high-low':
+          return b.price - a.price;
+        case 'best-sellers':
+          return b.displayRating - a.displayRating;
+        case 'recent':
+          return b.id - a.id;
+        default:
+          return b.id - a.id;
+      }
+    });
+
+  // Get products to display based on displayCount
+  const displayedProducts = filteredProducts.slice(0, displayCount);
+  const hasMoreProducts = displayCount < filteredProducts.length;
 
   return (
-    <>
-      <SecondaryHeader title='Products' />
-      <LayoutContainer>
-        <div className='flex flex-col md:flex-row justify-between items-start md:items-center my-4 md:my-10 px-4 md:px-0'>
-          <h1 className='text-xl md:text-2xl font-bold'>
-            {searchTerm
-              ? `Products starting with "${searchTerm}"`
-              : categoryFromUrl
-              ? `${categoryFromUrl} Products`
-              : showSaleOnly
-              ? 'Sale Items'
-              : sortOption === 'recent'
-              ? 'New Arrivals'
-              : sortOption === 'best-sellers'
-              ? 'Best Sellers'
-              : 'All Products'}
-          </h1>
-          <div className='flex items-center gap-3 mt-3 md:mt-0'>
+    <LayoutContainer className='my-20'>
+      <div className='flex flex-col md:flex-row gap-8'>
+        <div className='w-full md:w-1/4 space-y-6'>
+          <div className='flex justify-between items-center'>
+            <h2 className='text-xl font-semibold'>Filters</h2>
             <button
-              onClick={toggleFilters}
-              className='md:hidden flex items-center bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded'
+              onClick={handleClearFilters}
+              className='text-sm text-red-500 hover:text-red-700 transition duration-200 border border-red-500 hover:border-red-700 px-3 py-1 rounded-md hover:bg-red-50'
             >
-              <span className='mr-1'>{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
-              <span className='text-sm'>{showFilters ? '↑' : '↓'}</span>
+              Clear All
             </button>
-            <div className='sort-container'>
-              <label className='inline-flex items-center'>
-                <span className='mr-2 text-gray-700 text-sm md:text-base'>Sort by:</span>
-                <select
-                  value={sortOption}
-                  onChange={handleSortChange}
-                  className='border border-gray-300 rounded-md py-1 px-2 md:px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base'
-                >
-                  <option value='relevance'>Relevance</option>
-                  <option value='recent'>Most Recent</option>
-                  <option value='best-sellers'>Best Sellers</option>
-                  <option value='price-low-high'>Price, low to high</option>
-                  <option value='price-high-low'>Price, high to low</option>
-                </select>
+          </div>
+
+          <FilterPrice
+            minPrice={5}
+            maxPrice={200}
+            onFilterChange={handlePriceFilterChange}
+            initialValues={priceRange}
+            key={`price-${priceRange.min}-${priceRange.max}`}
+          />
+          <FilterCategory
+            initialSelected={selectedCategories}
+            onFilterChange={handleCategoryChange}
+            key={`category-${selectedCategories.length}`}
+          />
+          <FilterSale onFilterChange={handleSaleFilterChange} initialChecked={showSaleOnly} />
+          <TopRatedProducts products={products} />
+        </div>
+
+        <div className='w-full md:w-3/4'>
+          <div className='flex justify-between items-center mb-6'>
+            <h2 className='text-xl font-semibold'>Products ({filteredProducts.length} found)</h2>
+            <div className='flex items-center space-x-2'>
+              <label htmlFor='sort' className='text-sm font-medium text-gray-700'>
+                Sort By:
               </label>
+              <select
+                id='sort'
+                value={sortOption}
+                onChange={handleSortChange}
+                className='p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-sm'
+                disabled={loading}
+              >
+                <option value='recent'>New Arrivals</option>
+                <option value='price-low-high'>Price: Low to High</option>
+                <option value='price-high-low'>Price: High to Low</option>
+                <option value='best-sellers'>Best Sellers</option>
+              </select>
             </div>
           </div>
+
+          <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8'>
+            {loading
+              ? // Show skeleton UI while loading
+                Array.from({ length: 9 }).map((_, index) => <ProductSkeleton key={index} />)
+              : // Show actual products when loaded
+                displayedProducts.map((product) => <ProductCard key={product.id} product={product} />)}
+          </div>
+
+          {/* Show More Button */}
+          {!loading && hasMoreProducts && (
+            <div className='flex justify-center mt-12'>
+              <button
+                onClick={handleShowMore}
+                className='bg-red-500 text-white px-8 py-3 font-semibold hover:bg-red-600 transition-colors duration-200 border-2 border-red-500 hover:border-red-600'
+              >
+                Show More
+              </button>
+            </div>
+          )}
+
+          {/* No products message */}
+          {!loading && filteredProducts.length === 0 && (
+            <div className='text-center py-12'>
+              <p className='text-gray-500 text-lg'>No products found matching your criteria.</p>
+              <button onClick={handleClearFilters} className='mt-4 text-red-500 hover:text-red-700 font-medium'>
+                Clear all filters
+              </button>
+            </div>
+          )}
         </div>
-        <div className='flex flex-col md:flex-row gap-4 w-full px-4 md:px-0'>
-          <div className={`${showFilters ? 'block' : 'hidden'} md:block w-full md:w-1/4 mb-6 md:mb-0`}>
-            <div className='mb-6 bg-white p-4 shadow-md rounded-lg'>
-              <h3 className='font-bold text-lg md:text-xl mb-4'>Search Products</h3>
-              <form onSubmit={handleSearchSubmit} className='relative'>
-                <input
-                  type='text'
-                  placeholder='Search by name...'
-                  value={localSearch}
-                  onChange={handleSearchInputChange}
-                  className='w-full border border-gray-300 rounded-md py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500'
-                />
-                <div className='absolute right-0 top-0 h-full flex items-center'>
-                  {localSearch && (
-                    <button
-                      type='button'
-                      onClick={handleClearSearch}
-                      className='h-full px-2 text-gray-500 hover:text-gray-700'
-                    >
-                      ✕
-                    </button>
-                  )}
-                  <button type='submit' className='h-full px-3 text-gray-600 hover:text-gray-800'>
-                    🔍
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className='mb-6 bg-white p-4 shadow-md rounded-lg'>
-              <FilterPrice minPrice={10} maxPrice={200} onFilterChange={handleFilterPrice} />
-            </div>
-            <div className='mb-6 bg-white p-4 shadow-md rounded-lg'>
-              <FilterCategory
-                onFilterChange={handleFilterCategory}
-                initialSelected={categoryFromUrl ? [categoryFromUrl] : []}
-              />
-            </div>
-            <div className='mb-6 bg-white p-4 shadow-md rounded-lg'>
-              <FilterSale onFilterChange={handleFilterSale} initialChecked={showSaleOnly} />
-            </div>
-            <div className='bg-white p-4 shadow-md rounded-lg'>
-              <TopRatedProducts products={allProducts} />
-            </div>
-          </div>
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full'>
-            {loading ? (
-              Array(9)
-                .fill()
-                .map((_, index) => <ProductCardSkeleton key={index} />)
-            ) : products.length > 0 ? (
-              products.map((product) => <ProductCard key={product.id} product={product} />)
-            ) : (
-              <p className='col-span-full text-center py-10 md:py-20 font-bold text-xl md:text-3xl'>
-                No products found matching your criteria.
-              </p>
-            )}
-          </div>
-        </div>
-      </LayoutContainer>
-    </>
+      </div>
+    </LayoutContainer>
   );
-}
+};
+
+export default Products;

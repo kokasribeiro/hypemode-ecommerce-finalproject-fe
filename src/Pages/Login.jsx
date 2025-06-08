@@ -62,24 +62,16 @@ export default function Login() {
         <div className='bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full'>
           <h2 className='text-2xl font-bold mb-4 text-black'>You are logged in!</h2>
           <div className='flex justify-center mb-4 relative'>
-            <div className='dots-container'>
-              {/* Static dots forming a circle */}
-              {[...Array(12)].map((_, index) => {
-                const angle = (index * 30 * Math.PI) / 180;
-                const left = Math.cos(angle) * 60;
-                const top = Math.sin(angle) * 60;
-                return (
-                  <div
-                    key={index}
-                    className='static-dot'
-                    style={{
-                      transform: `translate(${left}px, ${top}px)`,
-                    }}
-                  ></div>
-                );
-              })}
-
-              <div className='spinning-dot'></div>
+            <div className='absolute inset-0 flex items-center justify-center'>
+              <div className='relative w-full h-full'>
+                <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+                  <div className='flex space-x-2'>
+                    <div className='w-2 h-2 bg-gray-500 rounded-full animate-bounce'></div>
+                    <div className='w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-.3s]'></div>
+                    <div className='w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-.5s]'></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

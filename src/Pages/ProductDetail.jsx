@@ -1,24 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import { Star } from 'lucide-react';
 import ButtonPrimary from '../components/ui/ButtonPrimary';
-import { useCart } from '../../useCart';
+import { useCart } from './CartContext';
+import { assignProductRating, createFlyToCartAnimation } from '../utils';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { addItem } = useCart();
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const { addToCart } = useCart();
+  const productImageRef = useRef(null);
+
+  const isClothing =
+    product?.category &&
+    ['jacket', 'sweater', 't-shirt', 'jackets', 'sweaters', 't-shirts'].includes(product.category.toLowerCase().trim());
+  const isShoes =
+    product?.category && ['shoes', 'shoe', 'sneakers', 'sneaker'].includes(product.category.toLowerCase().trim());
+  const isNecklace =
+    (product?.category && ['necklace', 'necklaces'].includes(product.category.toLowerCase().trim())) ||
+    (product?.name && ['chain', 'necklace'].some((word) => product.name.toLowerCase().includes(word)));
+  const isBackpack = product?.name && product.name.toLowerCase().includes('backpack');
+  const needsSize = isClothing || isShoes || isNecklace || isBackpack;
+
+  const sizes = isShoes
+    ? ['38', '39', '40', '42']
+    : isNecklace
+    ? ['16"', '18"', '20"', '24"']
+    : isBackpack
+    ? ['15L', '25L', '35L', '45L']
+    : ['S', 'M', 'L', 'XL'];
 
   useEffect(() => {
     setLoading(true);
+    setSelectedSizes([]);
     fetch(`https://681b1c4d17018fe5057a0e51.mockapi.io/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        const randomRating = Math.floor(Math.random() * 3) + 3;
-        setProduct({ ...data, displayRating: randomRating });
+        const consistentRating = assignProductRating(data.id);
+        setProduct({ ...data, displayRating: consistentRating });
         setLoading(false);
       })
       .catch((error) => {
@@ -51,9 +74,38 @@ export default function ProductDetail() {
     return stars;
   };
 
+  const handleSizeToggle = (size) => {
+    setSelectedSizes((prev) => {
+      if (prev.includes(size)) {
+        return prev.filter((s) => s !== size);
+      } else {
+        return [...prev, size];
+      }
+    });
+  };
+
   const handleAddToCart = () => {
-    if (product) {
-      addItem(product);
+    if (!product) return;
+
+    if (needsSize && selectedSizes.length === 0) {
+      alert('Please select at least one size first');
+      return;
+    }
+
+    if (needsSize) {
+      selectedSizes.forEach((size) => {
+        addToCart(product, size);
+      });
+
+      if (productImageRef.current) {
+        createFlyToCartAnimation(productImageRef.current, product.image);
+      }
+    } else {
+      addToCart(product, null);
+
+      if (productImageRef.current) {
+        createFlyToCartAnimation(productImageRef.current, product.image);
+      }
     }
   };
 
@@ -87,30 +139,76 @@ export default function ProductDetail() {
     <>
       <SecondaryHeader title='Product Detail' />
       <LayoutContainer>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 p-4 md:p-6 max-w-6xl mx-auto'>
-          <div className='w-full'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 py-8'>
+          <div className='relative'>
             <img
+              ref={productImageRef}
               src={product.image}
               alt={product.name}
-              className='w-full h-auto max-h-[400px] md:max-h-[600px] object-cover rounded-lg shadow-lg'
+              className='w-full h-auto rounded-lg shadow-lg'
             />
-          </div>
-          <div className='space-y-3 md:space-y-4'>
-            <h1 className='text-2xl md:text-3xl font-bold'>{product.name}</h1>
-            <div className='flex items-center space-x-2'>
-              <div className='flex'>{renderStars()}</div>
-              <span className='text-gray-500 text-sm'>(5 reviews)</span>
-            </div>
-            {product.sale ? (
-              <div className='flex items-center space-x-3'>
-                <span className='text-red-600 text-xl md:text-2xl font-bold'>€{calculateSalePrice(product.price)}</span>
-                <span className='text-gray-500 text-lg md:text-xl line-through'>
-                  €{Number(product.price).toFixed(2)}
-                </span>
+            {product.sale && (
+              <div className='absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold'>
+                SALE
               </div>
-            ) : (
-              <p className='text-xl md:text-2xl font-bold'>€{Number(product.price).toFixed(2)}</p>
             )}
+          </div>
+
+          <div className='space-y-6'>
+            <div>
+              <h1 className='text-3xl font-bold text-gray-800 mb-2'>{product.name}</h1>
+              <div className='flex items-center space-x-2 mb-4'>
+                <div className='flex'>{renderStars()}</div>
+                <span className='text-gray-500'>|</span>
+                <span className='text-gray-600'>{product.category}</span>
+              </div>
+
+              <div className='flex items-center space-x-3'>
+                {product.sale ? (
+                  <>
+                    <span className='text-2xl font-bold text-red-600'>€{calculateSalePrice(product.price)}</span>
+                    <span className='text-lg text-gray-400 line-through'>€{product.price}</span>
+                    <span className='bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-semibold'>
+                      {Math.round((1 - calculateSalePrice(product.price) / product.price) * 100)}% OFF
+                    </span>
+                  </>
+                ) : (
+                  <span className='text-2xl font-bold text-gray-800'>€{product.price}</span>
+                )}
+              </div>
+            </div>
+
+            {needsSize && (
+              <div className='my-6'>
+                <p className='text-base font-semibold mb-3'>
+                  Select Size(s):
+                  {selectedSizes.length > 0 && (
+                    <span className='text-red-600 ml-2'>
+                      ({selectedSizes.length} selected: {selectedSizes.join(', ')})
+                    </span>
+                  )}
+                </p>
+                <div className='flex gap-3'>
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => handleSizeToggle(size)}
+                      className={`w-12 h-12 flex items-center justify-center border-2 rounded ${
+                        selectedSizes.includes(size)
+                          ? 'border-red-500 bg-red-500 text-white'
+                          : 'border-gray-300 hover:border-red-500 hover:bg-red-500 hover:text-white'
+                      } transition-colors duration-200 text-lg font-medium`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+                <p className='text-sm text-gray-500 mt-2'>
+                  Click multiple sizes to add the same item in different sizes to your cart
+                </p>
+              </div>
+            )}
+
             <div className='my-4 md:my-6'>
               <h3 className='text-base md:text-lg font-semibold mb-2'>Description</h3>
               <p className='text-gray-600 text-sm md:text-base'>
@@ -118,7 +216,12 @@ export default function ProductDetail() {
               </p>
             </div>
             <div className='pt-2 md:pt-4'>
-              <ButtonPrimary buttonText='Add to Cart' onClick={handleAddToCart} />
+              <ButtonPrimary
+                buttonText={
+                  needsSize && selectedSizes.length > 1 ? `Add ${selectedSizes.length} Items to Cart` : 'Add to Cart'
+                }
+                onClick={handleAddToCart}
+              />
             </div>
           </div>
         </div>

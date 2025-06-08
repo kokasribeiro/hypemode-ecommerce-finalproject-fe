@@ -14,15 +14,15 @@ const Footer = () => {
   };
 
   const handleNewProductsClick = () => {
-    navigate('/products?sort=recent');
+    navigate('/products?sort=recent&clearFilters=true');
   };
 
   const handleBestSellersClick = () => {
-    navigate('/products?sort=best-sellers');
+    navigate('/products?sort=best-sellers&clearFilters=true');
   };
 
   const handleSpecialsClick = () => {
-    navigate('/products?sale=true');
+    navigate('/products?sale=true&clearFilters=true');
   };
 
   return (

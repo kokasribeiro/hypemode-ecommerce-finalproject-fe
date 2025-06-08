@@ -10,11 +10,11 @@ import Products from './Pages/Products';
 import Contact from './Pages/Contact';
 import Services from './Pages/Services';
 import AboutUs from './Pages/AboutUs';
-import News from './Pages/News';
 import ProductDetail from './Pages/ProductDetail';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Cart from './Pages/Cart';
+import Search from './Pages/Search';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +33,10 @@ const router = createBrowserRouter([
         element: <ProductDetail />,
       },
       {
+        path: '/search',
+        element: <Search />,
+      },
+      {
         path: '/cart',
         element: <Cart />,
       },
@@ -47,10 +51,6 @@ const router = createBrowserRouter([
       {
         path: '/about',
         element: <AboutUs />,
-      },
-      {
-        path: '/news',
-        element: <News />,
       },
       {
         path: '/login',

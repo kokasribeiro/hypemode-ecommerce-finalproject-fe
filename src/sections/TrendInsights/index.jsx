@@ -7,13 +7,14 @@ const TrendInsights = () => {
       <div className='flex justify-end relative'>
         <img src='./public/images/home/insight/insightDress.png' alt='WomenInsightDress' className='md:w-150 h-auto' />
 
-        <div className='absolute top-16 left-1/3 bg-black bg-opacity-90 text-white py-19 px-12 max-w-xs z-10'>
+        <div className='absolute top-50 right-130 bg-black bg-opacity-90 text-white py-19 px-10 max-w-sm z-10'>
           <h3 className='text-3xl font-semibold mb-4'>
-            Trend <br /> Insights
+            Trend <br /> Insight
           </h3>
           <p className='text-sm font-light mb-6 leading-relaxed'>
-            Mauris vitae ultricies leo integer malesuada. Odio tempor orci dapibus ultrices in. Egestas diam in arcu
-            cursus euismod. Dictum purus viverra accumsan in nisl. Tempor id eu.
+            We’re seeing a remarkable shift in consumer behavior this season—shoppers are leaning into sustainability
+            and minimalist aesthetics more than ever. Our curated collections reflect this evolution, ensuring our
+            customers stay ahead of the curve without compromising on quality or style.
           </p>
 
           <div className='mt-6'>

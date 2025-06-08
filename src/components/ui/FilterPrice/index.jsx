@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
-  const [minValue, setMinValue] = useState(minPrice);
-  const [maxValue, setMaxValue] = useState(maxPrice);
+const FilterPrice = ({ minPrice = 5, maxPrice = 200, onFilterChange, initialValues }) => {
+  const [minValue, setMinValue] = useState(initialValues?.min || minPrice);
+  const [maxValue, setMaxValue] = useState(initialValues?.max || maxPrice);
   const [isDragging, setIsDragging] = useState(false);
   const [activeDot, setActiveDot] = useState(null);
   const sliderRef = useRef(null);
@@ -10,6 +10,12 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
   const minPos = ((minValue - minPrice) / (maxPrice - minPrice)) * 100;
   const maxPos = ((maxValue - minPrice) / (maxPrice - minPrice)) * 100;
 
+  useEffect(() => {
+    if (initialValues) {
+      setMinValue(initialValues.min);
+      setMaxValue(initialValues.max);
+    }
+  }, [initialValues]);
 
   const updateFilterOnComplete = useCallback(() => {
     if (onFilterChange) {
@@ -17,21 +23,14 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
     }
   }, [minValue, maxValue, onFilterChange]);
 
-  useEffect(() => {
-    setMinValue(minPrice);
-    setMaxValue(maxPrice);
-  }, [minPrice, maxPrice]);
-
   const handleMinChange = (e) => {
     const value = Math.min(Number(e.target.value), maxValue - 1);
     setMinValue(value);
-    updateFilterOnComplete();
   };
 
   const handleMaxChange = (e) => {
     const value = Math.max(Number(e.target.value), minValue + 1);
     setMaxValue(value);
-    updateFilterOnComplete();
   };
 
   const handleMinInputChange = (e) => {
@@ -75,7 +74,7 @@ const FilterPrice = ({ minPrice = 0, maxPrice = 100, onFilterChange }) => {
         setMaxValue(newValue);
       }
     },
-    [isDragging, activeDot, minPrice, maxPrice, minValue, maxValue, setMinValue, setMaxValue],
+    [isDragging, activeDot, minPrice, maxPrice, minValue, maxValue],
   );
 
   const handleMouseUp = useCallback(() => {

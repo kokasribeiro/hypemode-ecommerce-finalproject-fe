@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 import ProductCard from '../../components/ui/ProductCard';
+import { assignProductRating } from '../../utils';
 
 const NewArrivals = ({ showViewAll = false, products = [] }) => {
   const navigate = useNavigate();
@@ -10,12 +11,12 @@ const NewArrivals = ({ showViewAll = false, products = [] }) => {
     .sort((a, b) => b.id - a.id)
     .slice(0, 4)
     .map((product) => {
-      const randomRating = Math.floor(Math.random() * 3) + 3; // 3, 4, or 5
-      return { ...product, displayRating: randomRating };
+      const consistentRating = assignProductRating(product.id);
+      return { ...product, displayRating: consistentRating };
     });
 
   const handleViewAll = () => {
-    navigate('/products?sort=recent');
+    navigate('/products?sort=recent&clearFilters=true');
   };
 
   return (
@@ -29,7 +30,7 @@ const NewArrivals = ({ showViewAll = false, products = [] }) => {
           <div className='flex justify-between items-center mb-6'>
             <button
               onClick={handleViewAll}
-              className='border border-gray-400 text-gray-700 py-2 px-5 text-sm font-medium hover:bg-red-500 transition duration-200'
+              className='border-4 border-gray-400 text-gray-700 py-2 px-5 text-sm font-medium hover:bg-red-500 hover:text-white hover:border-red-500 transition duration-200'
             >
               VIEW ALL
             </button>

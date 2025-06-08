@@ -10,7 +10,7 @@ const HighlightsProducts = ({ products = [] }) => {
   const highlightProducts = getRandomSubset(products, 4);
 
   const handleViewAll = () => {
-    navigate('/products');
+    navigate('/products?clearFilters=true');
   };
 
   return (
@@ -23,7 +23,7 @@ const HighlightsProducts = ({ products = [] }) => {
         <div className='flex justify-between items-center mb-6'>
           <button
             onClick={handleViewAll}
-            className='border border-gray-400 text-gray-700 py-2 px-5 text-sm font-medium hover:bg-red-500 transition duration-200'
+            className='border-4 border-gray-400 text-gray-700 py-2 px-5 text-sm font-medium hover:bg-red-500 hover:text-white hover:border-red-500 transition duration-200'
           >
             VIEW ALL
           </button>

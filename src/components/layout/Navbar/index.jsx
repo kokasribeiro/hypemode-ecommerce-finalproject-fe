@@ -1,8 +1,8 @@
 import { navItems } from '../../../data';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaBars, FaTimes, FaUser, FaSearch } from 'react-icons/fa';
-import { useState, useEffect, useRef } from 'react';
-import { useCart } from '../../../../useCart';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useCart } from '../../../Pages/CartContext';
 import CartDropdown from '../../ui/CartDropdown';
 
 export default function Navbar() {
@@ -12,120 +12,133 @@ export default function Navbar() {
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const cartRef = useRef(null);
-  const { getCartItemsCount } = useCart();
+  const { cartItemCount } = useCart();
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-      setShowSearch(false);
-      setSearchQuery('');
-    }
-  };
+  const handleSearchSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (searchQuery.trim()) {
+        navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+        setShowSearch(false);
+        setSearchQuery('');
+      }
+    },
+    [searchQuery, navigate],
+  );
 
-  const handleSearchButtonClick = () => {
-    if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-      setShowSearch(false);
-      setSearchQuery('');
-    }
-  };
-
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
-  const handleCartClick = () => {
-    setShowCartDropdown(!showCartDropdown);
-  };
-
-  const handleCloseCartDropdown = () => {
+  const toggleSearch = useCallback(() => {
+    setShowSearch((prev) => !prev);
     setShowCartDropdown(false);
-  };
+  }, []);
+
+  const toggleCart = useCallback((e) => {
+    e.stopPropagation();
+    setShowCartDropdown((prev) => !prev);
+    setShowSearch(false);
+  }, []);
+
+  const closeDropdowns = useCallback(() => {
+    setShowCartDropdown(false);
+    setShowSearch(false);
+  }, []);
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setShowSearch(false);
       }
       if (cartRef.current && !cartRef.current.contains(event.target)) {
         setShowCartDropdown(false);
       }
-    }
+    };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const cartItemsCount = getCartItemsCount();
-
   return (
-    <div className='bg-black'>
-      <div className=' text-gray-400 text-sm py-2 px-2 max-w-7xl mx-auto'>
-        Don't miss our <u className='cursor-pointer hover:text-white'>holiday offer</u> - up to 50% OFF!
-      </div>
+    <nav className='bg-white shadow-md'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div className='flex justify-between h-16'>
+          <div className='flex items-center'>
+            <Link to='/' className='flex-shrink-0'>
+              <img className='h-8 w-auto' src='/images/OfficialLogoPage/logo-ecommerce.png' alt='Logo' />
+            </Link>
+          </div>
 
-      <nav className='bg-white py-6 px-8 text-gray-600 hidden md:block'>
-        <div className='flex justify-between items-center max-w-7xl mx-auto'>
-          <img src='/public/images/OfficialLogoPage/logo-ecommerce.png' alt='Logo' className='h-10 cursor-pointer' />
-
-          <ul className='flex gap-9 cursor-pointer uppercase font-bold'>
+          <div className='hidden md:flex md:items-center md:space-x-6'>
             {navItems.map((item) => (
-              <li
+              <Link
                 key={item.id}
-                className='hover:text-black hover:underline relative after:bg-red-500 after:absolute after:h-1 after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300'
+                to={item.link}
+                className='relative text-gray-600 hover:text-gray-800 transition-colors duration-200 pb-1 group text-lg font-medium'
               >
-                <Link to={item.link}>{item.title}</Link>
-              </li>
+                {item.title}
+                <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full'></span>
+              </Link>
             ))}
-          </ul>
+          </div>
 
-          <div className='flex gap-3 cursor-pointer items-center relative'>
-            <div className='flex items-center' ref={searchRef}>
-              <div
-                className={`flex items-center transition-all duration-300 overflow-hidden ${
-                  showSearch ? 'w-48' : 'w-0'
-                }`}
+          <div className='flex items-center space-x-4'>
+            <div ref={searchRef} className='relative'>
+              <button
+                onClick={toggleSearch}
+                className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
+                aria-label='Search'
               >
-                <form onSubmit={handleSearchSubmit} className='flex w-full'>
-                  <input
-                    type='text'
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder='Search products...'
-                    className='border border-r-0 border-gray-300 rounded-l px-2 py-1 w-full outline-none text-sm'
-                    autoFocus={showSearch}
-                  />
-                  <button
-                    type='button'
-                    onClick={handleSearchButtonClick}
-                    className='p-1 bg-red-500 text-white border border-red-500 rounded-r cursor-pointer hover:bg-red-600 active:bg-red-700'
-                  >
-                    <FaSearch className='text-sm' />
-                  </button>
-                </form>
-              </div>
-              <FaSearch className='text-xl hover:text-red-500 ml-2' onClick={() => setShowSearch(!showSearch)} />
-            </div>
-            <FaUser className='text-xl hover:text-red-500' onClick={handleLoginClick} />
+                <FaSearch className='h-5 w-5' />
+              </button>
 
-            <div className='relative' ref={cartRef}>
-              <div className='relative cursor-pointer' onClick={handleCartClick}>
-                <FaShoppingCart className='text-xl hover:text-red-500 transition-colors' />
-                {cartItemsCount > 0 && (
-                  <span className='absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]'>
-                    {cartItemsCount > 99 ? '99+' : cartItemsCount}
+              {showSearch && (
+                <div
+                  className={`absolute right-0 top-full mt-2 w-80 bg-white shadow-xl rounded-lg border border-gray-200 z-50 transform transition-all duration-300 ${
+                    showSearch ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2'
+                  }`}
+                >
+                  <form onSubmit={handleSearchSubmit} className='p-4'>
+                    <div className='mb-3'>
+                      <h3 className='text-lg font-bold text-black mb-2'>Search Products</h3>
+                    </div>
+                    <input
+                      type='text'
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder='Search for products...'
+                      className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-black placeholder-gray-500'
+                      autoFocus
+                    />
+                  </form>
+                </div>
+              )}
+            </div>
+
+            <div ref={cartRef} className='relative'>
+              <button
+                onClick={toggleCart}
+                className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 relative cursor-pointer'
+                aria-label='Shopping cart'
+              >
+                <FaShoppingCart className='h-5 w-5' />
+                {cartItemCount > 0 && (
+                  <span className='absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center'>
+                    {cartItemCount}
                   </span>
                 )}
-              </div>
+              </button>
 
-              <CartDropdown isOpen={showCartDropdown} onClose={handleCloseCartDropdown} />
+              <CartDropdown isOpen={showCartDropdown} onClose={() => setShowCartDropdown(false)} />
             </div>
+
+            <Link
+              to='/login'
+              className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
+              aria-label='User account'
+            >
+              <FaUser className='h-5 w-5' />
+            </Link>
           </div>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 }

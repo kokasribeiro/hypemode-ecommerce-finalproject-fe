@@ -115,7 +115,6 @@ export const ERROR_MESSAGES = {
   FORM_VALIDATION_ERROR: 'Please fill all the required details and correct any errors.',
 };
 
-
 export const routerConfig = [
   {
     path: '/',
