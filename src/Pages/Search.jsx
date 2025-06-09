@@ -4,6 +4,7 @@ import LayoutContainer from '../components/layout/LayoutContainer';
 import ProductCard from '../components/ui/ProductCard';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import { addRatingToProducts } from '../utils';
+import { fetchProducts } from '../utils/api/mockapi';
 
 export default function Search() {
   const [searchParams] = useSearchParams();
@@ -12,10 +13,9 @@ export default function Search() {
   const query = searchParams.get('q') || '';
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const loadProducts = async () => {
       try {
-        const response = await fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products');
-        const data = await response.json();
+        const data = await fetchProducts();
         const productsWithRatings = addRatingToProducts(data);
         setProducts(productsWithRatings);
       } catch (error) {
@@ -25,7 +25,7 @@ export default function Search() {
       }
     };
 
-    fetchProducts();
+    loadProducts();
   }, []);
 
   const filteredProducts = products.filter((product) => {

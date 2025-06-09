@@ -4,8 +4,10 @@ import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import { Star } from 'lucide-react';
 import ButtonPrimary from '../components/ui/ButtonPrimary';
-import { useCart } from './CartContext';
+import { useCart } from '../contexts/CartContext';
 import { assignProductRating, createFlyToCartAnimation } from '../utils';
+import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../data';
+import { fetchProductById } from '../utils/api/mockapi';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -15,39 +17,38 @@ export default function ProductDetail() {
   const { addToCart } = useCart();
   const productImageRef = useRef(null);
 
-  const isClothing =
-    product?.category &&
-    ['jacket', 'sweater', 't-shirt', 'jackets', 'sweaters', 't-shirts'].includes(product.category.toLowerCase().trim());
-  const isShoes =
-    product?.category && ['shoes', 'shoe', 'sneakers', 'sneaker'].includes(product.category.toLowerCase().trim());
+  const isClothing = product?.category && clothingCategories.includes(product.category.toLowerCase().trim());
+  const isShoes = product?.category && shoesCategories.includes(product.category.toLowerCase().trim());
   const isNecklace =
-    (product?.category && ['necklace', 'necklaces'].includes(product.category.toLowerCase().trim())) ||
-    (product?.name && ['chain', 'necklace'].some((word) => product.name.toLowerCase().includes(word)));
-  const isBackpack = product?.name && product.name.toLowerCase().includes('backpack');
+    (product?.category && necklaceCategories.includes(product.category.toLowerCase().trim())) ||
+    (product?.name && necklaceCategories.some((word) => product.name.toLowerCase().includes(word)));
+  const isBackpack = product?.name && backpackCategories.some((word) => product.name.toLowerCase().includes(word));
   const needsSize = isClothing || isShoes || isNecklace || isBackpack;
 
   const sizes = isShoes
-    ? ['38', '39', '40', '42']
+    ? [sizesData.shoes][0]
     : isNecklace
-    ? ['16"', '18"', '20"', '24"']
+    ? [sizesData.necklace][0]
     : isBackpack
-    ? ['15L', '25L', '35L', '45L']
-    : ['S', 'M', 'L', 'XL'];
+    ? [sizesData.backpack][0]
+    : [sizesData.clothing];
 
   useEffect(() => {
-    setLoading(true);
-    setSelectedSizes([]);
-    fetch(`https://681b1c4d17018fe5057a0e51.mockapi.io/products/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        setSelectedSizes([]);
+        const data = await fetchProductById(id);
         const consistentRating = assignProductRating(data.id);
         setProduct({ ...data, displayRating: consistentRating });
-        setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Error fetching product details:', error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    loadProduct();
   }, [id]);
 
   const calculateSalePrice = (originalPrice) => {

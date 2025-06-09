@@ -7,6 +7,7 @@ import FilterSale from '../components/ui/FilterSale';
 import FilterPrice from '../components/ui/FilterPrice';
 import TopRatedProducts from '../components/ui/TopRatedProducts';
 import { addRatingToProducts, assignProductRating } from '../utils';
+import { fetchProducts } from '../utils/api/mockapi';
 
 // Skeleton component for loading state
 const ProductSkeleton = () => (
@@ -26,12 +27,9 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [displayCount, setDisplayCount] = useState(9);
 
-  // Check if we should clear filters (from footer navigation)
   const shouldClearFilters = searchParams.get('clearFilters') === 'true';
 
-  // Initialize state from localStorage and URL params
   const initialCategories = () => {
-    // If clearFilters is true, ignore localStorage and only use URL category
     if (shouldClearFilters) {
       const urlCategory = searchParams.get('category');
       return urlCategory ? [urlCategory] : [];
@@ -47,7 +45,7 @@ const Products = () => {
 
   const initialSortOption = () => {
     const urlSort = searchParams.get('sort');
-    // If clearFilters is true, use URL sort or default, ignore localStorage
+
     if (shouldClearFilters) {
       return urlSort || 'recent';
     }
@@ -57,7 +55,6 @@ const Products = () => {
   };
 
   const initialSaleFilter = () => {
-    // If clearFilters is true, only use URL sale parameter
     if (shouldClearFilters) {
       return searchParams.get('sale') === 'true';
     }
@@ -68,7 +65,6 @@ const Products = () => {
   };
 
   const initialPriceRange = () => {
-    // If clearFilters is true, use default price range
     if (shouldClearFilters) {
       return { min: 5, max: 200 };
     }
@@ -82,7 +78,6 @@ const Products = () => {
   const [sortOption, setSortOption] = useState(initialSortOption);
   const [priceRange, setPriceRange] = useState(initialPriceRange);
 
-  // Clear localStorage when clearFilters parameter is present
   useEffect(() => {
     if (shouldClearFilters) {
       localStorage.removeItem('selectedCategories');
@@ -92,15 +87,13 @@ const Products = () => {
     }
   }, [shouldClearFilters]);
 
-  // Function to randomly update ratings for some products
   const updateRandomRatings = useCallback(() => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
-      // Select 20-30% of products randomly to update
+
       const numberOfProductsToUpdate = Math.floor(updatedProducts.length * 0.25);
       const productsToUpdate = [];
 
-      // Randomly select products to update
       while (productsToUpdate.length < numberOfProductsToUpdate) {
         const randomIndex = Math.floor(Math.random() * updatedProducts.length);
         if (!productsToUpdate.includes(randomIndex)) {
@@ -108,7 +101,6 @@ const Products = () => {
         }
       }
 
-      // Update ratings for selected products
       productsToUpdate.forEach((index) => {
         const possibleRatings = [2, 3, 4, 5];
         const newRating = possibleRatings[Math.floor(Math.random() * possibleRatings.length)];
@@ -123,18 +115,15 @@ const Products = () => {
     });
   }, []);
 
-  // Fetch products only once when component mounts
   useEffect(() => {
     let isMounted = true;
 
-    const fetchProducts = async () => {
+    const fetchProductsData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products');
+        const data = await fetchProducts();
         if (!isMounted) return;
-        const data = await response.json();
         if (isMounted) {
-          // Add consistent ratings to all products
           const productsWithRatings = addRatingToProducts(data);
           setProducts(productsWithRatings);
         }
@@ -147,29 +136,26 @@ const Products = () => {
       }
     };
 
-    fetchProducts();
+    fetchProductsData();
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // Set up 20-minute interval for rating updates
   useEffect(() => {
     if (products.length === 0) return;
 
     const interval = setInterval(() => {
       updateRandomRatings();
-    }, 20 * 60 * 1000); // 20 minutes in milliseconds
+    }, 20 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [products.length, updateRandomRatings]);
 
-  // Reset display count when filters change
   useEffect(() => {
     setDisplayCount(9);
   }, [selectedCategories, showSaleOnly, sortOption, priceRange]);
 
-  // Save to localStorage whenever filters change
   useEffect(() => {
     localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
     localStorage.setItem('showSaleOnly', JSON.stringify(showSaleOnly));

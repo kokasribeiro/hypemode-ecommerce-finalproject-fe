@@ -1,8 +1,8 @@
 import { navItems } from '../../../data';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaBars, FaTimes, FaUser, FaSearch } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaSearch } from 'react-icons/fa';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useCart } from '../../../Pages/CartContext';
+import { useCart } from '../../../contexts/CartContext';
 import CartDropdown from '../../ui/CartDropdown';
 
 export default function Navbar() {

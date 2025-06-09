@@ -8,14 +8,15 @@ import NewsletterUpdates from '../sections/NewsletterUpdates';
 import FinalSale from '../sections/FinalSale';
 import HeaderMain from '../components/layout/HeaderMain';
 import { useState, useEffect } from 'react';
+import { fetchProducts } from '../utils/api/mockapi';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
+    fetchProducts()
+      .then((data) => setProducts(data))
+      .catch((error) => console.error('Error fetching products:', error));
   }, []);
 
   return (

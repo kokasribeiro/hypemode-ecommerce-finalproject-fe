@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaMinus, FaPlus, FaTrash, FaShoppingBag, FaArrowLeft } from 'react-icons/fa';
-import { useCart } from './CartContext';
+import { useCart } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';

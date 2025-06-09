@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { FaMinus, FaPlus, FaTrash, FaShoppingBag } from 'react-icons/fa';
-import { useCart } from '../../../Pages/CartContext';
+import { useCart } from '../../../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 
 const CartDropdown = ({ isOpen, onClose }) => {

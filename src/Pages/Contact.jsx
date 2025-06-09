@@ -4,6 +4,7 @@ import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import { useState, useEffect } from 'react';
 import { validateEmail } from '../data';
+import { fetchProducts } from '../utils/api/mockapi';
 
 export default function Contact() {
   const [products, setProducts] = useState([]);
@@ -12,9 +13,9 @@ export default function Contact() {
   const [messageSent, setMessageSent] = useState(false);
 
   useEffect(() => {
-    fetch('https://681b1c4d17018fe5057a0e51.mockapi.io/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
+    fetchProducts()
+      .then((data) => setProducts(data))
+      .catch((error) => console.error('Error fetching products:', error));
   }, []);
 
   const handleEmailChange = (e) => {

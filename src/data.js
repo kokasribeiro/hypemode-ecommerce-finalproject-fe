@@ -191,3 +191,15 @@ export const validateAge = (dateOfBirth) => {
 
   return calculatedAge >= VALIDATION.MIN_AGE_REQUIREMENT;
 };
+
+export const clothingCategories = ['jacket', 'sweater', 't-shirt', 'jackets', 'sweaters', 't-shirts'];
+export const shoesCategories = ['shoes', 'shoe', 'sneakers', 'sneaker'];
+export const necklaceCategories = ['necklace', 'necklaces'];
+export const backpackCategories = ['backpack', 'backpacks'];
+
+export const sizesData = {
+  shoes: ['38', '39', '40', '42'],
+  necklace: ['16"', '18"', '20"', '24"'],
+  backpack: ['15L', '25L', '35L', '45L'],
+  clothing: ['S', 'M', 'L', 'XL'],
+};

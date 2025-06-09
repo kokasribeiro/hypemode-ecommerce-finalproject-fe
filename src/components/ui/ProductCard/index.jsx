@@ -2,8 +2,9 @@ import React, { useState, useRef } from 'react';
 import ButtonPrimary from '../ButtonPrimary';
 import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../../../Pages/CartContext';
+import { useCart } from '../../../contexts/CartContext';
 import { createFlyToCartAnimation } from '../../../utils';
+import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../../../data';
 
 const ProductCard = ({ className, product, titleWhite }) => {
   const navigate = useNavigate();
@@ -11,24 +12,21 @@ const ProductCard = ({ className, product, titleWhite }) => {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const productImageRef = useRef(null);
 
-  const isClothing =
-    product.category &&
-    ['jacket', 'sweater', 't-shirt', 'jackets', 'sweaters', 't-shirts'].includes(product.category.toLowerCase().trim());
-  const isShoes =
-    product.category && ['shoes', 'shoe', 'sneakers', 'sneaker'].includes(product.category.toLowerCase().trim());
+  const isClothing = product.category && clothingCategories.includes(product.category.toLowerCase().trim());
+  const isShoes = product.category && shoesCategories.includes(product.category.toLowerCase().trim());
   const isNecklace =
-    (product.category && ['necklace', 'necklaces'].includes(product.category.toLowerCase().trim())) ||
-    (product.name && ['chain', 'necklace'].some((word) => product.name.toLowerCase().includes(word)));
-  const isBackpack = product.name && product.name.toLowerCase().includes('backpack');
+    (product.category && necklaceCategories.includes(product.category.toLowerCase().trim())) ||
+    (product.name && necklaceCategories.some((word) => product.name.toLowerCase().includes(word)));
+  const isBackpack = product.name && backpackCategories.some((word) => product.name.toLowerCase().includes(word));
   const needsSize = isClothing || isShoes || isNecklace || isBackpack;
 
   const sizes = isShoes
-    ? ['38', '39', '40', '42']
+    ? [sizesData.shoes][0]
     : isNecklace
-    ? ['16"', '18"', '20"', '24"']
+    ? [sizesData.necklace][0]
     : isBackpack
-    ? ['15L', '25L', '35L', '45L']
-    : ['S', 'M', 'L', 'XL'];
+    ? [sizesData.backpack][0]
+    : [sizesData.clothing];
 
   const renderStars = () => {
     const rating = product.displayRating || 5;

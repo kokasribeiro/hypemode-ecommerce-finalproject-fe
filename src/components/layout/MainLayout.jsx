@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import NavBar from './Navbar';
 import Footer from './Footer';
 import useScrollToTop from '../../hooks/useScrollToTop';
-import { CartProvider } from '../../Pages/CartContext';
+import { CartProvider } from '../../contexts/CartContext';
 
 export default function MainLayout() {
   useScrollToTop();
