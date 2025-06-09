@@ -51,7 +51,7 @@ export default function AboutUs() {
           <div className='grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8'>
             <div className='flex flex-col items-center'>
               <img
-                src='/public/images/AboutUs/TeamMember1.png'
+                src='/images/AboutUs/TeamMember1.png'
                 alt='Miguel Silva'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
@@ -93,7 +93,7 @@ export default function AboutUs() {
           <div className='relative flex flex-col md:flex-row'>
             <div className='w-full md:w-2/3 relative md:-ml-14 md:overflow-visible'>
               <img
-                src='/public/images/AboutUs/TestimonialCard.png'
+                src='/images/AboutUs/TestimonialCard.png'
                 alt='Fashion model'
                 className='w-full object-cover'
                 style={{ height: '700px', objectPosition: 'left center' }}
@@ -110,7 +110,7 @@ export default function AboutUs() {
               <div className='flex items-center'>
                 <div className='w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden mr-4'>
                   <img
-                    src='/public/images/AboutUs/TestimonialFace.png'
+                    src='/images/AboutUs/TestimonialFace.png'
                     alt='Jane Blayck'
                     className='w-full h-full object-cover'
                     loading='lazy'

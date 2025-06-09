@@ -20,7 +20,7 @@ export const navItems = [
 export const categories = [
   {
     id: 1,
-    image: './public/images/home/categories/hypemode-jacket.png',
+    image: '/images/Home/Categories/hypemode-jacket.png',
     alt: 'jacket category',
     count: '61 articles',
     title: 'Jackets',
@@ -28,7 +28,7 @@ export const categories = [
   },
   {
     id: 2,
-    image: './public/images/home/categories/sweater-hypemode.png',
+    image: '/images/Home/Categories/sweater-hypemode.png',
     alt: 'sweater category',
     count: '89 articles',
     title: 'Sweaters',
@@ -36,7 +36,7 @@ export const categories = [
   },
   {
     id: 3,
-    image: '/public/images/Home/Categories/TshirtCategory.png',
+    image: '/images/Home/Categories/TshirtCategory.png',
     alt: 'T-shirts category',
     count: '45 articles',
     title: 'T-Shirts',
@@ -44,7 +44,7 @@ export const categories = [
   },
   {
     id: 4,
-    image: './public/images/home/categories/acessories-hypemode.png',
+    image: '/images/Home/Categories/acessories-hypemode.png',
     alt: 'Accessories category',
     count: '20 articles',
     title: 'Accessories',
@@ -52,7 +52,7 @@ export const categories = [
   },
   {
     id: 5,
-    image: '/public/images/Home/Categories/ShoesCategory.png',
+    image: '/images/Home/Categories/ShoesCategory.png',
     alt: 'Shoes category',
     count: '30 articles',
     title: 'Shoes',
