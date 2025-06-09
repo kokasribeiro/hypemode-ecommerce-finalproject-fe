@@ -32,8 +32,15 @@ export default function Search() {
   const filteredProducts = products.filter((product) => {
     if (!query) return false;
 
-    const searchQuery = query.toLowerCase();
-    return product.name && product.name.toLowerCase().includes(searchQuery);
+    const searchQuery = query.toLowerCase().trim();
+    
+    if (!product.name) return false;
+    
+ 
+    const words = product.name.toLowerCase().split(/\s+/);
+    
+
+    return words.some(word => word.startsWith(searchQuery));
   });
 
   if (loading) {
