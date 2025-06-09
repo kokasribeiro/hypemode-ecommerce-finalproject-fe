@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import ProductCard from '../components/features/ProductCard';
+import ProductSkeleton from '../components/features/SkeletonUiLoading/ProductSkeleton';
 import FilterCategory from '../components/features/FilterCategory';
 import FilterSale from '../components/features/FilterSale';
 import FilterPrice from '../components/features/FilterPrice';
@@ -9,83 +9,25 @@ import TopRatedProducts from '../components/features/TopRatedProducts';
 import SEO from '../components/SEO';
 import { addRatingToProducts, assignProductRating } from '../utils';
 import { fetchProducts } from '../utils/api/mockapi';
-
-const ProductSkeleton = () => (
-  <div className='animate-pulse'>
-    <div className='bg-gray-300 h-64 w-full rounded-lg mb-4'></div>
-    <div className='space-y-2'>
-      <div className='h-4 bg-gray-300 rounded w-3/4'></div>
-      <div className='h-4 bg-gray-300 rounded w-1/2'></div>
-      <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-    </div>
-  </div>
-);
+import { useProductFilters } from '../hooks/useProductFilters';
 
 const Products = () => {
-  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [displayCount, setDisplayCount] = useState(9);
 
-  const shouldClearFilters = searchParams.get('clearFilters') === 'true';
-
-  const initialCategories = () => {
-    if (shouldClearFilters) {
-      const urlCategory = searchParams.get('category');
-      return urlCategory ? [urlCategory] : [];
-    }
-
-    const savedCategories = localStorage.getItem('selectedCategories');
-    const urlCategory = searchParams.get('category');
-    const parsedCategories = savedCategories ? JSON.parse(savedCategories) : [];
-    return urlCategory && !parsedCategories.includes(urlCategory)
-      ? [...parsedCategories, urlCategory]
-      : parsedCategories;
-  };
-
-  const initialSortOption = () => {
-    const urlSort = searchParams.get('sort');
-
-    if (shouldClearFilters) {
-      return urlSort || 'recent';
-    }
-
-    const savedSort = localStorage.getItem('sortOption');
-    return urlSort || savedSort || 'recent';
-  };
-
-  const initialSaleFilter = () => {
-    if (shouldClearFilters) {
-      return searchParams.get('sale') === 'true';
-    }
-
-    const saved = localStorage.getItem('showSaleOnly');
-    const urlSale = searchParams.get('sale') === 'true';
-    return urlSale || (saved ? JSON.parse(saved) : false);
-  };
-
-  const initialPriceRange = () => {
-    if (shouldClearFilters) {
-      return { min: 5, max: 200 };
-    }
-
-    const savedPriceRange = localStorage.getItem('priceRange');
-    return savedPriceRange ? JSON.parse(savedPriceRange) : { min: 5, max: 200 };
-  };
-
-  const [selectedCategories, setSelectedCategories] = useState(initialCategories);
-  const [showSaleOnly, setShowSaleOnly] = useState(initialSaleFilter);
-  const [sortOption, setSortOption] = useState(initialSortOption);
-  const [priceRange, setPriceRange] = useState(initialPriceRange);
-
-  useEffect(() => {
-    if (shouldClearFilters) {
-      localStorage.removeItem('selectedCategories');
-      localStorage.removeItem('showSaleOnly');
-      localStorage.removeItem('sortOption');
-      localStorage.removeItem('priceRange');
-    }
-  }, [shouldClearFilters]);
+  const {
+    selectedCategories,
+    showSaleOnly,
+    sortOption,
+    priceRange,
+    handleCategoryChange,
+    handleSaleFilterChange,
+    handleSortChange,
+    handlePriceFilterChange,
+    handleClearFilters,
+    filterAndSortProducts,
+  } = useProductFilters();
 
   const updateRandomRatings = useCallback(() => {
     setProducts((prevProducts) => {
@@ -123,10 +65,9 @@ const Products = () => {
         setLoading(true);
         const data = await fetchProducts();
         if (!isMounted) return;
-        if (isMounted) {
-          const productsWithRatings = addRatingToProducts(data);
-          setProducts(productsWithRatings);
-        }
+
+        const productsWithRatings = addRatingToProducts(data);
+        setProducts(productsWithRatings);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -156,73 +97,21 @@ const Products = () => {
     setDisplayCount(9);
   }, [selectedCategories, showSaleOnly, sortOption, priceRange]);
 
-  useEffect(() => {
-    localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
-    localStorage.setItem('showSaleOnly', JSON.stringify(showSaleOnly));
-    localStorage.setItem('sortOption', sortOption);
-    localStorage.setItem('priceRange', JSON.stringify(priceRange));
-  }, [selectedCategories, showSaleOnly, sortOption, priceRange]);
-
-  const handleCategoryChange = useCallback((newCategories) => {
-    setSelectedCategories(newCategories);
-  }, []);
-
-  const handleSaleFilterChange = useCallback((isChecked) => {
-    setShowSaleOnly(isChecked);
-  }, []);
-
-  const handleSortChange = useCallback((event) => {
-    setSortOption(event.target.value);
-  }, []);
-
-  const handlePriceFilterChange = useCallback((newPriceRange) => {
-    setPriceRange(newPriceRange);
-  }, []);
-
-  const handleClearFilters = useCallback(() => {
-    setSelectedCategories([]);
-    setShowSaleOnly(false);
-    setSortOption('recent');
-    setPriceRange({ min: 5, max: 200 });
-  }, []);
-
   const handleShowMore = useCallback(() => {
     setDisplayCount((prev) => prev + 9);
   }, []);
 
-  const filteredProducts = products
-    .filter((product) => {
-      const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category);
-      const saleMatch = !showSaleOnly || product.sale;
-      const priceMatch = product.price >= priceRange.min && product.price <= priceRange.max;
-      return categoryMatch && saleMatch && priceMatch;
-    })
-    .sort((a, b) => {
-      switch (sortOption) {
-        case 'price-low-high':
-          return a.price - b.price;
-        case 'price-high-low':
-          return b.price - a.price;
-        case 'best-sellers':
-          return b.displayRating - a.displayRating;
-        case 'recent':
-          return b.id - a.id;
-        default:
-          return b.id - a.id;
-      }
-    });
-
-  // Get products to display based on displayCount
+  const filteredProducts = filterAndSortProducts(products);
   const displayedProducts = filteredProducts.slice(0, displayCount);
   const hasMoreProducts = displayCount < filteredProducts.length;
 
   return (
     <LayoutContainer className='my-20'>
-      <SEO 
-        title="Produtos - Catálogo Completo"
-        description="Explore nossa coleção completa de produtos de moda. Roupas, calçados e acessórios com filtros por categoria, preço e mais. Encontre o seu estilo ideal!"
-        keywords="produtos, catálogo, roupas, calçados, acessórios, filtros, moda masculina, moda feminina, ofertas"
-        url="/products"
+      <SEO
+        title='Produtos - Catálogo Completo'
+        description='Explore nossa coleção completa de produtos de moda. Roupas, calçados e acessórios com filtros por categoria, preço e mais. Encontre o seu estilo ideal!'
+        keywords='produtos, catálogo, roupas, calçados, acessórios, filtros, moda masculina, moda feminina, ofertas'
+        url='/products'
       />
       <div className='flex flex-col md:flex-row gap-8'>
         <div className='w-full md:w-1/4 space-y-6'>
@@ -276,13 +165,10 @@ const Products = () => {
 
           <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8'>
             {loading
-              ? // Show skeleton UI while loading
-                Array.from({ length: 9 }).map((_, index) => <ProductSkeleton key={index} />)
-              : // Show actual products when loaded
-                displayedProducts.map((product) => <ProductCard key={product.id} product={product} />)}
+              ? Array.from({ length: 9 }).map((_, index) => <ProductSkeleton key={index} />)
+              : displayedProducts.map((product) => <ProductCard key={product.id} product={product} />)}
           </div>
 
-          {/* Show More Button */}
           {!loading && hasMoreProducts && (
             <div className='flex justify-center mt-12'>
               <button
@@ -294,7 +180,6 @@ const Products = () => {
             </div>
           )}
 
-          {/* No products message */}
           {!loading && filteredProducts.length === 0 && (
             <div className='text-center py-12'>
               <p className='text-gray-500 text-lg'>No products found matching your criteria.</p>

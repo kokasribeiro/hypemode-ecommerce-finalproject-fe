@@ -21,7 +21,7 @@ export const categories = [
   {
     id: 1,
     image: '/images/Home/Categories/hypemode-jacket.png',
-    alt: 'jacket category',
+    alt: 'Stylish urban jacket collection featuring modern streetwear designs and premium materials',
     count: '61 articles',
     title: 'Jackets',
     category: 'Jackets',
@@ -29,7 +29,7 @@ export const categories = [
   {
     id: 2,
     image: '/images/Home/Categories/sweater-hypemode.png',
-    alt: 'sweater category',
+    alt: 'Cozy sweater collection showcasing comfortable knitwear in various colors and styles',
     count: '89 articles',
     title: 'Sweaters',
     category: 'Sweaters',
@@ -37,7 +37,7 @@ export const categories = [
   {
     id: 3,
     image: '/images/Home/Categories/TshirtCategory.png',
-    alt: 'T-shirts category',
+    alt: 'Trendy t-shirt collection featuring graphic designs and essential streetwear basics',
     count: '45 articles',
     title: 'T-Shirts',
     category: 'T-Shirts',
@@ -45,7 +45,7 @@ export const categories = [
   {
     id: 4,
     image: '/images/Home/Categories/acessories-hypemode.png',
-    alt: 'Accessories category',
+    alt: 'Fashion accessories collection including bags, jewelry, and lifestyle items',
     count: '20 articles',
     title: 'Accessories',
     category: 'Accessories',
@@ -53,7 +53,7 @@ export const categories = [
   {
     id: 5,
     image: '/images/Home/Categories/ShoesCategory.png',
-    alt: 'Shoes category',
+    alt: 'Premium footwear collection featuring sneakers, boots, and stylish shoe designs',
     count: '30 articles',
     title: 'Shoes',
     category: 'Shoes',

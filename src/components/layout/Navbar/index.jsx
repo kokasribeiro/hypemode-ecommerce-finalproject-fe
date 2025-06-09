@@ -62,7 +62,11 @@ export default function Navbar() {
         <div className='flex justify-between h-16'>
           <div className='flex items-center'>
             <Link to='/' className='flex-shrink-0'>
-              <img className='h-8 w-auto' src='/images/OfficialLogoPage/logo-ecommerce.png' alt='Logo' />
+              <img
+                className='h-8 w-auto'
+                src='/images/OfficialLogoPage/logo-ecommerce.png'
+                alt='HypeMode Store - Streetwear fashion brand logo'
+              />
             </Link>
           </div>
 

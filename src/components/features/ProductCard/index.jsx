@@ -5,93 +5,131 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../../contexts/CartContext';
 import { createFlyToCartAnimation } from '../../../utils';
 import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../../../data';
-//todo: clean spagetti code
-const ProductCard = ({ className, product, titleWhite }) => {
-  const navigate = useNavigate();
-  const { addToCart } = useCart();
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const productImageRef = useRef(null);
 
+const getProductType = (product) => {
   const isClothing = product.category && clothingCategories.includes(product.category.toLowerCase().trim());
   const isShoes = product.category && shoesCategories.includes(product.category.toLowerCase().trim());
   const isNecklace =
     (product.category && necklaceCategories.includes(product.category.toLowerCase().trim())) ||
     (product.name && necklaceCategories.some((word) => product.name.toLowerCase().includes(word)));
   const isBackpack = product.name && backpackCategories.some((word) => product.name.toLowerCase().includes(word));
-  const needsSize = isClothing || isShoes || isNecklace || isBackpack;
 
-  const sizes = isShoes
-    ? sizesData.shoes
-    : isNecklace
-    ? sizesData.necklace
-    : isBackpack
-    ? sizesData.backpack
-    : sizesData.clothing;
+  return { isClothing, isShoes, isNecklace, isBackpack };
+};
 
-  const renderStars = () => {
-    const rating = product.displayRating || 5;
+const needsSizeSelection = (productTypes) => {
+  const { isClothing, isShoes, isNecklace, isBackpack } = productTypes;
+  return isClothing || isShoes || isNecklace || isBackpack;
+};
 
-    const stars = [];
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <Star
-          key={`star-${i}`}
-          className={`h-4 w-4 ${i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
-        />,
-      );
-    }
-    return stars;
-  };
+const getSizesForProduct = (productTypes) => {
+  const { isShoes, isNecklace, isBackpack } = productTypes;
 
-  const calculateSalePrice = (originalPrice) => {
-    const productIdNumber = parseInt(product.id, 10);
-    const discountBase = productIdNumber ? (productIdNumber % 11) / 100 + 0.1 : 0.15;
-    const discountedPrice = originalPrice * (1 - discountBase);
-    return Number(discountedPrice.toFixed(2));
-  };
+  if (isShoes) return sizesData.shoes;
+  if (isNecklace) return sizesData.necklace;
+  if (isBackpack) return sizesData.backpack;
+  return sizesData.clothing;
+};
+
+const calculateSalePrice = (originalPrice, productId) => {
+  const productIdNumber = parseInt(productId, 10);
+  const discountBase = productIdNumber ? (productIdNumber % 11) / 100 + 0.1 : 0.15;
+  const discountedPrice = originalPrice * (1 - discountBase);
+  return Number(discountedPrice.toFixed(2));
+};
+
+// Star rating component
+const StarRating = ({ rating = 5, titleWhite }) => {
+  const stars = [];
+  for (let i = 0; i < 5; i++) {
+    stars.push(
+      <Star
+        key={`star-${i}`}
+        className={`h-4 w-4 ${i < rating ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
+      />,
+    );
+  }
+  return <div className={`flex items-center mt-2 ${titleWhite ? 'text-white' : ''}`}>{stars}</div>;
+};
+
+const SizeSelector = ({ sizes, selectedSize, onSizeToggle }) => (
+  <div className='my-3 h-20'>
+    <p className='text-xs font-medium mb-2'>Select Size:</p>
+    <div className='flex flex-wrap gap-1'>
+      {sizes.map((size) => (
+        <button
+          key={size}
+          onClick={(e) => onSizeToggle(size, e)}
+          className={`text-xs px-2 py-1 border rounded ${
+            selectedSize === size ? 'border-red-500 bg-red-500 text-white' : 'border-gray-300 hover:border-red-500'
+          } transition-colors duration-200`}
+        >
+          {size}
+        </button>
+      ))}
+    </div>
+    {selectedSize && <p className='text-xs text-red-600 mt-1'>Selected: {selectedSize}</p>}
+  </div>
+);
+
+// Price display component
+const PriceDisplay = ({ product, titleWhite }) => {
+  if (product.sale) {
+    const salePrice = calculateSalePrice(product.price, product.id);
+    return (
+      <div className='flex items-center space-x-2'>
+        <span className='text-red-600 text-sm font-bold'>{salePrice} €</span>
+        <span className={`text-sm font-medium line-through ${titleWhite ? 'text-white' : 'text-gray-400'}`}>
+          {product.price} €
+        </span>
+      </div>
+    );
+  }
+
+  return <p className={`text-sm font-bold ${titleWhite ? 'text-white' : 'text-gray-400'}`}>{product.price} €</p>;
+};
+
+// Main ProductCard component
+const ProductCard = ({ className, product, titleWhite }) => {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const [selectedSize, setSelectedSize] = useState(null);
+  const productImageRef = useRef(null);
+
+  const productTypes = getProductType(product);
+  const needsSize = needsSizeSelection(productTypes);
+  const sizes = getSizesForProduct(productTypes);
 
   const handleProductClick = () => {
     navigate(`/products/${product.id}`);
   };
 
+  const handleSizeToggle = (size, e) => {
+    e.stopPropagation();
+    setSelectedSize((prev) => {
+      // If the same size is clicked, deselect it; otherwise, select the new size
+      return prev === size ? null : size;
+    });
+  };
+
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    if (needsSize && selectedSizes.length === 0) {
-      alert('Please select at least one size first');
+
+    if (needsSize && !selectedSize) {
+      alert('Please select a size first');
       return;
     }
 
-    if (needsSize) {
-      selectedSizes.forEach((size) => {
-        addToCart(product, size);
-      });
-
-      if (productImageRef.current) {
-        createFlyToCartAnimation(productImageRef.current, product.image);
-      }
-    } else {
-      addToCart(product, null);
-
-      if (productImageRef.current) {
-        createFlyToCartAnimation(productImageRef.current, product.image);
-      }
+    addToCart(product, selectedSize);
+    if (productImageRef.current) {
+      createFlyToCartAnimation(productImageRef.current, product.image);
     }
-  };
-
-  const handleSizeToggle = (size, e) => {
-    e.stopPropagation();
-    setSelectedSizes((prev) => {
-      if (prev.includes(size)) {
-        return prev.filter((s) => s !== size);
-      } else {
-        return [...prev, size];
-      }
-    });
   };
 
   return (
     <div className={`w-full h-full ${className}`}>
       <div className='flex flex-col h-full'>
+        {/* Product Image */}
         <div className='relative'>
           <img
             ref={productImageRef}
@@ -118,43 +156,12 @@ const ProductCard = ({ className, product, titleWhite }) => {
             {product.name}
           </h2>
 
-          {needsSize && (
-            <div className='my-3 h-20'>
-              <p className='text-xs font-medium mb-2'>Select Size(s):</p>
-              <div className='flex flex-wrap gap-1'>
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={(e) => handleSizeToggle(size, e)}
-                    className={`text-xs px-2 py-1 border rounded ${
-                      selectedSizes.includes(size)
-                        ? 'border-red-500 bg-red-500 text-white'
-                        : 'border-gray-300 hover:border-red-500'
-                    } transition-colors duration-200`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-              {selectedSizes.length > 0 && (
-                <p className='text-xs text-red-600 mt-1'>Selected: {selectedSizes.join(', ')}</p>
-              )}
-            </div>
-          )}
+          {needsSize && <SizeSelector sizes={sizes} selectedSize={selectedSize} onSizeToggle={handleSizeToggle} />}
 
-          <div className={`flex items-center mt-2 ${titleWhite ? 'text-white' : ''}`}>{renderStars()}</div>
+          <StarRating rating={product.displayRating} titleWhite={titleWhite} />
 
           <div className='mb-2'>
-            {product.sale ? (
-              <div className='flex items-center space-x-2'>
-                <span className='text-red-600 text-sm font-bold'>{calculateSalePrice(product.price)} €</span>
-                <span className={`text-sm font-medium line-through ${titleWhite ? 'text-white' : 'text-gray-400'}`}>
-                  {product.price} €
-                </span>
-              </div>
-            ) : (
-              <p className={`text-sm font-bold ${titleWhite ? 'text-white' : 'text-gray-400'}`}>{product.price} €</p>
-            )}
+            <PriceDisplay product={product} titleWhite={titleWhite} />
           </div>
 
           <p className={`text-sm mb-4 ${titleWhite ? 'text-white' : 'text-gray-500'}`}>{product.category}</p>

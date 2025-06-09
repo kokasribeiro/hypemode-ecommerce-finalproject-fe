@@ -6,7 +6,7 @@ const SEO = ({ title, description, keywords, image, url, type = 'website', autho
     'Sua loja online de moda e estilo. Encontre as melhores marcas e tendências em roupas, calçados e acessórios.';
   const defaultKeywords = 'moda, roupas, calçados, acessórios, estilo, tendências, loja online, ecommerce';
   const defaultImage = '/favicon.png';
-  const siteUrl = 'https://hypemode-store.com'; // Substitua pela URL real do seu site
+  const siteUrl = 'https://hypemode-store.com';
 
   const metaTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const metaDescription = description || defaultDescription;

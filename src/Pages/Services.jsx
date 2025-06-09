@@ -74,20 +74,20 @@ export default function Services() {
           </div>
         </div>
         <div className='flex flex-wrap justify-center gap-4 my-6 md:my-8 px-4'>
-          <img src='public/images/services/logo-nike-sponsers1.png' alt='Logo Nike' className='h-20 md:h-30 mx-2' />
-          <img src='public/images/services/urbancore-sponser2.png' alt='Logo Lv' className='h-20 md:h-30 mx-2' />
+          <img src='public/images/services/logo-nike-sponsers1.png' alt='Nike brand logo - Official sponsor partner' className='h-20 md:h-30 mx-2' />
+          <img src='public/images/services/urbancore-sponser2.png' alt='Urban Core brand logo - Fashion partner' className='h-20 md:h-30 mx-2' />
           <img
             src='public/images/services/badbunny-logo-sponser3.png'
-            alt='Logo BadBunny'
+            alt='Bad Bunny artist logo - Music collaboration partner'
             className='h-20 md:h-30 mx-2'
           />
-          <img src='public/images/services/hypemode-sponser4.png' alt='Logo Adidas' className='h-20 md:h-30 mx-2' />
+          <img src='public/images/services/hypemode-sponser4.png' alt='Adidas brand logo - Athletic wear sponsor' className='h-20 md:h-30 mx-2' />
         </div>
         <div className='max-w-6xl mx-auto my-10 md:my-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start px-4 md:px-0'>
           <div className='flex flex-col items-center md:items-start w-full'>
             <img
               src='public/images/services/WomenPhoto-ServicesCard.png'
-              alt='Serviço'
+              alt='Stylish woman wearing trendy fashion outfit showcasing our styling services'
               className='rounded w-full object-cover max-h-[250px] md:max-h-[400px] mb-6'
             />
             <h2 className='text-2xl md:text-4xl font-bold mb-2 text-center md:text-left w-full'>
@@ -123,7 +123,7 @@ export default function Services() {
             </p>
             <img
               src='public/images/services/clothes-ServicesCard.png'
-              alt='Other Service'
+              alt='Collection of premium streetwear clothing hanging in organized display'
               className='rounded w-full object-cover max-h-[250px] md:max-h-[470px] mt-2'
             />
           </div>

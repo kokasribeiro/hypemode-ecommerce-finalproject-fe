@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { Toaster } from 'react-hot-toast';
 
 import MainLayout from './components/layout/MainLayout';
 
@@ -69,6 +70,27 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <HelmetProvider>
       <RouterProvider router={router} />
+      <Toaster
+        position='top-center'
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=''
+        containerStyle={{}}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            theme: {
+              primary: 'green',
+              secondary: 'black',
+            },
+          },
+        }}
+      />
     </HelmetProvider>
   </StrictMode>,
 );

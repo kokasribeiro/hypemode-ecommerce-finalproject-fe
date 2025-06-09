@@ -47,7 +47,7 @@ export default function AboutUs() {
             </div>
           </div>
           <div className='absolute left-4 right-auto md:left-12 top-[-30px] md:top-[-50px] z-10 w-56 md:w-80 h-56 md:h-80 shadow-xl rounded-lg overflow-hidden'>
-            <img src='public/images/AboutUs/ShoesCardAboutUs.png' alt='Shoes' className='w-full h-full object-cover' />
+            <img src='public/images/AboutUs/ShoesCardAboutUs.png' alt='Premium sneaker collection featuring modern streetwear footwear designs' className='w-full h-full object-cover' />
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@ export default function AboutUs() {
             <div className='flex flex-col items-center'>
               <img
                 src='/images/AboutUs/TeamMember1.png'
-                alt='A pic of a team member'
+                alt='Miguel Silva - Creative Designer specializing in streetwear fashion'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
               <h3 className='mt-2 md:mt-4 text-base md:text-xl font-bold font-mono text-black'>Miguel Silva</h3>
@@ -68,7 +68,7 @@ export default function AboutUs() {
             <div className='flex flex-col items-center'>
               <img
                 src='public/images/AboutUs/TeamMember2.png'
-                alt='Steffi Brucce'
+                alt='Steffi Brucce - Operations Manager overseeing team coordination and business strategy'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
               <h3 className='mt-2 md:mt-4 text-base md:text-xl font-bold font-mono text-black'>Steffi Brucce</h3>
@@ -77,7 +77,7 @@ export default function AboutUs() {
             <div className='flex flex-col items-center'>
               <img
                 src='public/images/AboutUs/TeamMember3.png'
-                alt='Miguel Angelo'
+                alt='Miguel Angelo - Fashion Consultant providing expert styling advice and trend insights'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
               <h3 className='mt-2 md:mt-4 text-base md:text-xl font-bold font-mono text-black'>Miguel Angelo</h3>
@@ -86,7 +86,7 @@ export default function AboutUs() {
             <div className='flex flex-col items-center'>
               <img
                 src='public/images/AboutUs/TeamMember4.png'
-                alt='Enzo Sebastian'
+                alt='Enzo Sebastian - Personal Stylist creating custom looks and fashion guidance'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
               <h3 className='mt-2 md:mt-4 text-base md:text-xl font-bold font-mono text-black'>Enzo Sebastian</h3>
@@ -101,7 +101,7 @@ export default function AboutUs() {
             <div className='w-full md:w-2/3 relative md:-ml-14 md:overflow-visible'>
               <img
                 src='/images/AboutUs/TestimonialCard.png'
-                alt='Fashion model'
+                alt='Professional portrait of satisfied customer showcasing fashionable outfit'
                 className='w-full object-cover'
                 style={{ height: '700px', objectPosition: 'left center' }}
                 loading='lazy'
@@ -118,7 +118,7 @@ export default function AboutUs() {
                 <div className='w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden mr-4'>
                   <img
                     src='/images/AboutUs/TestimonialFace.png'
-                    alt='Jane Blayck'
+                    alt='Jane Blayck - Happy customer profile photo'
                     className='w-full h-full object-cover'
                     loading='lazy'
                   />

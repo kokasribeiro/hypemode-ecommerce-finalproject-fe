@@ -69,8 +69,8 @@ const HeaderMain = () => {
           </div>
           <div className='absolute right-110 top-0 h-full md:w-1/2 flex justify-end'>
             <img
-              src='/images/Home/Header/ManSweatRemove.png'
-              alt='Brand Collection'
+              src='/images/Home/Header/manSweatRemove.png'
+              alt='Male model showcasing new brand collection wearing stylish streetwear outfit'
               className='h-full opacity-90 object-cover max-w-full'
             />
           </div>

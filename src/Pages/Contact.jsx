@@ -1,17 +1,28 @@
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
+import FormInput from '../components/features/FormInput';
+import SuccessMessage from '../components/features/SuccessMessage';
+import ButtonPrimary from '../components/features/ButtonPrimary';
 import SEO from '../components/SEO';
 import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import { useState, useEffect } from 'react';
-import { validateEmail } from '../data';
+import { useFormValidation } from '../hooks/useFormValidation';
 import { fetchProducts } from '../utils/api/mockapi';
 
 export default function Contact() {
   const [products, setProducts] = useState([]);
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    message: ''
+  });
   const [messageSent, setMessageSent] = useState(false);
+
+  const { errors, validateSingleField } = useFormValidation({
+    required: ['name', 'phone', 'email', 'message']
+  });
 
   useEffect(() => {
     fetchProducts()
@@ -19,21 +30,25 @@ export default function Contact() {
       .catch((error) => console.error('Error fetching products:', error));
   }, []);
 
-  const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (value && !validateEmail(value)) {
-      setEmailError('Your email is not valid');
-    } else {
-      setEmailError('');
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    if (value) {
+      validateSingleField(name, value, formData);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateEmail(email)) {
-      setEmailError('Your email is not valid');
+    const isValidEmail = validateSingleField('email', formData.email, formData);
+    const hasRequiredFields = Object.values(formData).every(field => field.trim() !== '');
+
+    if (!isValidEmail || !hasRequiredFields) {
       return;
     }
 
@@ -43,11 +58,11 @@ export default function Contact() {
 
   return (
     <>
-      <SEO 
-        title="Contato - Entre em Contato Conosco"
-        description="Entre em contato com a HypeMode Store. Estamos aqui para ajudar com dúvidas, suporte ao cliente e feedback. Envie sua mensagem!"
-        keywords="contato, suporte, atendimento, dúvidas, formulário de contato, customer service"
-        url="/contact"
+      <SEO
+        title='Contato - Entre em Contato Conosco'
+        description='Entre em contato com a HypeMode Store. Estamos aqui para ajudar com dúvidas, suporte ao cliente e feedback. Envie sua mensagem!'
+        keywords='contato, suporte, atendimento, dúvidas, formulário de contato, customer service'
+        url='/contact'
       />
       <SecondaryHeader title='Contact' />
       <LayoutContainer>
@@ -58,105 +73,88 @@ export default function Contact() {
                 <div className='absolute inset-0 transform -translate-x-2 -translate-y-2 md:-translate-x-4 md:-translate-y-4 z-0'></div>
                 <img
                   src='public/images/contact/contact-image.png'
-                  alt='Woman with headphones'
+                  alt='Friendly customer service representative using a laptop ready to assist with inquiries'
                   className='relative z-10 w-full h-auto object-cover'
                 />
               </div>
             </div>
+            
             <div className='w-full md:w-1/2 max-w-md order-1 md:order-2'>
               <h2 className='text-2xl md:text-3xl font-bold mb-4 md:mb-6'>Contact with us</h2>
 
               {messageSent ? (
-                <div className='bg-green-50 border border-green-200 rounded-lg p-6 text-center'>
-                  <div className='flex justify-center mb-4'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='h-16 w-16 text-green-500'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                    >
-                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
-                    </svg>
-                  </div>
-                  <h3 className='text-xl font-semibold text-green-800 mb-2'>Message Sent Successfully!</h3>
-                  <p className='text-green-700 mb-4'>Thank you for reaching out. We will get back to you soon.</p>
-                  <button
-                    onClick={() => setMessageSent(false)}
-                    className='bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300'
-                  >
-                    Send Another Message
-                  </button>
-                </div>
+                <SuccessMessage
+                  title="Message Sent Successfully!"
+                  message="Thank you for reaching out. We will get back to you soon."
+                  buttonText="Send Another Message"
+                  onButtonClick={() => setMessageSent(false)}
+                  variant="green"
+                />
               ) : (
                 <form onSubmit={handleSubmit}>
-                  <div className='mb-3 md:mb-4'>
-                    <label htmlFor='name' className='block text-sm font-medium text-gray-700 mb-1'>
-                      Name *
-                    </label>
-                    <input
-                      type='text'
-                      id='name'
-                      name='name'
-                      required
-                      className='w-full p-2 md:p-3 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500'
-                    />
-                  </div>
-                  <div className='mb-3 md:mb-4'>
-                    <label htmlFor='phone' className='block text-sm font-medium text-gray-700 mb-1'>
-                      Phone *
-                    </label>
-                    <input
-                      type='tel'
-                      id='phone'
-                      name='phone'
-                      required
-                      className='w-full p-2 md:p-3 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500'
-                    />
-                  </div>
-                  <div className='mb-3 md:mb-4'>
-                    <label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-1'>
-                      Email Address *
-                    </label>
-                    <input
-                      type='email'
-                      id='email'
-                      name='email'
-                      value={email}
-                      onChange={handleEmailChange}
-                      required
-                      className={`w-full p-2 md:p-3 border ${
-                        emailError ? 'border-red-500' : 'border-gray-300'
-                      } rounded focus:ring-red-500 focus:border-red-500`}
-                    />
-                    {emailError && <p className='text-red-500 text-xs md:text-sm mt-1'>{emailError}</p>}
-                  </div>
-                  <div className='mb-4 md:mb-6'>
-                    <label htmlFor='message' className='block text-sm font-medium text-gray-700 mb-1'>
-                      Your Message *
-                    </label>
-                    <textarea
-                      id='message'
-                      name='message'
-                      rows='4'
-                      required
-                      className='w-full p-2 md:p-3 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500'
-                    ></textarea>
-                  </div>
-                  <button
+                  <FormInput
+                    label='Name'
+                    name='name'
+                    value={formData.name}
+                    onChange={handleChange}
+                    error={errors.name}
+                    required
+                    className='mb-3 md:mb-4'
+                    inputClassName='p-2 md:p-3'
+                  />
+
+                  <FormInput
+                    label='Phone'
+                    name='phone'
+                    type='tel'
+                    value={formData.phone}
+                    onChange={handleChange}
+                    error={errors.phone}
+                    required
+                    className='mb-3 md:mb-4'
+                    inputClassName='p-2 md:p-3'
+                  />
+
+                  <FormInput
+                    label='Email Address'
+                    name='email'
+                    type='email'
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={errors.email}
+                    required
+                    className='mb-3 md:mb-4'
+                    inputClassName='p-2 md:p-3'
+                  />
+
+                  <FormInput
+                    label='Your Message'
+                    name='message'
+                    type='textarea'
+                    rows='4'
+                    value={formData.message}
+                    onChange={handleChange}
+                    error={errors.message}
+                    required
+                    className='mb-4 md:mb-6'
+                    inputClassName='p-2 md:p-3'
+                  />
+
+                  <ButtonPrimary
+                    buttonText='Send Message'
                     type='submit'
-                    className='bg-red-600 text-white py-2 md:py-3 px-4 md:px-6 rounded hover:bg-red-700 transition duration-300 w-full md:w-auto'
-                  >
-                    Send Message
-                  </button>
+                    className='w-full md:w-auto py-2 md:py-3 px-4 md:px-6'
+                  />
                 </form>
               )}
             </div>
           </div>
         </div>
+        
         <div className='container mx-auto px-4 py-8'>
           <NewArrivals showViewAll={true} products={products} />
         </div>
+        
         <div className='container mx-auto px-4 py-8 md:py-12'>
           <NewsletterUpdates />
         </div>
