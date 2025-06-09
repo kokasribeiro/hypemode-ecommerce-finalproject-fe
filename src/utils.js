@@ -129,3 +129,9 @@ export const createFlyToCartAnimation = (sourceElement, productImage, onComplete
     }, 300);
   }, 2000);
 };
+
+export const getRandomPopularProducts = (products) => {
+  const topRated = sortByRating(products).slice(0, 10);
+  const shuffled = [...topRated].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 4);
+};

@@ -2,16 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 import ProductCard from '../../components/ui/ProductCard';
-import { sortByRating } from '../../utils';
+import { getRandomPopularProducts } from '../../utils';
 
 const PopularProducts = ({ products = [] }) => {
   const navigate = useNavigate();
 
-  const getRandomPopularProducts = () => {
-    const topRated = sortByRating(products).slice(0, 10);
-    const shuffled = [...topRated].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 4);
-  };
+  const randomPopularProducts = getRandomPopularProducts(products);
 
   const handleViewAll = () => {
     navigate('/products?sort=best-sellers&clearFilters=true');
@@ -34,7 +30,7 @@ const PopularProducts = ({ products = [] }) => {
         </div>
       </div>
       <div className='grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 my-16'>
-        {getRandomPopularProducts().map((product) => (
+        {randomPopularProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
