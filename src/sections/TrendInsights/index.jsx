@@ -5,7 +5,6 @@ const TrendInsights = () => {
   return (
     <LayoutContainer className='my-20'>
       <div className='flex justify-end relative'>
-        {/* todo: alt tem q ser bem descritivo */}
         <img
           src='/images/Home/Insight/insightDress.png'
           alt='Fashion model wearing elegant dress showcasing current trend insights and style inspiration'

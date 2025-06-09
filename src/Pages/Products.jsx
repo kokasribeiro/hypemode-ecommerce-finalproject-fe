@@ -137,7 +137,11 @@ const Products = () => {
             onFilterChange={handleCategoryChange}
             key={`category-${selectedCategories.length}`}
           />
-          <FilterSale onFilterChange={handleSaleFilterChange} initialChecked={showSaleOnly} />
+          <FilterSale
+            onFilterChange={handleSaleFilterChange}
+            initialChecked={showSaleOnly}
+            key={`sale-${showSaleOnly}`}
+          />
           <TopRatedProducts products={products} />
         </div>
 

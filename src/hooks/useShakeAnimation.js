@@ -4,7 +4,6 @@ export const useShakeAnimation = () => {
   const styleRef = useRef(null);
 
   useEffect(() => {
-    // Add shake animation styles to the document
     const styleEl = document.createElement('style');
     styleEl.innerHTML = `
       @keyframes shake {
@@ -20,7 +19,6 @@ export const useShakeAnimation = () => {
     document.head.appendChild(styleEl);
     styleRef.current = styleEl;
 
-    // Cleanup function
     return () => {
       if (styleRef.current && document.head.contains(styleRef.current)) {
         document.head.removeChild(styleRef.current);

@@ -38,7 +38,6 @@ const calculateSalePrice = (originalPrice, productId) => {
   return Number(discountedPrice.toFixed(2));
 };
 
-// Star rating component
 const StarRating = ({ rating = 5, titleWhite }) => {
   const stars = [];
   for (let i = 0; i < 5; i++) {
@@ -72,7 +71,6 @@ const SizeSelector = ({ sizes, selectedSize, onSizeToggle }) => (
   </div>
 );
 
-// Price display component
 const PriceDisplay = ({ product, titleWhite }) => {
   if (product.sale) {
     const salePrice = calculateSalePrice(product.price, product.id);
@@ -89,7 +87,6 @@ const PriceDisplay = ({ product, titleWhite }) => {
   return <p className={`text-sm font-bold ${titleWhite ? 'text-white' : 'text-gray-400'}`}>{product.price} €</p>;
 };
 
-// Main ProductCard component
 const ProductCard = ({ className, product, titleWhite }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -107,7 +104,6 @@ const ProductCard = ({ className, product, titleWhite }) => {
   const handleSizeToggle = (size, e) => {
     e.stopPropagation();
     setSelectedSize((prev) => {
-      // If the same size is clicked, deselect it; otherwise, select the new size
       return prev === size ? null : size;
     });
   };
@@ -129,7 +125,6 @@ const ProductCard = ({ className, product, titleWhite }) => {
   return (
     <div className={`w-full h-full ${className}`}>
       <div className='flex flex-col h-full'>
-        {/* Product Image */}
         <div className='relative'>
           <img
             ref={productImageRef}

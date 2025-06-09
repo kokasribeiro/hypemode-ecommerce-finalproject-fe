@@ -1,6 +1,5 @@
 import toast from 'react-hot-toast';
 
-// Toast de loading com promise
 export const toastLoading = (promise, messages) => {
   return toast.promise(promise, {
     loading: messages.loading || 'Carregando...',
@@ -8,7 +7,6 @@ export const toastLoading = (promise, messages) => {
     error: messages.error || 'Erro!',
   });
 };
-
 
 export const toastSuccess = (message, options = {}) => {
   return toast.success(message, {
@@ -34,7 +32,6 @@ export const toastError = (message, options = {}) => {
   });
 };
 
-
 export const toastLoginSuccess = (navigate, redirectPath = '/') => {
   const toastId = toast.success('Login realizado com sucesso! Redirecionando...', {
     duration: 3000,
@@ -52,7 +49,6 @@ export const toastLoginSuccess = (navigate, redirectPath = '/') => {
 
   return toastId;
 };
-
 
 export const toastWithCountdown = (message, seconds = 3, onComplete) => {
   let timeLeft = seconds;

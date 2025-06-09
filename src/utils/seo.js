@@ -1,4 +1,3 @@
-// SEO Configuration and Utilities
 export const SEO_CONFIG = {
   siteName: 'HypeMode Store',
   siteUrl: 'https://hypemode-store.com',
@@ -11,10 +10,9 @@ export const SEO_CONFIG = {
   facebookAppId: '123456789',
   language: 'pt-BR',
   locale: 'pt_BR',
-  themeColor: '#ef4444', // red-500
+  themeColor: '#ef4444',
 };
 
-// Generate structured data for different page types
 export const generateStructuredData = (type, data) => {
   const baseData = {
     '@context': 'https://schema.org',
@@ -100,7 +98,6 @@ export const generateStructuredData = (type, data) => {
   }
 };
 
-// Generate meta tags for different page types
 export const generateMetaTags = (pageType, data = {}) => {
   const title = data.title ? `${data.title} | ${SEO_CONFIG.siteName}` : SEO_CONFIG.defaultTitle;
   const description = data.description || SEO_CONFIG.defaultDescription;
@@ -122,7 +119,6 @@ export const generateMetaTags = (pageType, data = {}) => {
   };
 };
 
-// SEO best practices checklist
 export const SEO_CHECKLIST = {
   title: {
     minLength: 30,
@@ -141,7 +137,7 @@ export const SEO_CHECKLIST = {
   image: {
     minWidth: 1200,
     minHeight: 630,
-    aspectRatio: '1.91:1', // Facebook/Twitter recommended
+    aspectRatio: '1.91:1',
   },
 };
 

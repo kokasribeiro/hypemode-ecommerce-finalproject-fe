@@ -12,6 +12,10 @@ const FilterSale = ({ onFilterChange, initialChecked = false }) => {
     setIsChecked(saleParam === 'true');
   }, [location.search]);
 
+  useEffect(() => {
+    setIsChecked(initialChecked);
+  }, [initialChecked]);
+
   const handleChange = () => {
     const newChecked = !isChecked;
     setIsChecked(newChecked);

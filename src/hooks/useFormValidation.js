@@ -8,27 +8,18 @@ export const useFormValidation = (validationRules = {}) => {
     (name, value, allFormData = {}) => {
       let error = '';
 
-      // Check if field is required and empty
       if (validationRules.required && validationRules.required.includes(name) && !value) {
         error = ERROR_MESSAGES.REQUIRED_FIELD(name);
-      }
-      // Email validation
-      else if (name === 'email' && value && !validateEmail(value)) {
+      } else if (name === 'email' && value && !validateEmail(value)) {
         error = ERROR_MESSAGES.INVALID_EMAIL;
-      }
-      // Password validation
-      else if (name === 'password' && value) {
+      } else if (name === 'password' && value) {
         const passwordError = validatePassword(value);
         if (passwordError) error = passwordError;
-      }
-      // Confirm password validation
-      else if (name === 'confirmPassword' && value && allFormData.password) {
+      } else if (name === 'confirmPassword' && value && allFormData.password) {
         if (value !== allFormData.password) {
           error = ERROR_MESSAGES.PASSWORDS_DONT_MATCH;
         }
-      }
-      // Date of birth validation
-      else if (name === 'dateOfBirth' && value && !validateAge(value)) {
+      } else if (name === 'dateOfBirth' && value && !validateAge(value)) {
         error = ERROR_MESSAGES.UNDERAGE;
       }
 
@@ -65,7 +56,6 @@ export const useFormValidation = (validationRules = {}) => {
       const newErrors = {};
       let isValid = true;
 
-      // Validate required fields
       if (validationRules.required) {
         validationRules.required.forEach((field) => {
           const error = validateField(field, formData[field], formData);
@@ -76,7 +66,6 @@ export const useFormValidation = (validationRules = {}) => {
         });
       }
 
-      // Validate all other fields that have values
       Object.keys(formData).forEach((field) => {
         if (!validationRules.required || !validationRules.required.includes(field)) {
           const error = validateField(field, formData[field], formData);

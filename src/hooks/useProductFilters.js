@@ -5,7 +5,6 @@ export const useProductFilters = () => {
   const [searchParams] = useSearchParams();
   const shouldClearFilters = searchParams.get('clearFilters') === 'true';
 
-  // Initialize filter states
   const initialCategories = () => {
     if (shouldClearFilters) {
       const urlCategory = searchParams.get('category');
@@ -55,7 +54,6 @@ export const useProductFilters = () => {
   const [sortOption, setSortOption] = useState(initialSortOption);
   const [priceRange, setPriceRange] = useState(initialPriceRange);
 
-  // Clear filters on mount if needed
   useEffect(() => {
     if (shouldClearFilters) {
       localStorage.removeItem('selectedCategories');
@@ -65,7 +63,6 @@ export const useProductFilters = () => {
     }
   }, [shouldClearFilters]);
 
-  // Save filters to localStorage
   useEffect(() => {
     localStorage.setItem('selectedCategories', JSON.stringify(selectedCategories));
     localStorage.setItem('showSaleOnly', JSON.stringify(showSaleOnly));
@@ -73,7 +70,6 @@ export const useProductFilters = () => {
     localStorage.setItem('priceRange', JSON.stringify(priceRange));
   }, [selectedCategories, showSaleOnly, sortOption, priceRange]);
 
-  // Filter change handlers
   const handleCategoryChange = useCallback((newCategories) => {
     setSelectedCategories(newCategories);
   }, []);
@@ -97,7 +93,6 @@ export const useProductFilters = () => {
     setPriceRange({ min: 5, max: 200 });
   }, []);
 
-  // Filter and sort products
   const filterAndSortProducts = useCallback(
     (products) => {
       return products
@@ -126,20 +121,17 @@ export const useProductFilters = () => {
   );
 
   return {
-    // Filter states
     selectedCategories,
     showSaleOnly,
     sortOption,
     priceRange,
 
-    // Filter handlers
     handleCategoryChange,
     handleSaleFilterChange,
     handleSortChange,
     handlePriceFilterChange,
     handleClearFilters,
 
-    // Utility function
     filterAndSortProducts,
   };
 };
