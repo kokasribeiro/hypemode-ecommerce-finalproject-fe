@@ -9,8 +9,14 @@ const FilterSale = ({ onFilterChange, initialChecked = false }) => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const saleParam = params.get('sale');
-    setIsChecked(saleParam === 'true');
-  }, [location.search]);
+    const newChecked = saleParam === 'true';
+    setIsChecked(newChecked);
+
+    // Notify parent component when URL changes
+    if (onFilterChange) {
+      onFilterChange(newChecked);
+    }
+  }, [location.search, onFilterChange]);
 
   useEffect(() => {
     setIsChecked(initialChecked);

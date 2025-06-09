@@ -14,7 +14,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedSize, setSelectedSize] = useState('');
   const { addToCart } = useCart();
   const productImageRef = useRef(null);
 
@@ -38,7 +38,7 @@ export default function ProductDetail() {
     const loadProduct = async () => {
       try {
         setLoading(true);
-        setSelectedSizes([]);
+        setSelectedSize('');
         const data = await fetchProductById(id);
         const consistentRating = assignProductRating(data.id);
         setProduct({ ...data, displayRating: consistentRating });
@@ -76,51 +76,45 @@ export default function ProductDetail() {
     return stars;
   };
 
-  const handleSizeToggle = (size) => {
-    setSelectedSizes((prev) => {
-      if (prev.includes(size)) {
-        return prev.filter((s) => s !== size);
-      } else {
-        return [...prev, size];
-      }
-    });
+  const handleSizeSelect = (size) => {
+    setSelectedSize(size);
   };
 
   const handleAddToCart = () => {
     if (!product) return;
 
-    if (needsSize && selectedSizes.length === 0) {
-      alert('Please select at least one size first');
+    if (needsSize && !selectedSize) {
+      alert('Please select a size first');
       return;
     }
 
-    if (needsSize) {
-      selectedSizes.forEach((size) => {
-        addToCart(product, size);
-      });
+    addToCart(product, needsSize ? selectedSize : null);
 
-      if (productImageRef.current) {
-        createFlyToCartAnimation(productImageRef.current, product.image);
-      }
-    } else {
-      addToCart(product, null);
-
-      if (productImageRef.current) {
-        createFlyToCartAnimation(productImageRef.current, product.image);
-      }
+    if (productImageRef.current) {
+      createFlyToCartAnimation(productImageRef.current, product.image);
     }
   };
 
   if (loading) {
     return (
       <>
-        <SEO 
+        <SEO
           title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
-          description={product ? `${product.name} - ${product.category}. Preço: €${product.sale ? calculateSalePrice(product.price) : product.price}. ${product.description || 'Produto de qualidade da HypeMode Store.'}` : 'Detalhes do produto selecionado na HypeMode Store.'}
-          keywords={product ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online` : 'produto, detalhes, moda'}
+          description={
+            product
+              ? `${product.name} - ${product.category}. Preço: €${
+                  product.sale ? calculateSalePrice(product.price) : product.price
+                }. ${product.description || 'Produto de qualidade da HypeMode Store.'}`
+              : 'Detalhes do produto selecionado na HypeMode Store.'
+          }
+          keywords={
+            product
+              ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online`
+              : 'produto, detalhes, moda'
+          }
           url={`/products/${id}`}
           image={product?.image}
-          type="product"
+          type='product'
         />
         <SecondaryHeader title='Product Detail' />
         <LayoutContainer>
@@ -135,13 +129,23 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <>
-        <SEO 
+        <SEO
           title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
-          description={product ? `${product.name} - ${product.category}. Preço: €${product.sale ? calculateSalePrice(product.price) : product.price}. ${product.description || 'Produto de qualidade da HypeMode Store.'}` : 'Detalhes do produto selecionado na HypeMode Store.'}
-          keywords={product ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online` : 'produto, detalhes, moda'}
+          description={
+            product
+              ? `${product.name} - ${product.category}. Preço: €${
+                  product.sale ? calculateSalePrice(product.price) : product.price
+                }. ${product.description || 'Produto de qualidade da HypeMode Store.'}`
+              : 'Detalhes do produto selecionado na HypeMode Store.'
+          }
+          keywords={
+            product
+              ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online`
+              : 'produto, detalhes, moda'
+          }
           url={`/products/${id}`}
           image={product?.image}
-          type="product"
+          type='product'
         />
         <SecondaryHeader title='Product Detail' />
         <LayoutContainer>
@@ -155,13 +159,23 @@ export default function ProductDetail() {
 
   return (
     <>
-      <SEO 
+      <SEO
         title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
-        description={product ? `${product.name} - ${product.category}. Preço: €${product.sale ? calculateSalePrice(product.price) : product.price}. ${product.description || 'Produto de qualidade da HypeMode Store.'}` : 'Detalhes do produto selecionado na HypeMode Store.'}
-        keywords={product ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online` : 'produto, detalhes, moda'}
+        description={
+          product
+            ? `${product.name} - ${product.category}. Preço: €${
+                product.sale ? calculateSalePrice(product.price) : product.price
+              }. ${product.description || 'Produto de qualidade da HypeMode Store.'}`
+            : 'Detalhes do produto selecionado na HypeMode Store.'
+        }
+        keywords={
+          product
+            ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online`
+            : 'produto, detalhes, moda'
+        }
         url={`/products/${id}`}
         image={product?.image}
-        type="product"
+        type='product'
       />
       <SecondaryHeader title='Product Detail' />
       <LayoutContainer>
@@ -207,20 +221,16 @@ export default function ProductDetail() {
             {needsSize && (
               <div className='my-6'>
                 <p className='text-base font-semibold mb-3'>
-                  Select Size(s):
-                  {selectedSizes.length > 0 && (
-                    <span className='text-red-600 ml-2'>
-                      ({selectedSizes.length} selected: {selectedSizes.join(', ')})
-                    </span>
-                  )}
+                  Select Size:
+                  {selectedSize && <span className='text-red-600 ml-2'>({selectedSize} selected)</span>}
                 </p>
                 <div className='flex gap-3'>
                   {sizes.map((size) => (
                     <button
                       key={size}
-                      onClick={() => handleSizeToggle(size)}
+                      onClick={() => handleSizeSelect(size)}
                       className={`w-12 h-12 flex items-center justify-center border-2 rounded ${
-                        selectedSizes.includes(size)
+                        selectedSize === size
                           ? 'border-red-500 bg-red-500 text-white'
                           : 'border-gray-300 hover:border-red-500 hover:bg-red-500 hover:text-white'
                       } transition-colors duration-200 text-lg font-medium`}
@@ -229,9 +239,7 @@ export default function ProductDetail() {
                     </button>
                   ))}
                 </div>
-                <p className='text-sm text-gray-500 mt-2'>
-                  Click multiple sizes to add the same item in different sizes to your cart
-                </p>
+                <p className='text-sm text-gray-500 mt-2'>Select one size for this item</p>
               </div>
             )}
 
@@ -242,12 +250,7 @@ export default function ProductDetail() {
               </p>
             </div>
             <div className='pt-2 md:pt-4'>
-              <ButtonPrimary
-                buttonText={
-                  needsSize && selectedSizes.length > 1 ? `Add ${selectedSizes.length} Items to Cart` : 'Add to Cart'
-                }
-                onClick={handleAddToCart}
-              />
+              <ButtonPrimary buttonText='Add to Cart' onClick={handleAddToCart} />
             </div>
           </div>
         </div>
