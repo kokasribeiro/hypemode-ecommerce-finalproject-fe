@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import LayoutContainer from '../components/layout/LayoutContainer';
+import SEO from '../components/SEO';
 import { VALIDATION, FORM_FIELDS, ERROR_MESSAGES, validateEmail, validatePassword, validateAge } from '../data';
 
 const addShakeAnimationStyle = () => {
@@ -183,6 +184,12 @@ export default function Register() {
 
   return (
     <div>
+      <SEO 
+        title="Criar Conta - Registre-se"
+        description="Crie sua conta na HypeMode Store e tenha acesso a ofertas exclusivas, histórico de pedidos e uma experiência personalizada de compras."
+        keywords="registrar, criar conta, cadastro, novo usuário, inscrever-se"
+        url="/register"
+      />
       <SecondaryHeader title='Create Account' />
 
       <LayoutContainer className='py-16'>

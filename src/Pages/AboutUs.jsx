@@ -1,9 +1,16 @@
 import NewsletterUpdates from '../sections/NewsletterUpdates';
+import SEO from '../components/SEO';
 import { Link } from 'react-router-dom';
 
 export default function AboutUs() {
   return (
     <div>
+      <SEO 
+        title="Sobre Nós - Nossa História e Equipe"
+        description="Conheça a HypeMode Store, nossa missão, valores e a equipe apaixonada por moda que trabalha para trazer as melhores tendências até você."
+        keywords="sobre nós, equipe, história, missão, valores, moda, HypeMode Store, empresa"
+        url="/about"
+      />
       <div className='relative'>
         <div className='py-50 bg-stone-200 w-full text-center'>
           <nav className='text-sm text-gray-500 mb-2 max-w-4xl mx-auto px-4 text-left'>

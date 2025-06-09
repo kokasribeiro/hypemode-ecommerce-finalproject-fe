@@ -1,5 +1,6 @@
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
+import SEO from '../components/SEO';
 import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import { useState, useEffect } from 'react';
@@ -42,6 +43,12 @@ export default function Contact() {
 
   return (
     <>
+      <SEO 
+        title="Contato - Entre em Contato Conosco"
+        description="Entre em contato com a HypeMode Store. Estamos aqui para ajudar com dúvidas, suporte ao cliente e feedback. Envie sua mensagem!"
+        keywords="contato, suporte, atendimento, dúvidas, formulário de contato, customer service"
+        url="/contact"
+      />
       <SecondaryHeader title='Contact' />
       <LayoutContainer>
         <div className='container mx-auto px-4 py-8 md:py-12'>

@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import ProductCard from '../components/features/ProductCard';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
+import SEO from '../components/SEO';
 import { addRatingToProducts } from '../utils';
 import { fetchProducts } from '../utils/api/mockapi';
 
@@ -38,6 +39,12 @@ export default function Search() {
   if (loading) {
     return (
       <>
+        <SEO 
+          title={query ? `Busca: ${query} - Resultados` : 'Buscar Produtos'}
+          description={query ? `Resultados da busca por "${query}" na HypeMode Store. Encontre produtos de moda que combinam com seu estilo.` : 'Busque por produtos de moda na HypeMode Store. Roupas, calçados e acessórios das melhores marcas.'}
+          keywords={query ? `busca, ${query}, produtos, resultados, moda` : 'busca, pesquisa, produtos, moda, roupas, calçados'}
+          url={`/search${query ? `?q=${encodeURIComponent(query)}` : ''}`}
+        />
         <SecondaryHeader title={`Search Results`} />
         <LayoutContainer>
           <div className='flex justify-center items-center min-h-[200px] p-4'>
@@ -50,6 +57,12 @@ export default function Search() {
 
   return (
     <>
+      <SEO 
+        title={query ? `Busca: ${query} - Resultados` : 'Buscar Produtos'}
+        description={query ? `Resultados da busca por "${query}" na HypeMode Store. Encontre produtos de moda que combinam com seu estilo.` : 'Busque por produtos de moda na HypeMode Store. Roupas, calçados e acessórios das melhores marcas.'}
+        keywords={query ? `busca, ${query}, produtos, resultados, moda` : 'busca, pesquisa, produtos, moda, roupas, calçados'}
+        url={`/search${query ? `?q=${encodeURIComponent(query)}` : ''}`}
+      />
       <SecondaryHeader title={`Search Results for "${query}"`} />
       <LayoutContainer className='my-20'>
         {query ? (

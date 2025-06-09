@@ -6,6 +6,7 @@ import FilterCategory from '../components/features/FilterCategory';
 import FilterSale from '../components/features/FilterSale';
 import FilterPrice from '../components/features/FilterPrice';
 import TopRatedProducts from '../components/features/TopRatedProducts';
+import SEO from '../components/SEO';
 import { addRatingToProducts, assignProductRating } from '../utils';
 import { fetchProducts } from '../utils/api/mockapi';
 
@@ -217,6 +218,12 @@ const Products = () => {
 
   return (
     <LayoutContainer className='my-20'>
+      <SEO 
+        title="Produtos - Catálogo Completo"
+        description="Explore nossa coleção completa de produtos de moda. Roupas, calçados e acessórios com filtros por categoria, preço e mais. Encontre o seu estilo ideal!"
+        keywords="produtos, catálogo, roupas, calçados, acessórios, filtros, moda masculina, moda feminina, ofertas"
+        url="/products"
+      />
       <div className='flex flex-col md:flex-row gap-8'>
         <div className='w-full md:w-1/4 space-y-6'>
           <div className='flex justify-between items-center'>

@@ -4,6 +4,7 @@ import { useCart } from '../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
+import SEO from '../components/SEO';
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
@@ -39,6 +40,12 @@ const Cart = () => {
 
   return (
     <>
+      <SEO 
+        title="Carrinho de Compras"
+        description="Revise seus itens selecionados e finalize sua compra na HypeMode Store. Produtos de moda com entrega grátis e garantia de qualidade."
+        keywords="carrinho, compras, checkout, finalizar compra, moda online"
+        url="/cart"
+      />
       <SecondaryHeader title='Shopping Cart' />
       <LayoutContainer>
         <div className='py-8 px-4 max-w-6xl mx-auto'>

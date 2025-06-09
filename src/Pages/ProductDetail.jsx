@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
+import SEO from '../components/SEO';
 import { Star } from 'lucide-react';
 import ButtonPrimary from '../components/features/ButtonPrimary';
 import { useCart } from '../contexts/CartContext';
@@ -113,6 +114,14 @@ export default function ProductDetail() {
   if (loading) {
     return (
       <>
+        <SEO 
+          title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
+          description={product ? `${product.name} - ${product.category}. Preço: €${product.sale ? calculateSalePrice(product.price) : product.price}. ${product.description || 'Produto de qualidade da HypeMode Store.'}` : 'Detalhes do produto selecionado na HypeMode Store.'}
+          keywords={product ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online` : 'produto, detalhes, moda'}
+          url={`/products/${id}`}
+          image={product?.image}
+          type="product"
+        />
         <SecondaryHeader title='Product Detail' />
         <LayoutContainer>
           <div className='flex justify-center items-center min-h-[200px] md:min-h-[400px] p-4'>
@@ -126,6 +135,14 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <>
+        <SEO 
+          title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
+          description={product ? `${product.name} - ${product.category}. Preço: €${product.sale ? calculateSalePrice(product.price) : product.price}. ${product.description || 'Produto de qualidade da HypeMode Store.'}` : 'Detalhes do produto selecionado na HypeMode Store.'}
+          keywords={product ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online` : 'produto, detalhes, moda'}
+          url={`/products/${id}`}
+          image={product?.image}
+          type="product"
+        />
         <SecondaryHeader title='Product Detail' />
         <LayoutContainer>
           <div className='flex justify-center items-center min-h-[200px] md:min-h-[400px] p-4'>
@@ -138,6 +155,14 @@ export default function ProductDetail() {
 
   return (
     <>
+      <SEO 
+        title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
+        description={product ? `${product.name} - ${product.category}. Preço: €${product.sale ? calculateSalePrice(product.price) : product.price}. ${product.description || 'Produto de qualidade da HypeMode Store.'}` : 'Detalhes do produto selecionado na HypeMode Store.'}
+        keywords={product ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online` : 'produto, detalhes, moda'}
+        url={`/products/${id}`}
+        image={product?.image}
+        type="product"
+      />
       <SecondaryHeader title='Product Detail' />
       <LayoutContainer>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 py-8'>

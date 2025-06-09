@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://hypemode-store.com/sitemap.xml
+
+# Disallow private/admin areas (if any)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+
+# Allow important pages
+Allow: /
+Allow: /products
+Allow: /products/*
+Allow: /about
+Allow: /services
+Allow: /contact
+Allow: /search
+
+# Crawl delay (optional)
+Crawl-delay: 1 

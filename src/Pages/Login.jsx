@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import LayoutContainer from '../components/layout/LayoutContainer';
+import SEO from '../components/SEO';
 import { validatePassword } from '../data';
 
 export default function Login() {
@@ -129,6 +130,12 @@ export default function Login() {
 
   return (
     <div>
+      <SEO 
+        title="Login - Acesse sua Conta"
+        description="Faça login na sua conta da HypeMode Store para acessar seus pedidos, lista de desejos e ofertas exclusivas."
+        keywords="login, entrar, conta, acesso, autenticação, usuário"
+        url="/login"
+      />
       <SecondaryHeader title='Login' />
 
       <LayoutContainer className='py-16'>

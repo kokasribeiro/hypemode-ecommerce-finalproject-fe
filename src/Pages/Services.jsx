@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
+import SEO from '../components/SEO';
 import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import TrendInsights from '../sections/TrendInsights';
@@ -33,6 +34,12 @@ export default function Services() {
 
   return (
     <>
+      <SEO 
+        title="Nossos Serviços - Personal Stylist e Mais"
+        description="Descubra nossos serviços exclusivos: personal stylist, medições personalizadas, lavanderia e consultoria de moda. Eleve seu estilo conosco!"
+        keywords="serviços, personal stylist, consultoria de moda, medições, lavanderia, styling, moda personalizada"
+        url="/services"
+      />
       <SecondaryHeader title='Our Services' />
       <LayoutContainer>
         <div className='w-full max-w-6xl mx-auto px-4 -mt-16 md:-mt-20 z-10 relative'>
