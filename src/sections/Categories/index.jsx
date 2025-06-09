@@ -7,7 +7,6 @@ const Categories = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (categoryName) => {
-    console.log(`Navigating to category: ${categoryName}`);
     navigate(`/products?category=${categoryName}`);
   };
 
@@ -22,6 +21,7 @@ const Categories = () => {
         </div>
         <div className='grid md:grid-cols-5 my-16 w-full'>
           {categories.map((category) => (
+            //todo: extrair para componente
             <div
               key={category.id}
               className='w-full relative cursor-pointer'

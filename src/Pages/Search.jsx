@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
-import ProductCard from '../components/ui/ProductCard';
+import ProductCard from '../components/features/ProductCard';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import { addRatingToProducts } from '../utils';
 import { fetchProducts } from '../utils/api/mockapi';

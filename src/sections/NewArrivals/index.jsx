@@ -1,19 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
-import ProductCard from '../../components/ui/ProductCard';
-import { assignProductRating } from '../../utils';
+import ProductCard from '../../components/features/ProductCard';
+import { getRecentProducts } from '../../utils';
 
 const NewArrivals = ({ showViewAll = false, products = [] }) => {
   const navigate = useNavigate();
 
-  const recentProducts = [...products]
-    .sort((a, b) => b.id - a.id)
-    .slice(0, 4)
-    .map((product) => {
-      const consistentRating = assignProductRating(product.id);
-      return { ...product, displayRating: consistentRating };
-    });
+  const recentProducts = getRecentProducts(products);
 
   const handleViewAll = () => {
     navigate('/products?sort=recent&clearFilters=true');

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaSearch } from 'react-icons/fa';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCart } from '../../../contexts/CartContext';
-import CartDropdown from '../../ui/CartDropdown';
+import CartDropdown from '../../features/CartDropdown';
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);

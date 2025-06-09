@@ -74,7 +74,7 @@ export default function Login() {
               </div>
             </div>
           </div>
-
+          {/* todo: extrair para componente u usar react toast em vez de css ou tailwind */}
           <style>
             {`
               .dots-container {

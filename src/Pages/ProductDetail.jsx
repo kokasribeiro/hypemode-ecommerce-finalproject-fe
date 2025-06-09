@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import { Star } from 'lucide-react';
-import ButtonPrimary from '../components/ui/ButtonPrimary';
+import ButtonPrimary from '../components/features/ButtonPrimary';
 import { useCart } from '../contexts/CartContext';
 import { assignProductRating, createFlyToCartAnimation } from '../utils';
 import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../data';

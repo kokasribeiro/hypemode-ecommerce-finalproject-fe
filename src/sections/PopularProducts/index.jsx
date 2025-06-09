@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
-import ProductCard from '../../components/ui/ProductCard';
+import ProductCard from '../../components/features/ProductCard';
 import { getRandomPopularProducts } from '../../utils';
 
 const PopularProducts = ({ products = [] }) => {

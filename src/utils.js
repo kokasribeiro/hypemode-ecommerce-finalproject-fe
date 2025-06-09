@@ -135,3 +135,13 @@ export const getRandomPopularProducts = (products) => {
   const shuffled = [...topRated].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, 4);
 };
+
+export const getRecentProducts = (products) => {
+  return [...products]
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 4)
+    .map((product) => {
+      const consistentRating = assignProductRating(product.id);
+      return { ...product, displayRating: consistentRating };
+    });
+};

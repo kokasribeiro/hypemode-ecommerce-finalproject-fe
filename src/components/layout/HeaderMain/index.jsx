@@ -1,5 +1,5 @@
 import React from 'react';
-import ButtonPrimary from '../../ui/ButtonPrimary';
+import ButtonPrimary from '../../features/ButtonPrimary';
 import LayoutContainer from '../LayoutContainer';
 import { useNavigate } from 'react-router-dom';
 

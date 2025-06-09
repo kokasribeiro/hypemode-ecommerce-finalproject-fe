@@ -1,5 +1,5 @@
 import React from 'react';
-import BenefitCard from '../../components/ui/BenefitCard';
+import BenefitCard from '../../components/features/BenefitCard';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 import { benefitsData } from '../../data';
 

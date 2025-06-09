@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import LayoutContainer from '../components/layout/LayoutContainer';
-import ProductCard from '../components/ui/ProductCard';
-import FilterCategory from '../components/ui/FilterCategory';
-import FilterSale from '../components/ui/FilterSale';
-import FilterPrice from '../components/ui/FilterPrice';
-import TopRatedProducts from '../components/ui/TopRatedProducts';
+import ProductCard from '../components/features/ProductCard';
+import FilterCategory from '../components/features/FilterCategory';
+import FilterSale from '../components/features/FilterSale';
+import FilterPrice from '../components/features/FilterPrice';
+import TopRatedProducts from '../components/features/TopRatedProducts';
 import { addRatingToProducts, assignProductRating } from '../utils';
 import { fetchProducts } from '../utils/api/mockapi';
 
-// Skeleton component for loading state
 const ProductSkeleton = () => (
   <div className='animate-pulse'>
     <div className='bg-gray-300 h-64 w-full rounded-lg mb-4'></div>
