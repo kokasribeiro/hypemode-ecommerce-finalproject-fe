@@ -26,12 +26,12 @@ export default function ProductDetail() {
   const needsSize = isClothing || isShoes || isNecklace || isBackpack;
 
   const sizes = isShoes
-    ? [sizesData.shoes][0]
+    ? sizesData.shoes
     : isNecklace
-    ? [sizesData.necklace][0]
+    ? sizesData.necklace
     : isBackpack
-    ? [sizesData.backpack][0]
-    : [sizesData.clothing];
+    ? sizesData.backpack
+    : sizesData.clothing;
 
   useEffect(() => {
     const loadProduct = async () => {

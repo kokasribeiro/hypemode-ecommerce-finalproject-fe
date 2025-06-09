@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../../contexts/CartContext';
 import { createFlyToCartAnimation } from '../../../utils';
 import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../../../data';
-
+//todo: clean spagetti code
 const ProductCard = ({ className, product, titleWhite }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -21,12 +21,12 @@ const ProductCard = ({ className, product, titleWhite }) => {
   const needsSize = isClothing || isShoes || isNecklace || isBackpack;
 
   const sizes = isShoes
-    ? [sizesData.shoes][0]
+    ? sizesData.shoes
     : isNecklace
-    ? [sizesData.necklace][0]
+    ? sizesData.necklace
     : isBackpack
-    ? [sizesData.backpack][0]
-    : [sizesData.clothing];
+    ? sizesData.backpack
+    : sizesData.clothing;
 
   const renderStars = () => {
     const rating = product.displayRating || 5;

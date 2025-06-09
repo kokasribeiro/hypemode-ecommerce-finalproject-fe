@@ -13,8 +13,6 @@ const PopularProducts = ({ products = [] }) => {
     return shuffled.slice(0, 4);
   };
 
-  const randomPopularProducts = getRandomPopularProducts();
-
   const handleViewAll = () => {
     navigate('/products?sort=best-sellers&clearFilters=true');
   };
@@ -36,7 +34,7 @@ const PopularProducts = ({ products = [] }) => {
         </div>
       </div>
       <div className='grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 my-16'>
-        {randomPopularProducts.map((product) => (
+        {getRandomPopularProducts().map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

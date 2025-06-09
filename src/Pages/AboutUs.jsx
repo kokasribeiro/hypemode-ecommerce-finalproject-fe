@@ -9,7 +9,7 @@ export default function AboutUs() {
           <nav className='text-sm text-gray-500 mb-2 max-w-4xl mx-auto px-4 text-left'>
             <Link to='/' className='hover:underline cursor-pointer'>
               Home
-            </Link>{' '}
+            </Link>
             <span className='mx-2'>/</span>
             <span className='text-black'>About Us</span>
           </nav>
@@ -52,7 +52,7 @@ export default function AboutUs() {
             <div className='flex flex-col items-center'>
               <img
                 src='/images/AboutUs/TeamMember1.png'
-                alt='Miguel Silva'
+                alt='A pic of a team member'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
               <h3 className='mt-2 md:mt-4 text-base md:text-xl font-bold font-mono text-black'>Miguel Silva</h3>
