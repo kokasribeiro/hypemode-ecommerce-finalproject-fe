@@ -2,7 +2,6 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
 
 import MainLayout from './components/layout/MainLayout';
@@ -68,7 +67,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HelmetProvider>
       <RouterProvider router={router} />
       <Toaster
         position='top-center'
@@ -91,6 +89,5 @@ createRoot(document.getElementById('root')).render(
           },
         }}
       />
-    </HelmetProvider>
   </StrictMode>,
 );
