@@ -16,12 +16,12 @@ export default function Contact() {
     name: '',
     phone: '',
     email: '',
-    message: ''
+    message: '',
   });
   const [messageSent, setMessageSent] = useState(false);
 
   const { errors, validateSingleField } = useFormValidation({
-    required: ['name', 'phone', 'email', 'message']
+    required: ['name', 'phone', 'email', 'message'],
   });
 
   useEffect(() => {
@@ -32,9 +32,9 @@ export default function Contact() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     if (value) {
@@ -46,7 +46,7 @@ export default function Contact() {
     e.preventDefault();
 
     const isValidEmail = validateSingleField('email', formData.email, formData);
-    const hasRequiredFields = Object.values(formData).every(field => field.trim() !== '');
+    const hasRequiredFields = Object.values(formData).every((field) => field.trim() !== '');
 
     if (!isValidEmail || !hasRequiredFields) {
       return;
@@ -72,23 +72,23 @@ export default function Contact() {
               <div className='relative max-w-md w-full'>
                 <div className='absolute inset-0 transform -translate-x-2 -translate-y-2 md:-translate-x-4 md:-translate-y-4 z-0'></div>
                 <img
-                  src='public/images/contact/contact-image.png'
+                  src='/images/Contact/contact-image.png'
                   alt='Friendly customer service representative using a laptop ready to assist with inquiries'
                   className='relative z-10 w-full h-auto object-cover'
                 />
               </div>
             </div>
-            
+
             <div className='w-full md:w-1/2 max-w-md order-1 md:order-2'>
               <h2 className='text-2xl md:text-3xl font-bold mb-4 md:mb-6'>Contact with us</h2>
 
               {messageSent ? (
                 <SuccessMessage
-                  title="Message Sent Successfully!"
-                  message="Thank you for reaching out. We will get back to you soon."
-                  buttonText="Send Another Message"
+                  title='Message Sent Successfully!'
+                  message='Thank you for reaching out. We will get back to you soon.'
+                  buttonText='Send Another Message'
                   onButtonClick={() => setMessageSent(false)}
-                  variant="green"
+                  variant='green'
                 />
               ) : (
                 <form onSubmit={handleSubmit}>
@@ -150,11 +150,11 @@ export default function Contact() {
             </div>
           </div>
         </div>
-        
+
         <div className='container mx-auto px-4 py-8'>
           <NewArrivals showViewAll={true} products={products} />
         </div>
-        
+
         <div className='container mx-auto px-4 py-8 md:py-12'>
           <NewsletterUpdates />
         </div>
