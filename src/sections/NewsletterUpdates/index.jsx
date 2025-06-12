@@ -31,7 +31,7 @@ const NewsletterUpdates = () => {
       <div
         className='w-full h-96 flex flex-col justify-center items-center text-center p-8'
         style={{
-          backgroundImage: "url('/images/Home/Newsletter/newsletterCard.png')",
+          backgroundImage: "url('/images/Home/Newsletter/NewsletterCard.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
