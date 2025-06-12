@@ -40,11 +40,11 @@ const Cart = () => {
 
   return (
     <>
-      <SEO 
-        title="Carrinho de Compras"
-        description="Revise seus itens selecionados e finalize sua compra na HypeMode Store. Produtos de moda com entrega grátis e garantia de qualidade."
-        keywords="carrinho, compras, checkout, finalizar compra, moda online"
-        url="/cart"
+      <SEO
+        title='Shopping Cart'
+        description='Review your selected items and complete your purchase at HypeMode Store. Fashion products with free shipping and quality guarantee.'
+        keywords='cart, shopping, checkout, complete purchase, online fashion'
+        url='/cart'
       />
       <SecondaryHeader title='Shopping Cart' />
       <LayoutContainer>

@@ -108,9 +108,9 @@ const Products = () => {
   return (
     <LayoutContainer className='my-20'>
       <SEO
-        title='Produtos - Catálogo Completo'
-        description='Explore nossa coleção completa de produtos de moda. Roupas, calçados e acessórios com filtros por categoria, preço e mais. Encontre o seu estilo ideal!'
-        keywords='produtos, catálogo, roupas, calçados, acessórios, filtros, moda masculina, moda feminina, ofertas'
+        title='Products - Complete Catalog'
+        description='Explore our complete collection of fashion products. Clothing, shoes, and accessories with filters by category, price, and more. Find your ideal style!'
+        keywords='products, catalog, clothing, shoes, accessories, filters, men fashion, women fashion, offers'
         url='/products'
       />
       <div className='flex flex-col md:flex-row gap-8'>

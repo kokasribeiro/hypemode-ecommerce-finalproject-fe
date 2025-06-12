@@ -35,9 +35,9 @@ export default function Services() {
   return (
     <>
       <SEO
-        title='Nossos Serviços - Personal Stylist e Mais'
-        description='Descubra nossos serviços exclusivos: personal stylist, medições personalizadas, lavanderia e consultoria de moda. Eleve seu estilo conosco!'
-        keywords='serviços, personal stylist, consultoria de moda, medições, lavanderia, styling, moda personalizada'
+        title='Our Services - Personal Stylist and More'
+        description='Discover our exclusive services: personal stylist, custom measurements, laundry, and fashion consulting. Elevate your style with us!'
+        keywords='services, personal stylist, fashion consulting, measurements, laundry, styling, custom fashion'
         url='/services'
       />
       <SecondaryHeader title='Our Services' />

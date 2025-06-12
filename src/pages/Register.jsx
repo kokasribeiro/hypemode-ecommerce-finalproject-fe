@@ -89,9 +89,9 @@ export default function Register() {
     return (
       <div>
         <SEO 
-          title="Criar Conta - Registre-se"
-          description="Crie sua conta na HypeMode Store e tenha acesso a ofertas exclusivas, histórico de pedidos e uma experiência personalizada de compras."
-          keywords="registrar, criar conta, cadastro, novo usuário, inscrever-se"
+          title="Create Account - Register"
+          description="Create your HypeMode Store account and get access to exclusive offers, order history, and a personalized shopping experience."
+          keywords="register, create account, sign up, new user, subscribe"
           url="/register"
         />
         <SecondaryHeader title='Create Account' />
@@ -111,9 +111,9 @@ export default function Register() {
   return (
     <div>
       <SEO 
-        title="Criar Conta - Registre-se"
-        description="Crie sua conta na HypeMode Store e tenha acesso a ofertas exclusivas, histórico de pedidos e uma experiência personalizada de compras."
-        keywords="registrar, criar conta, cadastro, novo usuário, inscrever-se"
+        title="Create Account - Register"
+        description="Create your HypeMode Store account and get access to exclusive offers, order history, and a personalized shopping experience."
+        keywords="register, create account, sign up, new user, subscribe"
         url="/register"
       />
       <SecondaryHeader title='Create Account' />

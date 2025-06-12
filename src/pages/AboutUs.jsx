@@ -6,9 +6,9 @@ export default function AboutUs() {
   return (
     <div>
       <SEO
-        title='Sobre Nós - Nossa História e Equipe'
-        description='Conheça a HypeMode Store, nossa missão, valores e a equipe apaixonada por moda que trabalha para trazer as melhores tendências até você.'
-        keywords='sobre nós, equipe, história, missão, valores, moda, HypeMode Store, empresa'
+        title='About Us - Our Story and Team'
+        description='Meet HypeMode Store, our mission, values, and the fashion-passionate team working to bring you the best trends.'
+        keywords='about us, team, story, mission, values, fashion, HypeMode Store, company'
         url='/about'
       />
       <div className='relative'>
