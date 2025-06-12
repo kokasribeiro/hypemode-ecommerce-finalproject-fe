@@ -33,23 +33,29 @@ export default function Search() {
     if (!query) return false;
 
     const searchQuery = query.toLowerCase().trim();
-    
-    if (!product.name) return false;
-    
- 
-    const words = product.name.toLowerCase().split(/\s+/);
-    
 
-    return words.some(word => word.startsWith(searchQuery));
+    if (!product.name) return false;
+
+    const words = product.name.toLowerCase().split(/\s+/);
+
+    return words.some((word) => word.startsWith(searchQuery));
   });
 
   if (loading) {
     return (
       <>
-        <SEO 
-          title={query ? `Busca: ${query} - Resultados` : 'Buscar Produtos'}
-          description={query ? `Resultados da busca por "${query}" na HypeMode Store. Encontre produtos de moda que combinam com seu estilo.` : 'Busque por produtos de moda na HypeMode Store. Roupas, calçados e acessórios das melhores marcas.'}
-          keywords={query ? `busca, ${query}, produtos, resultados, moda` : 'busca, pesquisa, produtos, moda, roupas, calçados'}
+        <SEO
+          title={query ? `Search: ${query} - Results` : 'Search Products'}
+          description={
+            query
+              ? `Search results for "${query}" at HypeMode Store. Find fashion products that match your style.`
+              : 'Search for fashion products at HypeMode Store. Clothing, shoes, and accessories from the best brands.'
+          }
+          keywords={
+            query
+              ? `search, ${query}, products, results, fashion`
+              : 'search, research, products, fashion, clothing, shoes'
+          }
           url={`/search${query ? `?q=${encodeURIComponent(query)}` : ''}`}
         />
         <SecondaryHeader title={`Search Results`} />
@@ -64,10 +70,18 @@ export default function Search() {
 
   return (
     <>
-      <SEO 
-        title={query ? `Busca: ${query} - Resultados` : 'Buscar Produtos'}
-        description={query ? `Resultados da busca por "${query}" na HypeMode Store. Encontre produtos de moda que combinam com seu estilo.` : 'Busque por produtos de moda na HypeMode Store. Roupas, calçados e acessórios das melhores marcas.'}
-        keywords={query ? `busca, ${query}, produtos, resultados, moda` : 'busca, pesquisa, produtos, moda, roupas, calçados'}
+      <SEO
+        title={query ? `Search: ${query} - Results` : 'Search Products'}
+        description={
+          query
+            ? `Search results for "${query}" at HypeMode Store. Find fashion products that match your style.`
+            : 'Search for fashion products at HypeMode Store. Clothing, shoes, and accessories from the best brands.'
+        }
+        keywords={
+          query
+            ? `search, ${query}, products, results, fashion`
+            : 'search, research, products, fashion, clothing, shoes'
+        }
         url={`/search${query ? `?q=${encodeURIComponent(query)}` : ''}`}
       />
       <SecondaryHeader title={`Search Results for "${query}"`} />

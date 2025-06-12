@@ -23,9 +23,9 @@ export default function Home() {
   return (
     <>
       <SEO
-        title='Início - Moda e Estilo Premium'
-        description='Descubra as últimas tendências da moda na HypeMode Store. Roupas, calçados e acessórios das melhores marcas com entrega rápida e segura.'
-        keywords='moda, roupas online, calçados, acessórios, tendências, estilo, loja de moda, fashion'
+        title='Home - Premium Fashion and Style'
+        description='Discover the latest fashion trends at HypeMode Store. Clothing, shoes, and accessories from the best brands with fast and secure delivery.'
+        keywords='fashion, online clothing, shoes, accessories, trends, style, fashion store, fashion'
         url=''
       />
       <HeaderMain />

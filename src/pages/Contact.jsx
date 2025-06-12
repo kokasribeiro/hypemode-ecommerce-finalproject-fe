@@ -59,9 +59,9 @@ export default function Contact() {
   return (
     <>
       <SEO
-        title='Contato - Entre em Contato Conosco'
-        description='Entre em contato com a HypeMode Store. Estamos aqui para ajudar com dúvidas, suporte ao cliente e feedback. Envie sua mensagem!'
-        keywords='contato, suporte, atendimento, dúvidas, formulário de contato, customer service'
+        title='Contact - Get in Touch with Us'
+        description='Contact HypeMode Store. We are here to help with questions, customer support, and feedback. Send us your message!'
+        keywords='contact, support, customer service, questions, contact form, customer service'
         url='/contact'
       />
       <SecondaryHeader title='Contact' />

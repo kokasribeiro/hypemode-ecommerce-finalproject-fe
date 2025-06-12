@@ -99,18 +99,18 @@ export default function ProductDetail() {
     return (
       <>
         <SEO
-          title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
+          title={product ? `${product.name} - ${product.category}` : 'Product Details'}
           description={
             product
-              ? `${product.name} - ${product.category}. Preço: €${
+              ? `${product.name} - ${product.category}. Price: €${
                   product.sale ? calculateSalePrice(product.price) : product.price
-                }. ${product.description || 'Produto de qualidade da HypeMode Store.'}`
-              : 'Detalhes do produto selecionado na HypeMode Store.'
+                }. ${product.description || 'Quality product from HypeMode Store.'}`
+              : 'Details of the selected product at HypeMode Store.'
           }
           keywords={
             product
-              ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online`
-              : 'produto, detalhes, moda'
+              ? `${product.name}, ${product.category}, fashion, ${product.sale ? 'offer, discount,' : ''} buy online`
+              : 'product, details, fashion'
           }
           url={`/products/${id}`}
           image={product?.image}
@@ -130,18 +130,18 @@ export default function ProductDetail() {
     return (
       <>
         <SEO
-          title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
+          title={product ? `${product.name} - ${product.category}` : 'Product Details'}
           description={
             product
-              ? `${product.name} - ${product.category}. Preço: €${
+              ? `${product.name} - ${product.category}. Price: €${
                   product.sale ? calculateSalePrice(product.price) : product.price
-                }. ${product.description || 'Produto de qualidade da HypeMode Store.'}`
-              : 'Detalhes do produto selecionado na HypeMode Store.'
+                }. ${product.description || 'Quality product from HypeMode Store.'}`
+              : 'Details of the selected product at HypeMode Store.'
           }
           keywords={
             product
-              ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online`
-              : 'produto, detalhes, moda'
+              ? `${product.name}, ${product.category}, fashion, ${product.sale ? 'offer, discount,' : ''} buy online`
+              : 'product, details, fashion'
           }
           url={`/products/${id}`}
           image={product?.image}
@@ -160,18 +160,18 @@ export default function ProductDetail() {
   return (
     <>
       <SEO
-        title={product ? `${product.name} - ${product.category}` : 'Detalhes do Produto'}
+        title={product ? `${product.name} - ${product.category}` : 'Product Details'}
         description={
           product
-            ? `${product.name} - ${product.category}. Preço: €${
+            ? `${product.name} - ${product.category}. Price: €${
                 product.sale ? calculateSalePrice(product.price) : product.price
-              }. ${product.description || 'Produto de qualidade da HypeMode Store.'}`
-            : 'Detalhes do produto selecionado na HypeMode Store.'
+              }. ${product.description || 'Quality product from HypeMode Store.'}`
+            : 'Details of the selected product at HypeMode Store.'
         }
         keywords={
           product
-            ? `${product.name}, ${product.category}, moda, ${product.sale ? 'oferta, desconto,' : ''} comprar online`
-            : 'produto, detalhes, moda'
+            ? `${product.name}, ${product.category}, fashion, ${product.sale ? 'offer, discount,' : ''} buy online`
+            : 'product, details, fashion'
         }
         url={`/products/${id}`}
         image={product?.image}

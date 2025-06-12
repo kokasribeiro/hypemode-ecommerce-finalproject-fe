@@ -61,9 +61,9 @@ export default function Login() {
   return (
     <div>
       <SEO
-        title='Login - Acesse sua Conta'
-        description='Faça login na sua conta da HypeMode Store para acessar seus pedidos, lista de desejos e ofertas exclusivas.'
-        keywords='login, entrar, conta, acesso, autenticação, usuário'
+        title='Login - Access Your Account'
+        description='Log in to your HypeMode Store account to access your orders, wishlist, and exclusive offers.'
+        keywords='login, sign in, account, access, authentication, user'
         url='/login'
       />
       <SecondaryHeader title='Login' />

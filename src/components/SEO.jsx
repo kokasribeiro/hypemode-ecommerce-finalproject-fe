@@ -1,8 +1,8 @@
 const SEO = ({ title, description, keywords, image, url, type = 'website', author = 'HypeMode Store' }) => {
   const siteTitle = 'HypeMode Store';
   const defaultDescription =
-    'Sua loja online de moda e estilo. Encontre as melhores marcas e tendências em roupas, calçados e acessórios.';
-  const defaultKeywords = 'moda, roupas, calçados, acessórios, estilo, tendências, loja online, ecommerce';
+    'Your online fashion and style store. Find the best brands and trends in clothing, shoes, and accessories.';
+  const defaultKeywords = 'fashion, clothing, shoes, accessories, style, trends, online store, ecommerce';
   const defaultImage = '/favicon.png';
   const siteUrl = 'https://hypemode-store.com';
 

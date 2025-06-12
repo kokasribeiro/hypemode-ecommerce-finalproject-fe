@@ -1,15 +1,15 @@
 export const SEO_CONFIG = {
   siteName: 'HypeMode Store',
   siteUrl: 'https://hypemode-store.com',
-  defaultTitle: 'HypeMode Store - Moda e Estilo Premium',
+  defaultTitle: 'HypeMode Store - Premium Fashion and Style',
   defaultDescription:
-    'Sua loja online de moda e estilo. Encontre as melhores marcas e tendências em roupas, calçados e acessórios.',
-  defaultKeywords: 'moda, roupas, calçados, acessórios, estilo, tendências, loja online, ecommerce',
+    'Your online fashion and style store. Find the best brands and trends in clothing, shoes, and accessories.',
+  defaultKeywords: 'fashion, clothing, shoes, accessories, style, trends, online store, ecommerce',
   defaultImage: '/favicon.png',
   twitterHandle: '@hypemodestore',
   facebookAppId: '123456789',
-  language: 'pt-BR',
-  locale: 'pt_BR',
+  language: 'en-US',
+  locale: 'en_US',
   themeColor: '#ef4444',
 };
 
