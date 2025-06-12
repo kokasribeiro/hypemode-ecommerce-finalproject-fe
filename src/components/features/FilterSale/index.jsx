@@ -12,7 +12,6 @@ const FilterSale = ({ onFilterChange, initialChecked = false }) => {
     const newChecked = saleParam === 'true';
     setIsChecked(newChecked);
 
-    // Notify parent component when URL changes
     if (onFilterChange) {
       onFilterChange(newChecked);
     }

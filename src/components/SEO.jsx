@@ -16,36 +16,23 @@ const SEO = ({ title, description, keywords, image, url, type = 'website', autho
 
   return (
     <Helmet>
-      {/* Título */}
       <title>{metaTitle}</title>
-
-      {/* Meta Tags Básicas */}
       <meta name='description' content={metaDescription} />
       <meta name='keywords' content={metaKeywords} />
       <meta name='author' content={author} />
       <meta name='robots' content='index, follow' />
-
-      {/* Open Graph / Facebook */}
       <meta property='og:type' content={type} />
       <meta property='og:title' content={metaTitle} />
       <meta property='og:description' content={metaDescription} />
       <meta property='og:image' content={metaImage} />
       <meta property='og:url' content={metaUrl} />
       <meta property='og:site_name' content={siteTitle} />
-
-      {/* Twitter Card */}
       <meta name='twitter:card' content='summary_large_image' />
       <meta name='twitter:title' content={metaTitle} />
       <meta name='twitter:description' content={metaDescription} />
       <meta name='twitter:image' content={metaImage} />
-
-      {/* Canonical URL */}
       <link rel='canonical' href={metaUrl} />
-
-      {/* Viewport */}
       <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-
-      {/* Estruturados dados JSON-LD para SEO */}
       <script type='application/ld+json'>
         {JSON.stringify({
           '@context': 'https://schema.org',

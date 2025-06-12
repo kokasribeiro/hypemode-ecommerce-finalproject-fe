@@ -19,7 +19,6 @@ export default function Navbar() {
   const cartRef = useRef(null);
   const { cartItemCount } = useCart();
 
-  // Load all products when component mounts
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -34,7 +33,6 @@ export default function Navbar() {
     loadProducts();
   }, []);
 
-  // Filter products based on search query (prefix matching)
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
@@ -47,14 +45,11 @@ export default function Navbar() {
       const filtered = allProducts.filter((product) => {
         if (!product.name) return false;
 
-        // Split the product name into words
         const words = product.name.toLowerCase().split(/\s+/);
 
-        // Check if any word starts with the search query
         return words.some((word) => word.startsWith(query));
       });
 
-      // Limit results to first 6 for better UX
       setSearchResults(filtered.slice(0, 6));
     };
 
@@ -170,7 +165,6 @@ export default function Navbar() {
                       autoFocus
                     />
 
-                    {/* Live Search Results */}
                     {searchQuery.trim() && (
                       <div className='mt-3 max-h-80 overflow-y-auto'>
                         {searchResults.length > 0 ? (
