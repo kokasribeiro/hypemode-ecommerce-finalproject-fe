@@ -34,11 +34,11 @@ export default function Services() {
 
   return (
     <>
-      <SEO 
-        title="Nossos Serviços - Personal Stylist e Mais"
-        description="Descubra nossos serviços exclusivos: personal stylist, medições personalizadas, lavanderia e consultoria de moda. Eleve seu estilo conosco!"
-        keywords="serviços, personal stylist, consultoria de moda, medições, lavanderia, styling, moda personalizada"
-        url="/services"
+      <SEO
+        title='Nossos Serviços - Personal Stylist e Mais'
+        description='Descubra nossos serviços exclusivos: personal stylist, medições personalizadas, lavanderia e consultoria de moda. Eleve seu estilo conosco!'
+        keywords='serviços, personal stylist, consultoria de moda, medições, lavanderia, styling, moda personalizada'
+        url='/services'
       />
       <SecondaryHeader title='Our Services' />
       <LayoutContainer>
@@ -74,19 +74,31 @@ export default function Services() {
           </div>
         </div>
         <div className='flex flex-wrap justify-center gap-4 my-6 md:my-8 px-4'>
-          <img src='public/images/services/logo-nike-sponsers1.png' alt='Nike brand logo - Official sponsor partner' className='h-20 md:h-30 mx-2' />
-          <img src='public/images/services/urbancore-sponser2.png' alt='Urban Core brand logo - Fashion partner' className='h-20 md:h-30 mx-2' />
           <img
-            src='public/images/services/badbunny-logo-sponser3.png'
+            src='public/images/Services/logo-nike-sponsers1.png'
+            alt='Nike brand logo - Official sponsor partner'
+            className='h-20 md:h-30 mx-2'
+          />
+          <img
+            src='public/images/Services/urbancore-sponser2.png'
+            alt='Urban Core brand logo - Fashion partner'
+            className='h-20 md:h-30 mx-2'
+          />
+          <img
+            src='public/images/Services/badbunny-logo-sponser3.png'
             alt='Bad Bunny artist logo - Music collaboration partner'
             className='h-20 md:h-30 mx-2'
           />
-          <img src='public/images/services/hypemode-sponser4.png' alt='Adidas brand logo - Athletic wear sponsor' className='h-20 md:h-30 mx-2' />
+          <img
+            src='public/images/Services/hypemode-sponser4.png'
+            alt='Adidas brand logo - Athletic wear sponsor'
+            className='h-20 md:h-30 mx-2'
+          />
         </div>
         <div className='max-w-6xl mx-auto my-10 md:my-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start px-4 md:px-0'>
           <div className='flex flex-col items-center md:items-start w-full'>
             <img
-              src='public/images/services/WomenPhoto-ServicesCard.png'
+              src='public/images/Services/WomenPhoto-ServicesCard.png'
               alt='Stylish woman wearing trendy fashion outfit showcasing our styling services'
               className='rounded w-full object-cover max-h-[250px] md:max-h-[400px] mb-6'
             />
@@ -122,7 +134,7 @@ export default function Services() {
               just what you wear—it's how you wear it.
             </p>
             <img
-              src='public/images/services/clothes-ServicesCard.png'
+              src='public/images/Services/clothes-ServicesCard.png'
               alt='Collection of premium streetwear clothing hanging in organized display'
               className='rounded w-full object-cover max-h-[250px] md:max-h-[470px] mt-2'
             />
