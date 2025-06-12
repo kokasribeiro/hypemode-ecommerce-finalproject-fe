@@ -1,5 +1,3 @@
-import { Helmet } from 'react-helmet-async';
-
 const SEO = ({ title, description, keywords, image, url, type = 'website', author = 'HypeMode Store' }) => {
   const siteTitle = 'HypeMode Store';
   const defaultDescription =
@@ -15,7 +13,7 @@ const SEO = ({ title, description, keywords, image, url, type = 'website', autho
   const metaUrl = url ? `${siteUrl}${url}` : siteUrl;
 
   return (
-    <Helmet>
+    <>
       <title>{metaTitle}</title>
       <meta name='description' content={metaDescription} />
       <meta name='keywords' content={metaKeywords} />
@@ -47,7 +45,7 @@ const SEO = ({ title, description, keywords, image, url, type = 'website', autho
           },
         })}
       </script>
-    </Helmet>
+    </>
   );
 };
 
