@@ -22,11 +22,11 @@ export default function Home() {
 
   return (
     <>
-      <SEO 
-        title="Início - Moda e Estilo Premium"
-        description="Descubra as últimas tendências da moda na HypeMode Store. Roupas, calçados e acessórios das melhores marcas com entrega rápida e segura."
-        keywords="moda, roupas online, calçados, acessórios, tendências, estilo, loja de moda, fashion"
-        url="/"
+      <SEO
+        title='Início - Moda e Estilo Premium'
+        description='Descubra as últimas tendências da moda na HypeMode Store. Roupas, calçados e acessórios das melhores marcas com entrega rápida e segura.'
+        keywords='moda, roupas online, calçados, acessórios, tendências, estilo, loja de moda, fashion'
+        url=''
       />
       <HeaderMain />
       <Benefits />

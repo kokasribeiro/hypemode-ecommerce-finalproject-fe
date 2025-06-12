@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 export default function AboutUs() {
   return (
     <div>
-      <SEO 
-        title="Sobre Nós - Nossa História e Equipe"
-        description="Conheça a HypeMode Store, nossa missão, valores e a equipe apaixonada por moda que trabalha para trazer as melhores tendências até você."
-        keywords="sobre nós, equipe, história, missão, valores, moda, HypeMode Store, empresa"
-        url="/about"
+      <SEO
+        title='Sobre Nós - Nossa História e Equipe'
+        description='Conheça a HypeMode Store, nossa missão, valores e a equipe apaixonada por moda que trabalha para trazer as melhores tendências até você.'
+        keywords='sobre nós, equipe, história, missão, valores, moda, HypeMode Store, empresa'
+        url='/about'
       />
       <div className='relative'>
         <div className='py-50 bg-stone-200 w-full text-center'>
@@ -47,7 +47,11 @@ export default function AboutUs() {
             </div>
           </div>
           <div className='absolute left-4 right-auto md:left-12 top-[-30px] md:top-[-50px] z-10 w-56 md:w-80 h-56 md:h-80 shadow-xl rounded-lg overflow-hidden'>
-            <img src='public/images/AboutUs/ShoesCardAboutUs.png' alt='Premium sneaker collection featuring modern streetwear footwear designs' className='w-full h-full object-cover' />
+            <img
+              src='/images/AboutUs/ShoesCardAboutUs.png'
+              alt='Premium sneaker collection featuring modern streetwear footwear designs'
+              className='w-full h-full object-cover'
+            />
           </div>
         </div>
       </div>
@@ -67,7 +71,7 @@ export default function AboutUs() {
             </div>
             <div className='flex flex-col items-center'>
               <img
-                src='public/images/AboutUs/TeamMember2.png'
+                src='/images/AboutUs/TeamMember2.png'
                 alt='Steffi Brucce - Operations Manager overseeing team coordination and business strategy'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
@@ -76,7 +80,7 @@ export default function AboutUs() {
             </div>
             <div className='flex flex-col items-center'>
               <img
-                src='public/images/AboutUs/TeamMember3.png'
+                src='/images/AboutUs/TeamMember3.png'
                 alt='Miguel Angelo - Fashion Consultant providing expert styling advice and trend insights'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
@@ -85,7 +89,7 @@ export default function AboutUs() {
             </div>
             <div className='flex flex-col items-center'>
               <img
-                src='public/images/AboutUs/TeamMember4.png'
+                src='/images/AboutUs/TeamMember4.png'
                 alt='Enzo Sebastian - Personal Stylist creating custom looks and fashion guidance'
                 className='w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 object-cover rounded'
               />
