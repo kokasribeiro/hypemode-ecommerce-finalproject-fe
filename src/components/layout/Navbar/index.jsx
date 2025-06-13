@@ -1,6 +1,6 @@
 import { navItems } from '../../../data';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaUser, FaSearch } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaSearch, FaBars } from 'react-icons/fa';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCart } from '../../../contexts/CartContext';
 import CartDropdown from '../../features/CartDropdown';
@@ -18,6 +18,8 @@ export default function Navbar() {
   const searchRef = useRef(null);
   const cartRef = useRef(null);
   const { cartItemCount } = useCart();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const mobileMenuRef = useRef(null);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -103,6 +105,9 @@ export default function Navbar() {
       if (cartRef.current && !cartRef.current.contains(event.target)) {
         setShowCartDropdown(false);
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setShowMobileMenu(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -148,7 +153,7 @@ export default function Navbar() {
 
               {showSearch && (
                 <div
-                  className={`absolute right-0 top-full mt-2 w-96 bg-white shadow-xl rounded-lg border border-gray-200 z-50 transform transition-all duration-300 ${
+                  className={`fixed left-1/2 -translate-x-1/2 top-20 mt-2 w-full max-w-sm md:absolute md:right-0 md:left-auto md:translate-x-0 md:top-full md:w-96 bg-white shadow-xl rounded-lg border border-gray-200 z-50 transform transition-all duration-300 ${
                     showSearch ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2'
                   }`}
                 >
@@ -156,15 +161,22 @@ export default function Navbar() {
                     <div className='mb-3'>
                       <h3 className='text-lg font-bold text-black mb-2'>Search Products</h3>
                     </div>
-                    <input
-                      type='text'
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder='Search for products...'
-                      className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-black placeholder-gray-500'
-                      autoFocus
-                    />
-
+                    <div className='flex'>
+                      <input
+                        type='text'
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder='Search for products...'
+                        className='flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-black placeholder-gray-500'
+                        autoFocus
+                      />
+                      <button
+                        type='submit'
+                        className='px-4 py-2 bg-red-500 text-white rounded-r-lg hover:bg-red-600 transition-colors duration-200'
+                      >
+                        Search
+                      </button>
+                    </div>
                     {searchQuery.trim() && (
                       <div className='mt-3 max-h-80 overflow-y-auto'>
                         {searchResults.length > 0 ? (
@@ -239,9 +251,48 @@ export default function Navbar() {
             >
               <FaUser className='h-5 w-5' />
             </Link>
+
+            <button
+              className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer md:hidden'
+              aria-label='Open menu'
+              onClick={() => setShowMobileMenu(true)}
+            >
+              <FaBars className='h-6 w-6' />
+            </button>
           </div>
         </div>
       </div>
+
+      {showMobileMenu && (
+        <div className='fixed inset-0 z-50 flex'>
+          <div
+            className='fixed inset-0 bg-black bg-opacity-30 transition-opacity z-10'
+            onClick={() => setShowMobileMenu(false)}
+          ></div>
+          <div
+            ref={mobileMenuRef}
+            className='ml-auto w-64 max-w-full h-full bg-white shadow-lg p-6 flex flex-col space-y-6 animate-slide-in-right z-20'
+          >
+            <button
+              className='self-end mb-4 p-2 text-gray-600 hover:text-red-500 transition-colors duration-200'
+              aria-label='Close menu'
+              onClick={() => setShowMobileMenu(false)}
+            >
+              ✕
+            </button>
+            {navItems.map((item) => (
+              <Link
+                key={item.id}
+                to={item.link}
+                className='text-gray-700 text-lg font-medium hover:text-red-500 transition-colors duration-200'
+                onClick={() => setShowMobileMenu(false)}
+              >
+                {item.title}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
