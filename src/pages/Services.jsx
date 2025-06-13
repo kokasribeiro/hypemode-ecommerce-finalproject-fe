@@ -44,27 +44,27 @@ export default function Services() {
       <LayoutContainer>
         <div className='w-full max-w-6xl mx-auto px-4 -mt-16 md:-mt-20 z-10 relative'>
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10'>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl hover:bg-red-600 transition text-center md:text-left'>
+            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
               <h2 className='font-bold text-xl md:text-2xl mb-2'>Personal Stylist</h2>
               <p className='text-sm md:text-base'>
                 Get 1-on-1 sessions with fashion experts who help you elevate your drip. From chill fits to bold
                 statements, we've got you.
               </p>
             </div>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl hover:bg-red-600 transition text-center md:text-left'>
+            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
               <h2 className='font-bold text-xl md:text-2xl mb-2'>Cloth Assortment</h2>
               <p className='text-sm md:text-base'>
                 Browse exclusive fabrics and streetwear staples handpicked for hype and comfort. Find your perfect
                 texture and tone.
               </p>
             </div>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl hover:bg-red-600 transition text-center md:text-left'>
+            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
               <h2 className='font-bold text-xl md:text-2xl mb-2'>Taking Measurements</h2>
               <p className='text-sm md:text-base'>
                 We make sizing stress-free. Get professionally fitted so every piece hugs right and hits hard.
               </p>
             </div>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl hover:bg-red-600 transition text-center md:text-left'>
+            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
               <h2 className='font-bold text-xl md:text-2xl mb-2'>Dry Cleaning</h2>
               <p className='text-sm md:text-base'>
                 Keep your heat fresh. Drop your gear for top-tier care with quick turnaround and streetwear-safe
