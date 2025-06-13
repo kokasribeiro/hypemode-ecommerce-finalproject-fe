@@ -85,13 +85,22 @@ const Cart = () => {
                         key={`${item.id}-${item.selectedSize || 'no-size'}`}
                         className='bg-white border border-gray-200 rounded-lg p-4 shadow-sm'
                       >
-                        <div className='flex items-center space-x-4'>
+                        <div className='flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4'>
                           <div className='w-24 h-24 flex-shrink-0'>
                             <img src={item.image} alt={item.name} className='w-full h-full object-cover rounded-md' />
                           </div>
 
-                          <div className='flex-1'>
-                            <h3 className='text-lg font-semibold text-gray-800 mb-2'>{item.name}</h3>
+                          <div className='flex-1 w-full'>
+                            <div className='flex justify-between items-start'>
+                              <h3 className='text-lg font-semibold text-gray-800 mb-2'>{item.name}</h3>
+                              <button
+                                onClick={() => handleRemoveItem(item.id, item.selectedSize)}
+                                className='text-red-500 hover:text-red-700 p-2 rounded transition-colors sm:hidden'
+                                title='Remove item'
+                              >
+                                <FaTrash className='text-lg' />
+                              </button>
+                            </div>
                             {item.selectedSize && (
                               <div className='flex items-center space-x-2 mb-3'>
                                 <span className='text-sm text-gray-600'>Size:</span>
@@ -114,7 +123,7 @@ const Cart = () => {
                               )}
                             </div>
 
-                            <div className='flex items-center justify-between'>
+                            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0'>
                               <div className='flex items-center space-x-3'>
                                 <span className='text-sm font-medium text-gray-600'>Quantity:</span>
                                 <div className='flex items-center space-x-2'>
@@ -146,7 +155,7 @@ const Cart = () => {
                             </div>
                           </div>
 
-                          <div className='flex-shrink-0'>
+                          <div className='flex-shrink-0 hidden sm:block'>
                             <button
                               onClick={() => handleRemoveItem(item.id, item.selectedSize)}
                               className='text-red-500 hover:text-red-700 p-2 rounded transition-colors'
