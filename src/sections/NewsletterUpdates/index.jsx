@@ -29,13 +29,9 @@ const NewsletterUpdates = () => {
   return (
     <LayoutContainer className='my-20'>
       <div
-        className='w-full h-96 flex flex-col justify-center items-center text-center p-8 relative bg-cover bg-center'
+        className='w-full min-h-[384px] flex flex-col justify-center items-center text-center p-8 relative bg-cover bg-center bg-no-repeat'
         style={{
           backgroundImage: "url('/images/Home/Newsletter/newsletterCard.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          minHeight: '384px',
-          backgroundRepeat: 'no-repeat',
         }}
       >
         <h2 className='text-3xl font-bold text-white mb-4'>Newsletter Updates</h2>
