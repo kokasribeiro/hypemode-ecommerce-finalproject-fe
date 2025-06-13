@@ -68,7 +68,7 @@ export default function Contact() {
       <LayoutContainer>
         <div className='container mx-auto px-4 py-8 md:py-12'>
           <div className='flex flex-col md:flex-row items-center md:items-start justify-center gap-8 md:gap-16'>
-            <div className='w-full md:w-1/2 flex justify-center md:justify-end order-2 md:order-1'>
+            <div className='w-full md:w-1/2 flex justify-center md:justify-end order-1 md:order-1'>
               <div className='relative max-w-md w-full'>
                 <div className='absolute inset-0 transform -translate-x-2 -translate-y-2 md:-translate-x-4 md:-translate-y-4 z-0'></div>
                 <img
@@ -79,7 +79,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className='w-full md:w-1/2 max-w-md order-1 md:order-2'>
+            <div className='w-full md:w-1/2 max-w-md order-2 md:order-2'>
               <h2 className='text-2xl md:text-3xl font-bold mb-4 md:mb-6'>Contact with us</h2>
 
               {messageSent ? (
