@@ -33,7 +33,7 @@ export const toastError = (message, options = {}) => {
 };
 
 export const toastLoginSuccess = (navigate, redirectPath = '/') => {
-  const toastId = toast.success('Login realizado com sucesso! Redirecionando...', {
+  const toastId = toast.success('Login successful! Redirecting...', {
     duration: 3000,
     icon: '🎉',
     style: {
