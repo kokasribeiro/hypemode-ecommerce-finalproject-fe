@@ -32,13 +32,13 @@ export default function AboutUs() {
               <div className='md:w-1/2 h-0 md:h-48'></div>
               <div className='md:w-1/2 pt-16 md:pt-0'>
                 <h2 className='text-xl md:text-2xl font-mono font-bold mb-4'>Shoes Collection</h2>
-                <div className='flex gap-4 md:gap-8 text-sm'>
-                  <p className='w-1/2'>
+                <div className='flex flex-col md:flex-row gap-4 md:gap-8 text-sm'>
+                  <p className='w-full md:w-1/2'>
                     Step into the spotlight with our latest Shoes Collection—where everyday comfort meets standout
                     design. Whether you're chasing clean classics or bold statement pairs, we've got the soles to match
                     your style
                   </p>
-                  <p className='w-1/2'>
+                  <p className='w-full md:w-1/2'>
                     Built for movement, crafted for impact, and designed to keep you grounded while turning heads.
                     Discover the drop that completes your fit and takes your streetwear game to the next level.
                   </p>
@@ -46,7 +46,7 @@ export default function AboutUs() {
               </div>
             </div>
           </div>
-          <div className='absolute left-4 right-auto md:left-12 top-[-30px] md:top-[-50px] z-10 w-56 md:w-80 h-56 md:h-80 shadow-xl rounded-lg overflow-hidden'>
+          <div className='absolute left-4 right-auto md:left-12 top-[-50px] md:top-[-50px] z-10 w-32 md:w-80 h-32 md:h-80 shadow-xl rounded-lg overflow-hidden'>
             <img
               src='/images/AboutUs/ShoesCardAboutUs.png'
               alt='Premium sneaker collection featuring modern streetwear footwear designs'
@@ -107,11 +107,11 @@ export default function AboutUs() {
                 src='/images/AboutUs/TestimonialCard.png'
                 alt='Professional portrait of satisfied customer showcasing fashionable outfit'
                 className='w-full object-cover'
-                style={{ height: '700px', objectPosition: 'left center' }}
+                style={{ height: '400px', objectPosition: 'left center' }}
                 loading='lazy'
               />
             </div>
-            <div className='w-full md:w-5/12 md:absolute md:right-10 md:top-1/2 md:transform md:-translate-y-1/2 bg-black text-white p-6 md:p-16 md:z-10'>
+            <div className='w-full md:w-5/12 md:absolute md:right-10 md:top-1/2 md:transform md:-translate-y-1/2 bg-black text-white p-6 md:p-16 md:z-10 mt-4 md:mt-0'>
               <h2 className='text-2xl md:text-4xl font-bold font-mono mb-4 md:mb-8'>Testimonials</h2>
               <p className='text-gray-300 text-sm md:text-base mb-8 md:mb-16'>
                 Absolutely love this store! The quality of the pieces is amazing, and everything I ordered fit
