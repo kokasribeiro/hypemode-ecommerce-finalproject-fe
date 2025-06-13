@@ -75,15 +75,7 @@ const FinalSale = ({ products = [] }) => {
     <div className='bg-black py-11'>
       <LayoutContainer>
         <div className='flex flex-col lg:flex-row gap-16 items-center'>
-          <div className='flex-[2]'>
-            <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8'>
-              {displayProducts.map((product) => (
-                <SaleProductCard key={product.id} product={product} titleWhite={true} />
-              ))}
-            </div>
-          </div>
-
-          <div className='flex-[1] lg:max-w-xs text-center lg:text-left lg:ml-8'>
+          <div className='flex-[1] lg:max-w-xs text-center lg:text-left lg:ml-8 order-1 lg:order-2'>
             <div className='text-red-500 text-xl font-bold mb-2'>Big Deals!</div>
             <h2 className='text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight'>Final Sale</h2>
             <p className='text-gray-300 mb-4 leading-relaxed text-sm'>
@@ -98,6 +90,14 @@ const FinalSale = ({ products = [] }) => {
             >
               ALL DEALS
             </button>
+          </div>
+
+          <div className='flex-[2] order-2 lg:order-1'>
+            <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8'>
+              {displayProducts.map((product) => (
+                <SaleProductCard key={product.id} product={product} titleWhite={true} />
+              ))}
+            </div>
           </div>
         </div>
       </LayoutContainer>

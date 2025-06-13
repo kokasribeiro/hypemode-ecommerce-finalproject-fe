@@ -44,7 +44,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className={`absolute right-0 top-full mt-2 w-96 bg-white shadow-xl rounded-lg border border-gray-200 z-50 transform transition-all duration-300 ${
+      className={`fixed left-1/2 -translate-x-1/2 top-20 mt-2 w-full max-w-sm md:absolute md:right-0 md:left-auto md:translate-x-0 md:top-full md:w-96 bg-white shadow-xl rounded-lg border border-gray-200 z-50 transform transition-all duration-300 ${
         isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2'
       }`}
       onClick={(e) => e.stopPropagation()}
