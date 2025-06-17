@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Cart from './pages/Cart';
 import Search from './pages/Search';
+import Checkout from './pages/Checkout';
 
 const router = createBrowserRouter([
   {
@@ -61,33 +62,37 @@ const router = createBrowserRouter([
         path: '/register',
         element: <Register />,
       },
+      {
+        path: '/checkout',
+        element: <Checkout />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <RouterProvider router={router} />
-      <Toaster
-        position='top-center'
-        reverseOrder={false}
-        gutter={8}
-        containerClassName=''
-        containerStyle={{}}
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: '#363636',
-            color: '#fff',
+    <RouterProvider router={router} />
+    <Toaster
+      position='top-center'
+      reverseOrder={false}
+      gutter={8}
+      containerClassName=''
+      containerStyle={{}}
+      toastOptions={{
+        duration: 4000,
+        style: {
+          background: '#363636',
+          color: '#fff',
+        },
+        success: {
+          duration: 3000,
+          theme: {
+            primary: 'green',
+            secondary: 'black',
           },
-          success: {
-            duration: 3000,
-            theme: {
-              primary: 'green',
-              secondary: 'black',
-            },
-          },
-        }}
-      />
+        },
+      }}
+    />
   </StrictMode>,
 );
