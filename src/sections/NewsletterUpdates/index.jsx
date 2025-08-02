@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LayoutContainer from '../../components/layout/LayoutContainer';
 import { validateEmail } from '../../data';
+import newsletterCardImage from '../../assets/images/newsletterCard.png';
 
 const NewsletterUpdates = () => {
   const [email, setEmail] = useState('');
@@ -31,7 +32,7 @@ const NewsletterUpdates = () => {
       <div
         className='w-full min-h-[384px] flex flex-col justify-center items-center text-center p-8 relative bg-cover bg-center bg-no-repeat'
         style={{
-          backgroundImage: "url('/images/Home/Newsletter/newsletterCard.png')",
+          backgroundImage: `url(${newsletterCardImage})`,
         }}
       >
         <h2 className='text-3xl font-bold text-white mb-4'>Newsletter Updates</h2>
