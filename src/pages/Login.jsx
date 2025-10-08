@@ -8,13 +8,17 @@ import FormContainer from '../components/features/FormContainer';
 import ButtonPrimary from '../components/features/ButtonPrimary';
 import SEO from '../components/SEO';
 import { useFormValidation } from '../hooks/useFormValidation';
+import { authAPI } from '../utils/api/apiService';
+import { useCart } from '../contexts/CartContext';
 
 export default function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { syncCartOnLogin } = useCart();
 
   const { errors, validateSingleField } = useFormValidation({
     required: ['email', 'password']
@@ -32,21 +36,37 @@ export default function Login() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    if (!formData.password) {
-      toastError('Password is required');
+    if (!formData.email || !formData.password) {
+      toastError('Email and password are required');
+      setIsLoading(false);
       return;
     }
 
-    const passwordError = validateSingleField('password', formData.password, formData);
-    if (!passwordError) {
-      return;
+    try {
+      // Login via backend API
+      const response = await authAPI.login(formData.email, formData.password);
+      
+      if (response.success) {
+        console.log('✅ Login successful:', response.data.user);
+        
+        // Sincronizar carrinho do localStorage com o backend
+        await syncCartOnLogin();
+        
+        // Show success and navigate
+        toastLoginSuccess(navigate);
+      } else {
+        toastError(response.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toastError(error.message || 'Invalid email or password');
+    } finally {
+      setIsLoading(false);
     }
-
-    console.log('Login attempt with:', formData);
-    toastLoginSuccess(navigate);
   };
 
   const footerContent = (
@@ -95,9 +115,10 @@ export default function Login() {
           />
 
           <ButtonPrimary
-            buttonText='LOGIN'
+            buttonText={isLoading ? 'LOGGING IN...' : 'LOGIN'}
             type='submit'
             className='w-full py-3'
+            disabled={isLoading}
           />
         </FormContainer>
       </LayoutContainer>

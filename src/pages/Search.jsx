@@ -5,7 +5,7 @@ import ProductCard from '../components/features/ProductCard';
 import SecondaryHeader from '../components/layout/SecondaryHeader';
 import SEO from '../components/SEO';
 import { addRatingToProducts } from '../utils';
-import { fetchProducts } from '../utils/api/mockapi';
+import { productAPI } from '../utils/api/apiService';
 
 export default function Search() {
   const [searchParams] = useSearchParams();
@@ -16,7 +16,8 @@ export default function Search() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProducts();
+        const response = await productAPI.getAll();
+        const data = response.data || [];
         const productsWithRatings = addRatingToProducts(data);
         setProducts(productsWithRatings);
       } catch (error) {

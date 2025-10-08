@@ -8,7 +8,7 @@ import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import { useState, useEffect } from 'react';
 import { useFormValidation } from '../hooks/useFormValidation';
-import { fetchProducts } from '../utils/api/mockapi';
+import { productAPI } from '../utils/api/apiService';
 
 export default function Contact() {
   const [products, setProducts] = useState([]);
@@ -25,8 +25,9 @@ export default function Contact() {
   });
 
   useEffect(() => {
-    fetchProducts()
-      .then((data) => setProducts(data))
+    productAPI
+      .getAll()
+      .then((response) => setProducts(response.data || []))
       .catch((error) => console.error('Error fetching products:', error));
   }, []);
 

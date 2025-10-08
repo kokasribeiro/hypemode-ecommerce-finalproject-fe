@@ -9,14 +9,15 @@ import FinalSale from '../sections/FinalSale';
 import HeaderMain from '../components/layout/HeaderMain';
 import SEO from '../components/SEO';
 import { useState, useEffect } from 'react';
-import { fetchProducts } from '../utils/api/mockapi';
+import { productAPI } from '../utils/api/apiService';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetchProducts()
-      .then((data) => setProducts(data))
+    productAPI
+      .getAll()
+      .then((response) => setProducts(response.data || []))
       .catch((error) => console.error('Error fetching products:', error));
   }, []);
 

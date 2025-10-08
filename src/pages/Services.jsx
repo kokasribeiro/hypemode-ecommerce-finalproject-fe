@@ -5,7 +5,7 @@ import SEO from '../components/SEO';
 import NewArrivals from '../sections/NewArrivals';
 import NewsletterUpdates from '../sections/NewsletterUpdates';
 import TrendInsights from '../sections/TrendInsights';
-import { fetchProducts } from '../utils/api/mockapi';
+import { productAPI } from '../utils/api/apiService';
 
 function AccordionItem({ title, children }) {
   const [open, setOpen] = useState(false);
@@ -27,8 +27,9 @@ export default function Services() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetchProducts()
-      .then((data) => setProducts(data))
+    productAPI
+      .getAll()
+      .then((response) => setProducts(response.data || []))
       .catch((error) => console.error('Error fetching products:', error));
   }, []);
 
