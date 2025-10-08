@@ -111,23 +111,40 @@ export default function AboutUs() {
                 loading='lazy'
               />
             </div>
-            <div className='w-full md:w-5/12 md:absolute md:right-10 md:top-1/2 md:transform md:-translate-y-1/2 bg-black text-white p-6 md:p-16 md:z-10 mt-4 md:mt-0'>
-              <h2 className='text-2xl md:text-4xl font-bold font-mono mb-4 md:mb-8'>Testimonials</h2>
-              <p className='text-gray-300 text-sm md:text-base mb-8 md:mb-16'>
-                Absolutely love this store! The quality of the pieces is amazing, and everything I ordered fit
-                perfectly. The shipping was fast and the customer service was super helpful. Definitely coming back for
-                more.
-              </p>
-              <div className='flex items-center'>
-                <div className='w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden mr-4'>
-                  <img
-                    src='/images/AboutUs/TestimonialFace.png'
-                    alt='Jane Blayck - Happy customer profile photo'
-                    className='w-full h-full object-cover'
-                    loading='lazy'
-                  />
+            <div
+              className='w-full md:w-5/12 md:absolute md:right-10 md:top-1/2 md:transform md:-translate-y-1/2 p-6 md:p-16 md:z-10 mt-4 md:mt-0 rounded-2xl overflow-hidden'
+              style={{
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.15))',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid rgba(255,255,255,0.4)',
+                boxShadow: '0 8px 32px 0 rgba(0,0,0,0.37), inset 0 1px 1px 0 rgba(255,255,255,0.3)',
+              }}
+            >
+              <div className='absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-white/10 pointer-events-none'></div>
+              <div className='relative z-10'>
+                <h2 className='text-2xl md:text-4xl font-bold font-mono mb-4 md:mb-8 text-black drop-shadow-sm'>
+                  Testimonials
+                </h2>
+                <p className='text-gray-900 text-sm md:text-base mb-8 md:mb-16 leading-relaxed font-medium'>
+                  Absolutely love this store! The quality of the pieces is amazing, and everything I ordered fit
+                  perfectly. The shipping was fast and the customer service was super helpful. Definitely coming back
+                  for more.
+                </p>
+                <div className='flex items-center'>
+                  <div
+                    className='w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden mr-4 ring-2 ring-white/60 shadow-lg'
+                    style={{ boxShadow: '0 0 15px rgba(255,255,255,0.5)' }}
+                  >
+                    <img
+                      src='/images/AboutUs/TestimonialFace.png'
+                      alt='Jane Blayck - Happy customer profile photo'
+                      className='w-full h-full object-cover'
+                      loading='lazy'
+                    />
+                  </div>
+                  <span className='text-red-600 text-sm md:text-base font-bold drop-shadow-sm'>Jane Blayck</span>
                 </div>
-                <span className='text-red-500 text-sm md:text-base'>Jane Blayck</span>
               </div>
             </div>
           </div>

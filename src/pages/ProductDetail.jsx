@@ -8,7 +8,7 @@ import ButtonPrimary from '../components/features/ButtonPrimary';
 import { useCart } from '../contexts/CartContext';
 import { assignProductRating, createFlyToCartAnimation } from '../utils';
 import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../data';
-import { fetchProductById } from '../utils/api/mockapi';
+import { productAPI } from '../utils/api/apiService';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -39,7 +39,8 @@ export default function ProductDetail() {
       try {
         setLoading(true);
         setSelectedSize('');
-        const data = await fetchProductById(id);
+        const response = await productAPI.getById(id);
+        const data = response.data;
         const consistentRating = assignProductRating(data.id);
         setProduct({ ...data, displayRating: consistentRating });
       } catch (error) {

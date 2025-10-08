@@ -1,0 +1,218 @@
+import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+// Create axios instance
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Add token to requests if available
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
+// Handle response errors
+api.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      // Redirect to login if needed
+      if (window.location.pathname !== '/login') {
+        // window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error.response?.data || error.message);
+  },
+);
+
+// ==================== AUTH ENDPOINTS ====================
+
+export const authAPI = {
+  register: async (userData) => {
+    const response = await api.post('/auth/register', userData);
+    if (response.data?.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    return response;
+  },
+
+  login: async (email, password) => {
+    const response = await api.post('/auth/login', { email, password });
+    if (response.data?.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    return response;
+  },
+
+  logout: () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  },
+
+  getMe: async () => {
+    return await api.get('/auth/me');
+  },
+
+  updateProfile: async (profileData) => {
+    return await api.put('/auth/profile', profileData);
+  },
+
+  getCurrentUser: () => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  },
+
+  isAuthenticated: () => {
+    return !!localStorage.getItem('token');
+  },
+
+  isAdmin: () => {
+    const user = authAPI.getCurrentUser();
+    return user?.role === 'admin';
+  },
+};
+
+// ==================== PRODUCT ENDPOINTS ====================
+
+export const productAPI = {
+  getAll: async (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
+  },
+
+  getById: async (id) => {
+    return await api.get(`/products/${id}`);
+  },
+
+  create: async (productData) => {
+    return await api.post('/products', productData);
+  },
+
+  update: async (id, productData) => {
+    return await api.put(`/products/${id}`, productData);
+  },
+
+  delete: async (id) => {
+    return await api.delete(`/products/${id}`);
+  },
+
+  search: async (searchTerm) => {
+    return await api.get(`/products?search=${encodeURIComponent(searchTerm)}`);
+  },
+
+  getByCategory: async (category, params = {}) => {
+    return await api.get(`/products?category=${encodeURIComponent(category)}`, { params });
+  },
+
+  getFeatured: async () => {
+    return await api.get('/products?featured=true');
+  },
+
+  getNewArrivals: async () => {
+    return await api.get('/products?newArrival=true');
+  },
+
+  getBestSellers: async () => {
+    return await api.get('/products?bestSeller=true');
+  },
+
+  getOnSale: async () => {
+    return await api.get('/products?discount=true');
+  },
+};
+
+// ==================== CART ENDPOINTS ====================
+
+export const cartAPI = {
+  get: async () => {
+    return await api.get('/cart');
+  },
+
+  add: async (productId, quantity = 1, size = null, color = null) => {
+    return await api.post('/cart', { productId, quantity, size, color });
+  },
+
+  update: async (cartItemId, quantity) => {
+    return await api.put(`/cart/${cartItemId}`, { quantity });
+  },
+
+  remove: async (cartItemId) => {
+    return await api.delete(`/cart/${cartItemId}`);
+  },
+
+  clear: async () => {
+    return await api.delete('/cart');
+  },
+};
+
+// ==================== ORDER ENDPOINTS ====================
+
+export const orderAPI = {
+  create: async (orderData) => {
+    return await api.post('/orders', orderData);
+  },
+
+  getAll: async () => {
+    return await api.get('/orders');
+  },
+
+  getById: async (id) => {
+    return await api.get(`/orders/${id}`);
+  },
+
+  getAllAdmin: async () => {
+    return await api.get('/orders/admin/all');
+  },
+
+  updateStatus: async (id, status, trackingNumber = null) => {
+    return await api.put(`/orders/${id}/status`, { status, trackingNumber });
+  },
+
+  createPaymentIntent: async (orderId) => {
+    return await api.post(`/orders/${orderId}/payment`);
+  },
+};
+
+// ==================== BACKWARD COMPATIBILITY ====================
+// For easy migration from mockapi
+
+export const fetchProducts = async () => {
+  try {
+    const response = await productAPI.getAll();
+    return response.data || [];
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
+};
+
+export const fetchProductById = async (id) => {
+  try {
+    const response = await productAPI.getById(id);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching product ${id}:`, error);
+    throw error;
+  }
+};
+
+export default api;
+

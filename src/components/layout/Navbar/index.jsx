@@ -4,7 +4,7 @@ import { FaShoppingCart, FaUser, FaSearch, FaBars } from 'react-icons/fa';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCart } from '../../../contexts/CartContext';
 import CartDropdown from '../../features/CartDropdown';
-import { fetchProducts } from '../../../utils/api/mockapi';
+import { productAPI } from '../../../utils/api/apiService';
 import { addRatingToProducts } from '../../../utils';
 
 export default function Navbar() {
@@ -24,7 +24,8 @@ export default function Navbar() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProducts();
+        const response = await productAPI.getAll();
+        const data = response.data || [];
         const productsWithRatings = addRatingToProducts(data);
         setAllProducts(productsWithRatings);
       } catch (error) {

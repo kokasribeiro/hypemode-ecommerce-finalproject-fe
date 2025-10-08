@@ -8,7 +8,7 @@ import FilterPrice from '../components/features/FilterPrice';
 import TopRatedProducts from '../components/features/TopRatedProducts';
 import SEO from '../components/SEO';
 import { addRatingToProducts, assignProductRating } from '../utils';
-import { fetchProducts } from '../utils/api/mockapi';
+import { productAPI } from '../utils/api/apiService';
 import { useProductFilters } from '../hooks/useProductFilters';
 
 const Products = () => {
@@ -63,9 +63,10 @@ const Products = () => {
     const fetchProductsData = async () => {
       try {
         setLoading(true);
-        const data = await fetchProducts();
+        const response = await productAPI.getAll();
         if (!isMounted) return;
 
+        const data = response.data || [];
         const productsWithRatings = addRatingToProducts(data);
         setProducts(productsWithRatings);
       } catch (error) {
