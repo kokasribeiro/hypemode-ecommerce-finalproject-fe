@@ -10,9 +10,13 @@ import SEO from '../components/SEO';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { useShakeAnimation } from '../hooks/useShakeAnimation';
 import { FORM_FIELDS, ERROR_MESSAGES } from '../data';
+import { authAPI } from '../utils/api/apiService';
+import { useCart } from '../contexts/CartContext';
+import { toastError } from '../utils/toast';
 
 export default function Register() {
   const navigate = useNavigate();
+  const { syncCartOnLogin } = useCart();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -25,6 +29,7 @@ export default function Register() {
 
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [generalError, setGeneralError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { triggerShakeByRef } = useShakeAnimation();
   const { errors, validateSingleField, validateAllFields } = useFormValidation({
@@ -53,22 +58,55 @@ export default function Register() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setGeneralError('');
+    setIsLoading(true);
 
     const { isValid, errors: validationErrors } = validateAllFields(formData);
 
-    if (isValid) {
-      console.log('Registration attempt with:', formData);
-      setRegistrationSuccess(true);
-    } else {
+    if (!isValid) {
       Object.keys(validationErrors).forEach((fieldName) => {
         if (inputRefs[fieldName]) {
           triggerShakeByRef(inputRefs[fieldName]);
         }
       });
       setGeneralError(ERROR_MESSAGES.FORM_VALIDATION_ERROR);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Register via backend API
+      const response = await authAPI.register({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+        phone: '', // Campo opcional
+        address: '',
+        city: '',
+        postalCode: '',
+        country: '',
+      });
+
+      if (response.success) {
+        console.log('✅ Registration successful:', response.data.user);
+        
+        // Sincronizar carrinho do localStorage com o backend
+        await syncCartOnLogin();
+        
+        setRegistrationSuccess(true);
+      } else {
+        toastError(response.message || 'Registration failed');
+        setGeneralError(response.message || 'Registration failed');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      const errorMessage = error.message || 'Failed to create account. Please try again.';
+      toastError(errorMessage);
+      setGeneralError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -208,9 +246,10 @@ export default function Register() {
           />
 
           <ButtonPrimary
-            buttonText='CREATE ACCOUNT'
+            buttonText={isLoading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
             type='submit'
             className='w-full py-3'
+            disabled={isLoading}
           />
 
           {generalError && (
