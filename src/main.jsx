@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -17,6 +17,9 @@ import Register from './pages/Register';
 import Cart from './pages/Cart';
 import Search from './pages/Search';
 import Checkout from './pages/Checkout';
+import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
+import ChangePassword from './pages/ChangePassword';
 
 const router = createBrowserRouter([
   {
@@ -66,9 +69,29 @@ const router = createBrowserRouter([
         path: '/checkout',
         element: <Checkout />,
       },
+      {
+        path: '/profile',
+        element: <Profile />,
+      },
+      {
+        path: '/edit-profile',
+        element: <EditProfile />,
+      },
+      {
+        path: '/change-password',
+        element: <ChangePassword />,
+      },
     ],
   },
 ]);
+
+// Apply dark mode on app start
+useEffect(() => {
+  const darkMode = localStorage.getItem('darkMode');
+  if (darkMode === 'true') {
+    document.documentElement.classList.add('dark');
+  }
+}, []);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

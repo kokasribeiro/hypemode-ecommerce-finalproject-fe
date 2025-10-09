@@ -49,7 +49,7 @@ export const register = async (req, res, next) => {
 // @access  Public
 export const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
 
     // Validate input
     if (!email || !password) {
@@ -77,8 +77,8 @@ export const login = async (req, res, next) => {
       });
     }
 
-    // Generate token
-    const token = generateToken(user.id);
+    // Generate token (30 days if rememberMe, otherwise 7 days)
+    const token = generateToken(user.id, rememberMe);
 
     res.status(200).json({
       success: true,
@@ -147,4 +147,3 @@ export const updateProfile = async (req, res, next) => {
     next(error);
   }
 };
-

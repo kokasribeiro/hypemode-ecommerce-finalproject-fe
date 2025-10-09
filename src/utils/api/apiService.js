@@ -28,6 +28,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    console.log('🔍 API Error:', error);
+    console.log('🔍 Error response:', error.response);
+    console.log('🔍 Error response data:', error.response?.data);
+
     if (error.response?.status === 401) {
       // Token expired or invalid
       localStorage.removeItem('token');
@@ -37,7 +41,9 @@ api.interceptors.response.use(
         // window.location.href = '/login';
       }
     }
-    return Promise.reject(error.response?.data || error.message);
+
+    // Return the full error object so we can access response.data
+    return Promise.reject(error);
   },
 );
 
@@ -45,7 +51,9 @@ api.interceptors.response.use(
 
 export const authAPI = {
   register: async (userData) => {
+    console.log('🚀 API Service - Register attempt:', userData);
     const response = await api.post('/auth/register', userData);
+    console.log('📡 API Service - Register response:', response);
     if (response.data?.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -53,8 +61,8 @@ export const authAPI = {
     return response;
   },
 
-  login: async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
+  login: async (email, password, rememberMe = false) => {
+    const response = await api.post('/auth/login', { email, password, rememberMe });
     if (response.data?.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -215,4 +223,3 @@ export const fetchProductById = async (id) => {
 };
 
 export default api;
-
