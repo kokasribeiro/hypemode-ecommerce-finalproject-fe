@@ -1,14 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 html,
 body {
   cursor: default;
-}
-
-body {
-  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
 }
 
 button:not(:disabled),

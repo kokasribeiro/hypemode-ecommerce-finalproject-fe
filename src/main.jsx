@@ -85,16 +85,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Apply dark mode on app start
-try {
-  const darkMode = localStorage.getItem('darkMode');
-  if (darkMode === 'true') {
-    document.documentElement.classList.add('dark');
-  }
-} catch (error) {
-  console.log('Dark mode not available:', error);
-}
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router} />

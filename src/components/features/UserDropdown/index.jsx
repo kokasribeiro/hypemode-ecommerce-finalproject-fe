@@ -1,14 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { FaUser, FaMoon, FaSun, FaSignOutAlt, FaEdit, FaLock } from 'react-icons/fa';
+import { FaUser, FaCog, FaSignOutAlt, FaEdit, FaLock } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check if dark mode is already enabled
-    return document.documentElement.classList.contains('dark') || localStorage.getItem('darkMode') === 'true';
-  });
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -25,15 +21,6 @@ export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, onClose]);
-
-  useEffect(() => {
-    // Apply dark mode on component mount
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
 
   const handleLogout = () => {
     // Clear localStorage
@@ -64,18 +51,10 @@ export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
     navigate('/change-password');
   };
 
-  const handleDarkModeToggle = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-
-    // Toggle dark mode on document
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('darkMode', 'false');
-    }
+  const handleSettingsClick = () => {
+    onClose();
+    // Navigate to settings page (you can create this page later)
+    navigate('/settings');
   };
 
   if (!isOpen) return null;
@@ -83,18 +62,18 @@ export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
   return (
     <div
       ref={dropdownRef}
-      className='absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 shadow-xl rounded-lg border border-gray-200 dark:border-gray-700 z-50 transform transition-all duration-300 opacity-100 scale-100 translate-y-0'
+      className='absolute right-0 top-full mt-2 w-80 bg-white shadow-xl rounded-lg border border-gray-200 z-50 transform transition-all duration-300 opacity-100 scale-100 translate-y-0'
     >
       {/* Header */}
-      <div className='p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-700 dark:to-gray-600'>
+      <div className='p-4 border-b border-gray-200 bg-gradient-to-r from-red-50 to-pink-50'>
         <div className='flex items-center space-x-3'>
           <div className='w-12 h-12 bg-red-500 rounded-full flex items-center justify-center'>
             <FaUser className='h-6 w-6 text-white' />
           </div>
           <div className='flex-1 min-w-0'>
-            <h3 className='text-lg font-bold text-gray-900 dark:text-white truncate'>{user?.name || 'User'}</h3>
-            <p className='text-sm text-gray-600 dark:text-gray-300 truncate'>{user?.email || 'user@example.com'}</p>
-            <span className='inline-block px-2 py-1 text-xs font-medium text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-200 rounded-full mt-1'>
+            <h3 className='text-lg font-bold text-gray-900 truncate'>{user?.name || 'User'}</h3>
+            <p className='text-sm text-gray-600 truncate'>{user?.email || 'user@example.com'}</p>
+            <span className='inline-block px-2 py-1 text-xs font-medium text-red-600 bg-red-100 rounded-full mt-1'>
               {user?.role === 'admin' ? 'Administrator' : 'Customer'}
             </span>
           </div>
@@ -106,32 +85,28 @@ export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
         {/* Profile */}
         <button
           onClick={handleProfileClick}
-          className='w-full flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200'
+          className='w-full flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200'
         >
-          <FaUser className='h-4 w-4 mr-3 text-gray-500 dark:text-gray-400' />
+          <FaUser className='h-4 w-4 mr-3 text-gray-500' />
           <span className='text-sm font-medium'>My Profile</span>
         </button>
 
         {/* Change Password */}
         <button
           onClick={handleChangePasswordClick}
-          className='w-full flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200'
+          className='w-full flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200'
         >
-          <FaLock className='h-4 w-4 mr-3 text-gray-500 dark:text-gray-400' />
+          <FaLock className='h-4 w-4 mr-3 text-gray-500' />
           <span className='text-sm font-medium'>Change Password</span>
         </button>
 
-        {/* Dark Mode Toggle */}
+        {/* Settings */}
         <button
-          onClick={handleDarkModeToggle}
-          className='w-full flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200'
+          onClick={handleSettingsClick}
+          className='w-full flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200'
         >
-          {isDarkMode ? (
-            <FaSun className='h-4 w-4 mr-3 text-yellow-500' />
-          ) : (
-            <FaMoon className='h-4 w-4 mr-3 text-gray-500 dark:text-gray-400' />
-          )}
-          <span className='text-sm font-medium'>{isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+          <FaCog className='h-4 w-4 mr-3 text-gray-500' />
+          <span className='text-sm font-medium'>Settings</span>
         </button>
 
         {/* Divider */}

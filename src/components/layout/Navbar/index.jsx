@@ -153,7 +153,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className='bg-white dark:bg-gray-900 shadow-md'>
+    <nav className='bg-white shadow-md'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between h-16'>
           <div className='flex items-center'>
@@ -171,7 +171,7 @@ export default function Navbar() {
               <Link
                 key={item.id}
                 to={item.link}
-                className='relative text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors duration-200 pb-1 group text-lg font-medium'
+                className='relative text-gray-600 hover:text-gray-800 transition-colors duration-200 pb-1 group text-lg font-medium'
               >
                 {item.title}
                 <span className='absolute bottom-0 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full'></span>
@@ -183,7 +183,7 @@ export default function Navbar() {
             <div ref={searchRef} className='relative'>
               <button
                 onClick={toggleSearch}
-                className='p-2 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors duration-200 cursor-pointer'
+                className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
                 aria-label='Search'
               >
                 <FaSearch className='h-5 w-5' />
@@ -286,7 +286,7 @@ export default function Navbar() {
               <div ref={userRef} className='relative'>
                 <button
                   onClick={toggleUser}
-                  className='p-2 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors duration-200 cursor-pointer'
+                  className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
                   aria-label='User account'
                 >
                   <FaUser className='h-5 w-5' />
@@ -302,7 +302,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to='/login'
-                className='p-2 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors duration-200 cursor-pointer'
+                className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
                 aria-label='User account'
               >
                 <FaUser className='h-5 w-5' />
