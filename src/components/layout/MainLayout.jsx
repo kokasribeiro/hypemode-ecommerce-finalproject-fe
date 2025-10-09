@@ -9,7 +9,7 @@ export default function MainLayout() {
 
   return (
     <CartProvider>
-      <div className='min-h-screen bg-white'>
+      <div className='min-h-screen bg-white dark:bg-gray-900'>
         <NavBar />
         <main>
           <Outlet />
