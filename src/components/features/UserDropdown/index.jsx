@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { FaUser, FaCog, FaSignOutAlt, FaEdit, FaLock } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaEdit, FaLock, FaHistory } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
@@ -51,10 +51,9 @@ export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
     navigate('/change-password');
   };
 
-  const handleSettingsClick = () => {
+  const handleOrderHistoryClick = () => {
     onClose();
-    // Navigate to settings page (you can create this page later)
-    navigate('/settings');
+    navigate('/order-history');
   };
 
   if (!isOpen) return null;
@@ -100,13 +99,13 @@ export default function UserDropdown({ isOpen, onClose, user, onLogout }) {
           <span className='text-sm font-medium'>Change Password</span>
         </button>
 
-        {/* Settings */}
+        {/* Order History */}
         <button
-          onClick={handleSettingsClick}
+          onClick={handleOrderHistoryClick}
           className='w-full flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200'
         >
-          <FaCog className='h-4 w-4 mr-3 text-gray-500' />
-          <span className='text-sm font-medium'>Settings</span>
+          <FaHistory className='h-4 w-4 mr-3 text-gray-500' />
+          <span className='text-sm font-medium'>Order History</span>
         </button>
 
         {/* Divider */}

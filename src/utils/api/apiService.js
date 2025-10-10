@@ -182,6 +182,10 @@ export const orderAPI = {
     return await api.get('/orders');
   },
 
+  getMyOrders: async () => {
+    return await api.get('/orders/my-orders');
+  },
+
   getById: async (id) => {
     return await api.get(`/orders/${id}`);
   },
@@ -196,6 +200,10 @@ export const orderAPI = {
 
   createPaymentIntent: async (orderId) => {
     return await api.post(`/orders/${orderId}/payment`);
+  },
+
+  delete: async (orderId) => {
+    return await api.delete(`/orders/${orderId}`);
   },
 };
 

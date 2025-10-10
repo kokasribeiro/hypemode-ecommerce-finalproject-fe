@@ -15,7 +15,17 @@ const generateOrderNumber = () => {
 // @access  Private
 export const createOrder = async (req, res, next) => {
   try {
-    const { items, shippingAddress, billingAddress, paymentMethod } = req.body;
+    const {
+      items,
+      shippingAddress,
+      billingAddress,
+      paymentMethod,
+      subtotal: clientSubtotal,
+      tax: clientTax,
+      shipping: clientShipping,
+      total: clientTotal,
+      notes,
+    } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({
@@ -45,7 +55,8 @@ export const createOrder = async (req, res, next) => {
         });
       }
 
-      const itemPrice = product.discount ? product.price * (1 - product.discountPercentage / 100) : product.price;
+      const itemPrice =
+        item.price || (product.discount ? product.price * (1 - product.discountPercentage / 100) : product.price);
 
       const itemTotal = itemPrice * item.quantity;
       subtotal += itemTotal;
@@ -65,9 +76,10 @@ export const createOrder = async (req, res, next) => {
       await product.save();
     }
 
-    const tax = subtotal * 0.1; // 10% tax
-    const shipping = subtotal > 100 ? 0 : 10; // Free shipping over $100
-    const total = subtotal + tax + shipping;
+    // Use client-provided values if available, otherwise calculate
+    const tax = clientTax !== undefined ? clientTax : subtotal * 0.1;
+    const shipping = clientShipping !== undefined ? clientShipping : subtotal > 100 ? 0 : 10;
+    const total = clientTotal !== undefined ? clientTotal : subtotal + tax + shipping;
 
     // Create order
     const order = await Order.create({
@@ -82,7 +94,8 @@ export const createOrder = async (req, res, next) => {
       billingAddress: billingAddress || shippingAddress,
       paymentMethod,
       status: 'pending',
-      paymentStatus: 'pending',
+      paymentStatus: 'paid', // Mark as paid since it's a demo
+      notes: notes || null,
     });
 
     // Clear user's cart
@@ -249,3 +262,40 @@ export const createPaymentIntent = async (req, res, next) => {
   }
 };
 
+// @desc    Delete order
+// @route   DELETE /api/orders/:id
+// @access  Private
+export const deleteOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findOne({
+      where: {
+        id: req.params.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      });
+    }
+
+    // Only allow deletion of pending orders
+    if (order.status !== 'pending') {
+      return res.status(400).json({
+        success: false,
+        message: 'Only pending orders can be deleted',
+      });
+    }
+
+    await order.destroy();
+
+    res.status(200).json({
+      success: true,
+      message: 'Order deleted successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};

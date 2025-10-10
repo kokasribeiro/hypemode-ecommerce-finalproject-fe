@@ -20,6 +20,7 @@ import Checkout from './pages/Checkout';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import ChangePassword from './pages/ChangePassword';
+import OrderHistory from './pages/OrderHistory';
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path: '/change-password',
         element: <ChangePassword />,
+      },
+      {
+        path: '/order-history',
+        element: <OrderHistory />,
       },
     ],
   },
