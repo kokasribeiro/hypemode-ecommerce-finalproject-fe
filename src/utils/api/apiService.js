@@ -1,6 +1,12 @@
 import axios from 'axios';
+import { mockAPI } from './mockData.js';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+// Check if we're in production and no backend URL is set
+const isProduction = import.meta.env.PROD;
+const hasBackendURL = import.meta.env.VITE_API_URL;
+const useMockData = isProduction && !hasBackendURL;
 
 // Create axios instance
 const api = axios.create({
@@ -102,11 +108,19 @@ export const authAPI = {
 
 export const productAPI = {
   getAll: async (params = {}) => {
+    if (useMockData) {
+      console.log('🔄 Using mock data for products (backend not available)');
+      return mockAPI.getAll();
+    }
     const queryString = new URLSearchParams(params).toString();
     return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
   },
 
   getById: async (id) => {
+    if (useMockData) {
+      console.log('🔄 Using mock data for product details (backend not available)');
+      return mockAPI.getById(id);
+    }
     return await api.get(`/products/${id}`);
   },
 
