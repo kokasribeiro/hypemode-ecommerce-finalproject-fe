@@ -82,7 +82,7 @@ export const login = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials',
+        message: 'Your username or password are wrong, try again',
       });
     }
 
@@ -91,7 +91,7 @@ export const login = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials',
+        message: 'Your username or password are wrong, try again',
       });
     }
 

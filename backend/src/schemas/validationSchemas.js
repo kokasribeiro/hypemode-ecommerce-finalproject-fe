@@ -131,7 +131,7 @@ export const createOrderSchema = z.object({
   tax: z.number().min(0, 'Tax must be non-negative').optional(),
   shipping: z.number().min(0, 'Shipping must be non-negative').optional(),
   total: z.number().positive('Total must be positive').optional(),
-  notes: z.string().max(500, 'Notes must be less than 500 characters').optional(),
+  notes: z.string().max(500, 'Notes must be less than 500 characters').optional().nullable(),
 });
 
 // Query parameter validation schemas

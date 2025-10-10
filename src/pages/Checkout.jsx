@@ -154,6 +154,19 @@ export default function Checkout() {
       return;
     }
 
+    if (cart.length === 0) {
+      toast.error('Your cart is empty. Please add items to your cart first.');
+      navigate('/cart');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('You must be logged in to complete your purchase.');
+      navigate('/login');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -191,8 +204,9 @@ export default function Checkout() {
           country: formData.country,
         },
         paymentMethod: 'credit_card',
-        notes: formData.notes || null,
+        notes: formData.notes || undefined,
       };
+
 
       // Create order
       const response = await orderAPI.create(orderData);
