@@ -7,14 +7,19 @@ import {
   deleteProduct,
 } from '../controllers/productController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { validateBody, validateQuery, validateParams, sanitizeInput } from '../middleware/validation.js';
+import { createProductSchema, updateProductSchema, productQuerySchema, idParamSchema } from '../schemas/validationSchemas.js';
 
 const router = express.Router();
 
-router.get('/', getProducts);
-router.get('/:id', getProduct);
-router.post('/', protect, authorize('admin'), createProduct);
-router.put('/:id', protect, authorize('admin'), updateProduct);
-router.delete('/:id', protect, authorize('admin'), deleteProduct);
+// Apply sanitization to all routes
+router.use(sanitizeInput);
+
+router.get('/', validateQuery(productQuerySchema), getProducts);
+router.get('/:id', validateParams(idParamSchema), getProduct);
+router.post('/', protect, authorize('admin'), validateBody(createProductSchema), createProduct);
+router.put('/:id', protect, authorize('admin'), validateParams(idParamSchema), validateBody(updateProductSchema), updateProduct);
+router.delete('/:id', protect, authorize('admin'), validateParams(idParamSchema), deleteProduct);
 
 export default router;
 
