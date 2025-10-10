@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { validateEmail, validatePassword, validateAge, ERROR_MESSAGES, FORM_FIELDS } from '../data';
+import { validateEmail, validatePassword, validateAge, ERROR_MESSAGES, FORM_FIELDS } from '../constants/validation';
 
 export const useFormValidation = (validationRules = {}) => {
   const [errors, setErrors] = useState({});

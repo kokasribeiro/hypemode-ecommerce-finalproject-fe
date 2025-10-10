@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../../components/layout/LayoutContainer';
-import { categories } from '../../data';
+import { PRODUCT_CATEGORIES as categories } from '../../constants';
 const Categories = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const navigate = useNavigate();

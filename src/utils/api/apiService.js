@@ -1,6 +1,20 @@
 import axios from 'axios';
+import { mockAPI } from './mockData.js';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+// Check if we're in production and no backend URL is set
+const isProduction = import.meta.env.PROD;
+const hasBackendURL = import.meta.env.VITE_API_URL;
+const useMockData = isProduction && !hasBackendURL;
+
+// Debug logging
+console.log('🔍 API Debug:', {
+  isProduction,
+  hasBackendURL,
+  useMockData,
+  API_BASE_URL,
+});
 
 // Create axios instance
 const api = axios.create({
@@ -28,6 +42,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    console.log('🔍 API Error:', error);
+    console.log('🔍 Error response:', error.response);
+    console.log('🔍 Error response data:', error.response?.data);
+
     if (error.response?.status === 401) {
       // Token expired or invalid
       localStorage.removeItem('token');
@@ -37,7 +55,9 @@ api.interceptors.response.use(
         // window.location.href = '/login';
       }
     }
-    return Promise.reject(error.response?.data || error.message);
+
+    // Return the full error object so we can access response.data
+    return Promise.reject(error);
   },
 );
 
@@ -45,7 +65,9 @@ api.interceptors.response.use(
 
 export const authAPI = {
   register: async (userData) => {
+    console.log('🚀 API Service - Register attempt:', userData);
     const response = await api.post('/auth/register', userData);
+    console.log('📡 API Service - Register response:', response);
     if (response.data?.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -53,8 +75,8 @@ export const authAPI = {
     return response;
   },
 
-  login: async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
+  login: async (email, password, rememberMe = false) => {
+    const response = await api.post('/auth/login', { email, password, rememberMe });
     if (response.data?.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -94,12 +116,32 @@ export const authAPI = {
 
 export const productAPI = {
   getAll: async (params = {}) => {
-    const queryString = new URLSearchParams(params).toString();
-    return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
+    if (useMockData) {
+      console.log('🔄 Using mock data for products (backend not available)');
+      return mockAPI.getAll();
+    }
+
+    try {
+      const queryString = new URLSearchParams(params).toString();
+      return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
+    } catch (error) {
+      console.log('🔄 API failed, falling back to mock data:', error.message);
+      return mockAPI.getAll();
+    }
   },
 
   getById: async (id) => {
-    return await api.get(`/products/${id}`);
+    if (useMockData) {
+      console.log('🔄 Using mock data for product details (backend not available)');
+      return mockAPI.getById(id);
+    }
+
+    try {
+      return await api.get(`/products/${id}`);
+    } catch (error) {
+      console.log('🔄 API failed, falling back to mock data:', error.message);
+      return mockAPI.getById(id);
+    }
   },
 
   create: async (productData) => {
@@ -174,6 +216,10 @@ export const orderAPI = {
     return await api.get('/orders');
   },
 
+  getMyOrders: async () => {
+    return await api.get('/orders/my-orders');
+  },
+
   getById: async (id) => {
     return await api.get(`/orders/${id}`);
   },
@@ -188,6 +234,10 @@ export const orderAPI = {
 
   createPaymentIntent: async (orderId) => {
     return await api.post(`/orders/${orderId}/payment`);
+  },
+
+  delete: async (orderId) => {
+    return await api.delete(`/orders/${orderId}`);
   },
 };
 
@@ -215,4 +265,3 @@ export const fetchProductById = async (id) => {
 };
 
 export default api;
-

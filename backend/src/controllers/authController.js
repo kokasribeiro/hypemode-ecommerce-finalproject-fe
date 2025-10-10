@@ -1,5 +1,6 @@
 import { User } from '../models/index.js';
 import generateToken from '../utils/generateToken.js';
+import { formatResponse } from '../utils/hateoas.js';
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -32,12 +33,29 @@ export const register = async (req, res, next) => {
     // Generate token
     const token = generateToken(user.id);
 
+    const userData = {
+      user: user.toSafeObject(),
+      token,
+    };
+
+    const response = formatResponse(req, userData, 'auth', {
+      additionalActions: {
+        login: {
+          path: 'login',
+          method: 'POST',
+          title: 'Login',
+        },
+        profile: {
+          path: 'profile',
+          method: 'GET',
+          title: 'Get user profile',
+        },
+      },
+    });
+
     res.status(201).json({
       success: true,
-      data: {
-        user: user.toSafeObject(),
-        token,
-      },
+      ...response,
     });
   } catch (error) {
     next(error);
@@ -49,7 +67,7 @@ export const register = async (req, res, next) => {
 // @access  Public
 export const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
 
     // Validate input
     if (!email || !password) {
@@ -64,7 +82,7 @@ export const login = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials',
+        message: 'Your username or password are wrong, try again',
       });
     }
 
@@ -73,19 +91,36 @@ export const login = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials',
+        message: 'Your username or password are wrong, try again',
       });
     }
 
-    // Generate token
-    const token = generateToken(user.id);
+    // Generate token (30 days if rememberMe, otherwise 7 days)
+    const token = generateToken(user.id, rememberMe);
+
+    const userData = {
+      user: user.toSafeObject(),
+      token,
+    };
+
+    const response = formatResponse(req, userData, 'auth', {
+      additionalActions: {
+        profile: {
+          path: 'profile',
+          method: 'GET',
+          title: 'Get user profile',
+        },
+        logout: {
+          path: 'logout',
+          method: 'POST',
+          title: 'Logout',
+        },
+      },
+    });
 
     res.status(200).json({
       success: true,
-      data: {
-        user: user.toSafeObject(),
-        token,
-      },
+      ...response,
     });
   } catch (error) {
     next(error);
@@ -147,4 +182,3 @@ export const updateProfile = async (req, res, next) => {
     next(error);
   }
 };
-

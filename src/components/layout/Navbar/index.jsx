@@ -1,22 +1,26 @@
-import { navItems } from '../../../data';
+import { NAV_ITEMS as navItems } from '../../../constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaSearch, FaBars } from 'react-icons/fa';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCart } from '../../../contexts/CartContext';
 import CartDropdown from '../../features/CartDropdown';
+import UserDropdown from '../../features/UserDropdown';
 import { productAPI } from '../../../utils/api/apiService';
 import { addRatingToProducts } from '../../../utils';
 
 export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
   const [showCartDropdown, setShowCartDropdown] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const cartRef = useRef(null);
+  const userRef = useRef(null);
   const { cartItemCount } = useCart();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const mobileMenuRef = useRef(null);
@@ -34,6 +38,22 @@ export default function Navbar() {
     };
 
     loadProducts();
+  }, []);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -91,11 +111,25 @@ export default function Navbar() {
     e.stopPropagation();
     setShowCartDropdown((prev) => !prev);
     setShowSearch(false);
+    setShowUserDropdown(false);
+  }, []);
+
+  const toggleUser = useCallback((e) => {
+    e.stopPropagation();
+    setShowUserDropdown((prev) => !prev);
+    setShowSearch(false);
+    setShowCartDropdown(false);
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    setUser(null);
+    setShowUserDropdown(false);
   }, []);
 
   const closeDropdowns = useCallback(() => {
     setShowCartDropdown(false);
     setShowSearch(false);
+    setShowUserDropdown(false);
   }, []);
 
   useEffect(() => {
@@ -105,6 +139,9 @@ export default function Navbar() {
       }
       if (cartRef.current && !cartRef.current.contains(event.target)) {
         setShowCartDropdown(false);
+      }
+      if (userRef.current && !userRef.current.contains(event.target)) {
+        setShowUserDropdown(false);
       }
       if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
         setShowMobileMenu(false);
@@ -245,13 +282,32 @@ export default function Navbar() {
               <CartDropdown isOpen={showCartDropdown} onClose={() => setShowCartDropdown(false)} />
             </div>
 
-            <Link
-              to='/login'
-              className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
-              aria-label='User account'
-            >
-              <FaUser className='h-5 w-5' />
-            </Link>
+            {user ? (
+              <div ref={userRef} className='relative'>
+                <button
+                  onClick={toggleUser}
+                  className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
+                  aria-label='User account'
+                >
+                  <FaUser className='h-5 w-5' />
+                </button>
+
+                <UserDropdown
+                  isOpen={showUserDropdown}
+                  onClose={() => setShowUserDropdown(false)}
+                  user={user}
+                  onLogout={handleLogout}
+                />
+              </div>
+            ) : (
+              <Link
+                to='/login'
+                className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer'
+                aria-label='User account'
+              >
+                <FaUser className='h-5 w-5' />
+              </Link>
+            )}
 
             <button
               className='p-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer md:hidden'

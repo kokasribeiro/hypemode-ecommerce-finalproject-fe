@@ -33,7 +33,7 @@ export default function Register() {
 
   const { triggerShakeByRef } = useShakeAnimation();
   const { errors, validateSingleField, validateAllFields } = useFormValidation({
-    required: FORM_FIELDS.REQUIRED_REGISTRATION_FIELDS
+    required: FORM_FIELDS.REQUIRED_REGISTRATION_FIELDS,
   });
 
   const inputRefs = {
@@ -66,6 +66,16 @@ export default function Register() {
     const { isValid, errors: validationErrors } = validateAllFields(formData);
 
     if (!isValid) {
+      console.log('❌ Validation errors:', validationErrors);
+
+      // Show specific error messages
+      const errorMessages = Object.entries(validationErrors)
+        .filter(([_, error]) => error)
+        .map(([field, error]) => `${field}: ${error}`)
+        .join('\n');
+
+      console.error('Validation failed:\n', errorMessages);
+
       Object.keys(validationErrors).forEach((fieldName) => {
         if (inputRefs[fieldName]) {
           triggerShakeByRef(inputRefs[fieldName]);
@@ -77,6 +87,12 @@ export default function Register() {
     }
 
     try {
+      console.log('🚀 Attempting registration with data:', {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        username: formData.username,
+      });
+
       // Register via backend API
       const response = await authAPI.register({
         name: `${formData.firstName} ${formData.lastName}`,
@@ -89,20 +105,49 @@ export default function Register() {
         country: '',
       });
 
+      console.log('🔍 Full response object:', response);
+      console.log('🔍 Response success:', response.success);
+      console.log('🔍 Response data:', response.data);
+
       if (response.success) {
         console.log('✅ Registration successful:', response.data.user);
-        
+
         // Sincronizar carrinho do localStorage com o backend
         await syncCartOnLogin();
-        
+
         setRegistrationSuccess(true);
       } else {
+        console.error('❌ Registration failed:', response);
         toastError(response.message || 'Registration failed');
         setGeneralError(response.message || 'Registration failed');
       }
     } catch (error) {
-      console.error('Registration error:', error);
-      const errorMessage = error.message || 'Failed to create account. Please try again.';
+      console.error('❌ Registration error full:', error);
+      console.error('❌ Error type:', typeof error);
+      console.error('❌ Error keys:', Object.keys(error));
+      console.error('❌ Error response:', error.response);
+      console.error('❌ Error message:', error.message);
+
+      // Extract detailed error message
+      let errorMessage = 'Failed to create account. Please try again.';
+
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+        console.log('📝 Using response.data.message:', errorMessage);
+      } else if (error.message) {
+        errorMessage = error.message;
+        console.log('📝 Using error.message:', errorMessage);
+      } else if (error.response?.data) {
+        errorMessage = JSON.stringify(error.response.data);
+        console.log('📝 Using response.data as string:', errorMessage);
+      }
+
+      // Check for specific errors
+      if (errorMessage.includes('already exists') || errorMessage.includes('Duplicate')) {
+        errorMessage = 'This email is already registered. Please use another email or login.';
+      }
+
+      console.error('📝 Final error message:', errorMessage);
       toastError(errorMessage);
       setGeneralError(errorMessage);
     } finally {
@@ -126,20 +171,20 @@ export default function Register() {
   if (registrationSuccess) {
     return (
       <div>
-        <SEO 
-          title="Create Account - Register"
-          description="Create your HypeMode Store account and get access to exclusive offers, order history, and a personalized shopping experience."
-          keywords="register, create account, sign up, new user, subscribe"
-          url="/register"
+        <SEO
+          title='Create Account - Register'
+          description='Create your HypeMode Store account and get access to exclusive offers, order history, and a personalized shopping experience.'
+          keywords='register, create account, sign up, new user, subscribe'
+          url='/register'
         />
         <SecondaryHeader title='Create Account' />
         <LayoutContainer className='py-16'>
           <SuccessMessage
-            title="Your account was created!"
-            message="Thank you for registering with us."
-            buttonText="START NAVIGATE"
+            title='Your account was created!'
+            message='Thank you for registering with us.'
+            buttonText='START NAVIGATE'
             onButtonClick={handleStartNavigate}
-            variant="centered"
+            variant='centered'
           />
         </LayoutContainer>
       </div>
@@ -148,20 +193,16 @@ export default function Register() {
 
   return (
     <div>
-      <SEO 
-        title="Create Account - Register"
-        description="Create your HypeMode Store account and get access to exclusive offers, order history, and a personalized shopping experience."
-        keywords="register, create account, sign up, new user, subscribe"
-        url="/register"
+      <SEO
+        title='Create Account - Register'
+        description='Create your HypeMode Store account and get access to exclusive offers, order history, and a personalized shopping experience.'
+        keywords='register, create account, sign up, new user, subscribe'
+        url='/register'
       />
       <SecondaryHeader title='Create Account' />
 
       <LayoutContainer className='py-16'>
-        <FormContainer
-          title='Register'
-          onSubmit={handleSubmit}
-          footerContent={footerContent}
-        >
+        <FormContainer title='Register' onSubmit={handleSubmit} footerContent={footerContent}>
           <div className='grid grid-cols-2 gap-4 mb-4'>
             <FormInput
               label='First Name'
@@ -217,6 +258,7 @@ export default function Register() {
             onChange={handleChange}
             error={errors.username}
             required
+            helperText='Any characters allowed (letters, numbers, special characters)'
           />
 
           <FormInput
@@ -228,7 +270,7 @@ export default function Register() {
             onChange={handleChange}
             error={errors.password}
             required
-            helperText='Password must have minimum 8 characters, 1 uppercase letter, and 1 special character'
+            helperText='Min 8 characters, 1 uppercase (A-Z), 1 special (!@#$%^&*) - Example: MyPass@123'
             minLength='8'
           />
 
@@ -252,11 +294,7 @@ export default function Register() {
             disabled={isLoading}
           />
 
-          {generalError && (
-            <p className='text-red-500 text-sm mt-3 text-center font-medium'>
-              {generalError}
-            </p>
-          )}
+          {generalError && <p className='text-red-500 text-sm mt-3 text-center font-medium'>{generalError}</p>}
         </FormContainer>
       </LayoutContainer>
     </div>

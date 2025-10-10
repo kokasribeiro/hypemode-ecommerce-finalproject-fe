@@ -11,7 +11,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
-    console.log('Proceeding to checkout...');
+    navigate('/checkout');
   };
 
   const handleContinueShopping = () => {

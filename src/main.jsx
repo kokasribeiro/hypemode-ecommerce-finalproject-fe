@@ -4,19 +4,23 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import MainLayout from './components/layout/MainLayout';
+import MainLayout from './components/layout/MainLayout.jsx';
 
-import Home from './pages/Home';
-import Products from './pages/Products';
-import Contact from './pages/Contact';
-import Services from './pages/Services';
-import AboutUs from './pages/AboutUs';
-import ProductDetail from './pages/ProductDetail';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Cart from './pages/Cart';
-import Search from './pages/Search';
-import Checkout from './pages/Checkout';
+import Home from './pages/Home.jsx';
+import Products from './pages/Products.jsx';
+import Contact from './pages/Contact.jsx';
+import Services from './pages/Services.jsx';
+import AboutUs from './pages/AboutUs.jsx';
+import ProductDetail from './pages/ProductDetail.jsx';
+import Login from './pages/Login.jsx';
+import Register from './pages/Register.jsx';
+import Cart from './pages/Cart.jsx';
+import Search from './pages/Search.jsx';
+import Checkout from './pages/Checkout.jsx';
+import Profile from './pages/Profile.jsx';
+import EditProfile from './pages/EditProfile.jsx';
+import ChangePassword from './pages/ChangePassword.jsx';
+import OrderHistory from './pages/OrderHistory.jsx';
 
 const router = createBrowserRouter([
   {
@@ -65,6 +69,22 @@ const router = createBrowserRouter([
       {
         path: '/checkout',
         element: <Checkout />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
+      },
+      {
+        path: '/edit-profile',
+        element: <EditProfile />,
+      },
+      {
+        path: '/change-password',
+        element: <ChangePassword />,
+      },
+      {
+        path: '/order-history',
+        element: <OrderHistory />,
       },
     ],
   },

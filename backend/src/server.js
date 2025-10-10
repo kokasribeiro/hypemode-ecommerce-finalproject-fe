@@ -3,9 +3,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import rateLimit from 'express-rate-limit';
 import sequelize, { testConnection, syncDatabase } from './config/database.js';
 import errorHandler from './middleware/errorHandler.js';
+import { generalLimiter, authLimiter, adminLimiter, cartLimiter } from './middleware/rateLimiter.js';
 
 // Import routes
 import authRoutes from './routes/authRoutes.js';
@@ -25,7 +25,7 @@ app.use(helmet());
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: [process.env.FRONTEND_URL || 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
     credentials: true,
   }),
 );
@@ -40,13 +40,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.',
-});
-
-app.use('/api/', limiter);
+app.use('/api/', generalLimiter);
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -58,9 +52,10 @@ app.get('/health', (req, res) => {
 });
 
 // API routes
-app.use('/api/auth', authRoutes);
+// Routes with specific rate limiting
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/cart', cartRoutes);
+app.use('/api/cart', cartLimiter, cartRoutes);
 app.use('/api/orders', orderRoutes);
 
 // 404 handler
@@ -107,4 +102,3 @@ const startServer = async () => {
 startServer();
 
 export default app;
-
