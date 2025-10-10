@@ -13,7 +13,7 @@ console.log('🔍 API Debug:', {
   isProduction,
   hasBackendURL,
   useMockData,
-  API_BASE_URL
+  API_BASE_URL,
 });
 
 // Create axios instance
@@ -120,7 +120,7 @@ export const productAPI = {
       console.log('🔄 Using mock data for products (backend not available)');
       return mockAPI.getAll();
     }
-    
+
     try {
       const queryString = new URLSearchParams(params).toString();
       return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
@@ -135,7 +135,7 @@ export const productAPI = {
       console.log('🔄 Using mock data for product details (backend not available)');
       return mockAPI.getById(id);
     }
-    
+
     try {
       return await api.get(`/products/${id}`);
     } catch (error) {
