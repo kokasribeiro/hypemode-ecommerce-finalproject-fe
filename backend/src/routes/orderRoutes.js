@@ -24,4 +24,3 @@ router.post('/:id/payment', createPaymentIntent);
 router.delete('/:id', deleteOrder);
 
 export default router;
-
