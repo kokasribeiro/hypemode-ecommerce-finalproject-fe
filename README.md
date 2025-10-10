@@ -239,6 +239,7 @@ hypemode-ecommerce-finalproject-fe/
 ### Frontend (Vercel)
 
 1. **Push seu código para GitHub:**
+
    ```bash
    git add .
    git commit -m "Ready for deployment"
@@ -246,6 +247,7 @@ hypemode-ecommerce-finalproject-fe/
    ```
 
 2. **Configurar no Vercel:**
+
    - Vá para [vercel.com](https://vercel.com)
    - Importe seu repositório do GitHub
    - Configure as variáveis de ambiente:
@@ -260,6 +262,7 @@ hypemode-ecommerce-finalproject-fe/
 ### Backend (Recomendações)
 
 Para o backend, você pode usar:
+
 - **Railway** (recomendado para MySQL)
 - **Render**
 - **Heroku**
