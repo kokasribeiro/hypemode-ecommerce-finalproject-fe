@@ -12,8 +12,8 @@ export const validate = (schema, property = 'body') => {
       req[property] = validatedData;
       next();
     } catch (error) {
-      if (error.name === 'ZodError') {
-        const errors = error.errors.map(err => ({
+      if (error.name === 'ZodError' && error.errors) {
+        const errors = error.errors.map((err) => ({
           field: err.path.join('.'),
           message: err.message,
           code: err.code,
@@ -46,7 +46,7 @@ export const validateParams = (schema) => validate(schema, 'params');
 export const validateMultiple = (schemas) => {
   return (req, res, next) => {
     try {
-      Object.keys(schemas).forEach(property => {
+      Object.keys(schemas).forEach((property) => {
         const schema = schemas[property];
         const data = req[property];
         const validatedData = schema.parse(data);
@@ -54,8 +54,8 @@ export const validateMultiple = (schemas) => {
       });
       next();
     } catch (error) {
-      if (error.name === 'ZodError') {
-        const errors = error.errors.map(err => ({
+      if (error.name === 'ZodError' && error.errors) {
+        const errors = error.errors.map((err) => ({
           field: err.path.join('.'),
           message: err.message,
           code: err.code,
@@ -82,7 +82,7 @@ export const sanitizeInput = (req, res, next) => {
 
   // Sanitize body
   if (req.body && typeof req.body === 'object') {
-    Object.keys(req.body).forEach(key => {
+    Object.keys(req.body).forEach((key) => {
       if (typeof req.body[key] === 'string') {
         req.body[key] = sanitizeString(req.body[key]);
       }
@@ -91,7 +91,7 @@ export const sanitizeInput = (req, res, next) => {
 
   // Sanitize query
   if (req.query && typeof req.query === 'object') {
-    Object.keys(req.query).forEach(key => {
+    Object.keys(req.query).forEach((key) => {
       if (typeof req.query[key] === 'string') {
         req.query[key] = sanitizeString(req.query[key]);
       }
@@ -108,7 +108,7 @@ export const validateFileUpload = (options = {}) => {
   const {
     maxSize = 5 * 1024 * 1024, // 5MB default
     allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-    maxFiles = 5
+    maxFiles = 5,
   } = options;
 
   return (req, res, next) => {
@@ -126,8 +126,8 @@ export const validateFileUpload = (options = {}) => {
           code: 'TOO_MANY_FILES',
           timestamp: new Date().toISOString(),
           path: req.originalUrl,
-          method: req.method
-        }
+          method: req.method,
+        },
       });
     }
 
@@ -140,8 +140,8 @@ export const validateFileUpload = (options = {}) => {
             code: 'FILE_TOO_LARGE',
             timestamp: new Date().toISOString(),
             path: req.originalUrl,
-            method: req.method
-          }
+            method: req.method,
+          },
         });
       }
 
@@ -153,8 +153,8 @@ export const validateFileUpload = (options = {}) => {
             code: 'INVALID_FILE_TYPE',
             timestamp: new Date().toISOString(),
             path: req.originalUrl,
-            method: req.method
-          }
+            method: req.method,
+          },
         });
       }
     }

@@ -1,6 +1,6 @@
 import { beforeAll, afterAll, beforeEach } from 'vitest';
 import { execSync } from 'node:child_process';
-import { sequelize } from '../config/database.js';
+import sequelize from '../config/database.js';
 
 // Setup database before all tests
 beforeAll(async () => {
