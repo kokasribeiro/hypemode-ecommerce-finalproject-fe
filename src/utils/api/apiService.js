@@ -8,6 +8,14 @@ const isProduction = import.meta.env.PROD;
 const hasBackendURL = import.meta.env.VITE_API_URL;
 const useMockData = isProduction && !hasBackendURL;
 
+// Debug logging
+console.log('🔍 API Debug:', {
+  isProduction,
+  hasBackendURL,
+  useMockData,
+  API_BASE_URL
+});
+
 // Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -112,8 +120,14 @@ export const productAPI = {
       console.log('🔄 Using mock data for products (backend not available)');
       return mockAPI.getAll();
     }
-    const queryString = new URLSearchParams(params).toString();
-    return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
+    
+    try {
+      const queryString = new URLSearchParams(params).toString();
+      return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
+    } catch (error) {
+      console.log('🔄 API failed, falling back to mock data:', error.message);
+      return mockAPI.getAll();
+    }
   },
 
   getById: async (id) => {
@@ -121,7 +135,13 @@ export const productAPI = {
       console.log('🔄 Using mock data for product details (backend not available)');
       return mockAPI.getById(id);
     }
-    return await api.get(`/products/${id}`);
+    
+    try {
+      return await api.get(`/products/${id}`);
+    } catch (error) {
+      console.log('🔄 API failed, falling back to mock data:', error.message);
+      return mockAPI.getById(id);
+    }
   },
 
   create: async (productData) => {
