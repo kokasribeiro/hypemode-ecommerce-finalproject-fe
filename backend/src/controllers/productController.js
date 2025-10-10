@@ -1,5 +1,6 @@
 import { Product } from '../models/index.js';
 import { Op } from 'sequelize';
+import { formatResponse } from '../utils/hateoas.js';
 
 // @desc    Get all products with filters
 // @route   GET /api/products
@@ -71,12 +72,21 @@ export const getProducts = async (req, res, next) => {
       offset: parseInt(offset),
     });
 
+    const totalPages = Math.ceil(count / limit);
+    const currentPage = parseInt(page);
+    
+    const response = formatResponse(req, products, 'products', {
+      page: currentPage,
+      totalPages,
+      limit: parseInt(limit)
+    });
+
     res.status(200).json({
       success: true,
       count,
-      totalPages: Math.ceil(count / limit),
-      currentPage: parseInt(page),
-      data: products,
+      totalPages,
+      currentPage,
+      ...response
     });
   } catch (error) {
     next(error);
@@ -97,9 +107,20 @@ export const getProduct = async (req, res, next) => {
       });
     }
 
+    const response = formatResponse(req, product, 'products', {
+      id: product.id,
+      additionalActions: {
+        addToCart: {
+          path: 'cart',
+          method: 'POST',
+          title: 'Add to cart'
+        }
+      }
+    });
+
     res.status(200).json({
       success: true,
-      data: product,
+      ...response
     });
   } catch (error) {
     next(error);

@@ -1,5 +1,6 @@
 import { User } from '../models/index.js';
 import generateToken from '../utils/generateToken.js';
+import { formatResponse } from '../utils/hateoas.js';
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -32,12 +33,29 @@ export const register = async (req, res, next) => {
     // Generate token
     const token = generateToken(user.id);
 
+    const userData = {
+      user: user.toSafeObject(),
+      token,
+    };
+
+    const response = formatResponse(req, userData, 'auth', {
+      additionalActions: {
+        login: {
+          path: 'login',
+          method: 'POST',
+          title: 'Login'
+        },
+        profile: {
+          path: 'profile',
+          method: 'GET',
+          title: 'Get user profile'
+        }
+      }
+    });
+
     res.status(201).json({
       success: true,
-      data: {
-        user: user.toSafeObject(),
-        token,
-      },
+      ...response
     });
   } catch (error) {
     next(error);
@@ -80,12 +98,29 @@ export const login = async (req, res, next) => {
     // Generate token (30 days if rememberMe, otherwise 7 days)
     const token = generateToken(user.id, rememberMe);
 
+    const userData = {
+      user: user.toSafeObject(),
+      token,
+    };
+
+    const response = formatResponse(req, userData, 'auth', {
+      additionalActions: {
+        profile: {
+          path: 'profile',
+          method: 'GET',
+          title: 'Get user profile'
+        },
+        logout: {
+          path: 'logout',
+          method: 'POST',
+          title: 'Logout'
+        }
+      }
+    });
+
     res.status(200).json({
       success: true,
-      data: {
-        user: user.toSafeObject(),
-        token,
-      },
+      ...response
     });
   } catch (error) {
     next(error);
