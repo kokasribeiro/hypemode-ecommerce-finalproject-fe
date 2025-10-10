@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LayoutContainer from '../../components/layout/LayoutContainer';
-import { validateEmail } from '../../data';
+import { validateEmail } from '../../constants/validation';
 import newsletterCardImage from '../../assets/images/newsletterCard.png';
 
 const NewsletterUpdates = () => {

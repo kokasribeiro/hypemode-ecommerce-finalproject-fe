@@ -4,15 +4,15 @@ import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../../contexts/CartContext';
 import { createFlyToCartAnimation } from '../../../utils';
-import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../../../data';
+import { CATEGORY_KEYWORDS, PRODUCT_SIZES as sizesData } from '../../../constants';
 
 const getProductType = (product) => {
-  const isClothing = product.category && clothingCategories.includes(product.category.toLowerCase().trim());
-  const isShoes = product.category && shoesCategories.includes(product.category.toLowerCase().trim());
+  const isClothing = product.category && CATEGORY_KEYWORDS.clothing.includes(product.category.toLowerCase().trim());
+  const isShoes = product.category && CATEGORY_KEYWORDS.shoes.includes(product.category.toLowerCase().trim());
   const isNecklace =
-    (product.category && necklaceCategories.includes(product.category.toLowerCase().trim())) ||
-    (product.name && necklaceCategories.some((word) => product.name.toLowerCase().includes(word)));
-  const isBackpack = product.name && backpackCategories.some((word) => product.name.toLowerCase().includes(word));
+    (product.category && CATEGORY_KEYWORDS.necklace.includes(product.category.toLowerCase().trim())) ||
+    (product.name && CATEGORY_KEYWORDS.necklace.some((word) => product.name.toLowerCase().includes(word)));
+  const isBackpack = product.name && CATEGORY_KEYWORDS.backpack.some((word) => product.name.toLowerCase().includes(word));
 
   return { isClothing, isShoes, isNecklace, isBackpack };
 };

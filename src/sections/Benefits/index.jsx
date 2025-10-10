@@ -1,7 +1,7 @@
 import React from 'react';
 import BenefitCard from '../../components/features/BenefitCard';
 import LayoutContainer from '../../components/layout/LayoutContainer';
-import { benefitsData } from '../../data';
+import { BENEFITS_DATA as benefitsData } from '../../constants';
 
 const Benefits = () => {
   return (

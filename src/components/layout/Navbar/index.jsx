@@ -1,4 +1,4 @@
-import { navItems } from '../../../data';
+import { NAV_ITEMS as navItems } from '../../../constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser, FaSearch, FaBars } from 'react-icons/fa';
 import { useState, useEffect, useRef, useCallback } from 'react';
