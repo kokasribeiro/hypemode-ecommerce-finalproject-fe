@@ -45,32 +45,64 @@ export default function Services() {
       <LayoutContainer>
         <div className='w-full max-w-6xl mx-auto px-4 -mt-16 md:-mt-20 z-10 relative'>
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10'>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
-              <h2 className='font-bold text-xl md:text-2xl mb-2'>Personal Stylist</h2>
-              <p className='text-sm md:text-base'>
-                Get 1-on-1 sessions with fashion experts who help you elevate your drip. From chill fits to bold
-                statements, we've got you.
-              </p>
+            <div className='relative group overflow-hidden rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl text-center md:text-left'>
+              <div className='absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-70 group-hover:opacity-80 transition-opacity duration-500'></div>
+              <div className='absolute inset-0 bg-gradient-to-br from-red-600/20 via-transparent to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='absolute inset-0 bg-gradient-to-tl from-purple-600/10 via-transparent to-cyan-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='relative z-10 p-6 md:p-12 text-white transform group-hover:scale-105 transition-transform duration-500'>
+                <h2 className='font-bold text-xl md:text-2xl mb-2 group-hover:text-red-400 transition-colors duration-300'>
+                  Personal Stylist
+                </h2>
+                <p className='text-sm md:text-base group-hover:text-gray-200 transition-colors duration-300'>
+                  Get 1-on-1 sessions with fashion experts who help you elevate your drip. From chill fits to bold
+                  statements, we've got you.
+                </p>
+              </div>
+              <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out'></div>
             </div>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
-              <h2 className='font-bold text-xl md:text-2xl mb-2'>Cloth Assortment</h2>
-              <p className='text-sm md:text-base'>
-                Browse exclusive fabrics and streetwear staples handpicked for hype and comfort. Find your perfect
-                texture and tone.
-              </p>
+            <div className='relative group overflow-hidden rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl text-center md:text-left'>
+              <div className='absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-70 group-hover:opacity-80 transition-opacity duration-500'></div>
+              <div className='absolute inset-0 bg-gradient-to-br from-red-600/20 via-transparent to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='absolute inset-0 bg-gradient-to-tl from-purple-600/10 via-transparent to-cyan-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='relative z-10 p-6 md:p-12 text-white transform group-hover:scale-105 transition-transform duration-500'>
+                <h2 className='font-bold text-xl md:text-2xl mb-2 group-hover:text-red-400 transition-colors duration-300'>
+                  Cloth Assortment
+                </h2>
+                <p className='text-sm md:text-base group-hover:text-gray-200 transition-colors duration-300'>
+                  Browse exclusive fabrics and streetwear staples handpicked for hype and comfort. Find your perfect
+                  texture and tone.
+                </p>
+              </div>
+              <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out'></div>
             </div>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
-              <h2 className='font-bold text-xl md:text-2xl mb-2'>Taking Measurements</h2>
-              <p className='text-sm md:text-base'>
-                We make sizing stress-free. Get professionally fitted so every piece hugs right and hits hard.
-              </p>
+            <div className='relative group overflow-hidden rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl text-center md:text-left'>
+              <div className='absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-70 group-hover:opacity-80 transition-opacity duration-500'></div>
+              <div className='absolute inset-0 bg-gradient-to-br from-red-600/20 via-transparent to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='absolute inset-0 bg-gradient-to-tl from-purple-600/10 via-transparent to-cyan-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='relative z-10 p-6 md:p-12 text-white transform group-hover:scale-105 transition-transform duration-500'>
+                <h2 className='font-bold text-xl md:text-2xl mb-2 group-hover:text-red-400 transition-colors duration-300'>
+                  Taking Measurements
+                </h2>
+                <p className='text-sm md:text-base group-hover:text-gray-200 transition-colors duration-300'>
+                  We make sizing stress-free. Get professionally fitted so every piece hugs right and hits hard.
+                </p>
+              </div>
+              <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out'></div>
             </div>
-            <div className='bg-black text-white p-6 md:p-12 rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl active:bg-red-600 md:hover:bg-red-600 transition text-center md:text-left'>
-              <h2 className='font-bold text-xl md:text-2xl mb-2'>Dry Cleaning</h2>
-              <p className='text-sm md:text-base'>
-                Keep your heat fresh. Drop your gear for top-tier care with quick turnaround and streetwear-safe
-                treatment.
-              </p>
+            <div className='relative group overflow-hidden rounded-lg min-h-[160px] md:min-h-[220px] flex flex-col justify-center shadow-xl text-center md:text-left'>
+              <div className='absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-70 group-hover:opacity-80 transition-opacity duration-500'></div>
+              <div className='absolute inset-0 bg-gradient-to-br from-red-600/20 via-transparent to-blue-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='absolute inset-0 bg-gradient-to-tl from-purple-600/10 via-transparent to-cyan-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></div>
+              <div className='relative z-10 p-6 md:p-12 text-white transform group-hover:scale-105 transition-transform duration-500'>
+                <h2 className='font-bold text-xl md:text-2xl mb-2 group-hover:text-red-400 transition-colors duration-300'>
+                  Dry Cleaning
+                </h2>
+                <p className='text-sm md:text-base group-hover:text-gray-200 transition-colors duration-300'>
+                  Keep your heat fresh. Drop your gear for top-tier care with quick turnaround and streetwear-safe
+                  treatment.
+                </p>
+              </div>
+              <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out'></div>
             </div>
           </div>
         </div>

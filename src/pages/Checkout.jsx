@@ -36,8 +36,16 @@ export default function Checkout() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // Load user data if logged in
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
+
+    if (!token || !userData) {
+      toast.error('Please log in to complete your purchase');
+      navigate('/login');
+      return;
+    }
+
     if (userData) {
       try {
         const user = JSON.parse(userData);
@@ -55,7 +63,7 @@ export default function Checkout() {
         console.error('Error loading user data:', error);
       }
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     // Redirect if cart is empty
@@ -160,8 +168,8 @@ export default function Checkout() {
           productId: item.id,
           quantity: item.quantity,
           price: item.discount ? item.price * (1 - item.discountPercentage / 100) : item.price,
-          size: item.selectedSize || null,
-          color: item.selectedColor || null,
+          size: item.selectedSize || undefined,
+          color: item.selectedColor || undefined,
         })),
         subtotal,
         tax,
@@ -199,7 +207,29 @@ export default function Checkout() {
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      toast.error(error.response?.data?.message || 'Failed to process order. Please try again.');
+      console.error('Error response:', error.response);
+      console.error('Error response data:', error.response?.data);
+
+      if (error.response?.status === 401) {
+        toast.error('Your session has expired. Please log in again.');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+      } else if (error.response?.status === 400) {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.response?.data?.error?.message ||
+          'Please check your information and try again.';
+        toast.error(errorMessage);
+      } else if (error.response?.status === 500) {
+        toast.error('Server error. Please try again later.');
+      } else {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.response?.data?.error?.message ||
+          'Failed to process order. Please try again.';
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -496,7 +526,7 @@ export default function Checkout() {
                 ) : (
                   <>
                     <FaLock className='mr-2' />
-                    Pay Now ${calculateTotal().toFixed(2)}
+                    Pay Now €{calculateTotal().toFixed(2)}
                   </>
                 )}
               </button>
@@ -519,7 +549,7 @@ export default function Checkout() {
                         <p className='text-xs text-gray-600'>Qty: {item.quantity}</p>
                         {item.selectedSize && <p className='text-xs text-gray-600'>Size: {item.selectedSize}</p>}
                       </div>
-                      <p className='text-sm font-semibold text-gray-900'>${(price * item.quantity).toFixed(2)}</p>
+                      <p className='text-sm font-semibold text-gray-900'>€{(price * item.quantity).toFixed(2)}</p>
                     </div>
                   );
                 })}
