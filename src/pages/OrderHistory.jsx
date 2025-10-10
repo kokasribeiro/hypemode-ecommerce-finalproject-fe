@@ -156,7 +156,7 @@ export default function OrderHistory() {
                       </span>
                       <div className='text-right'>
                         <p className='text-sm text-gray-600'>Total</p>
-                        <p className='text-lg font-bold text-gray-900'>${Number(order.total).toFixed(2)}</p>
+                        <p className='text-lg font-bold text-gray-900'>€{Number(order.total).toFixed(2)}</p>
                       </div>
                     </div>
                   </div>
@@ -186,13 +186,13 @@ export default function OrderHistory() {
                               {item.name || item.Product?.name || 'Product'}
                             </p>
                             <p className='text-sm text-gray-600'>
-                              Quantity: {item.quantity} × ${Number(item.price).toFixed(2)}
+                              Quantity: {item.quantity} × €{Number(item.price).toFixed(2)}
                             </p>
                             {item.size && <p className='text-xs text-gray-500'>Size: {item.size}</p>}
                           </div>
                           <div className='text-right'>
                             <p className='text-sm font-semibold text-gray-900'>
-                              ${(item.quantity * Number(item.price)).toFixed(2)}
+                              €{(item.quantity * Number(item.price)).toFixed(2)}
                             </p>
                           </div>
                         </div>
