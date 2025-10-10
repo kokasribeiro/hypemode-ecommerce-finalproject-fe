@@ -15,4 +15,3 @@ router.get('/me', protect, getMe);
 router.put('/profile', protect, validateBody(updateProfileSchema), updateProfile);
 
 export default router;
-

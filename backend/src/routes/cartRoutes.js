@@ -17,4 +17,3 @@ router.delete('/:id', validateParams(idParamSchema), removeFromCart);
 router.delete('/', clearCart);
 
 export default router;
-
