@@ -11,47 +11,51 @@ export const generateLinks = (req, resource, id = null) => {
   return {
     self: {
       href: `${baseUrl}${resourceIdPath}`,
-      method: 'GET'
+      method: 'GET',
     },
     create: {
       href: `${baseUrl}${resourcePath}`,
       method: 'POST',
-      title: `Create new ${resource}`
+      title: `Create new ${resource}`,
     },
-    update: id ? {
-      href: `${baseUrl}${resourceIdPath}`,
-      method: 'PUT',
-      title: `Update ${resource}`
-    } : null,
-    delete: id ? {
-      href: `${baseUrl}${resourceIdPath}`,
-      method: 'DELETE',
-      title: `Delete ${resource}`
-    } : null
+    update: id
+      ? {
+          href: `${baseUrl}${resourceIdPath}`,
+          method: 'PUT',
+          title: `Update ${resource}`,
+        }
+      : null,
+    delete: id
+      ? {
+          href: `${baseUrl}${resourceIdPath}`,
+          method: 'DELETE',
+          title: `Delete ${resource}`,
+        }
+      : null,
   };
 };
 
 export const generatePaginationLinks = (req, page, totalPages, limit) => {
   const baseUrl = `${req.protocol}://${req.get('host')}/api`;
   const currentPath = req.originalUrl.split('?')[0];
-  
+
   const links = {
     self: {
       href: `${baseUrl}${currentPath}?page=${page}&limit=${limit}`,
-      method: 'GET'
-    }
+      method: 'GET',
+    },
   };
 
   if (page > 1) {
     links.first = {
       href: `${baseUrl}${currentPath}?page=1&limit=${limit}`,
       method: 'GET',
-      title: 'First page'
+      title: 'First page',
     };
     links.prev = {
       href: `${baseUrl}${currentPath}?page=${page - 1}&limit=${limit}`,
       method: 'GET',
-      title: 'Previous page'
+      title: 'Previous page',
     };
   }
 
@@ -59,12 +63,12 @@ export const generatePaginationLinks = (req, page, totalPages, limit) => {
     links.next = {
       href: `${baseUrl}${currentPath}?page=${page + 1}&limit=${limit}`,
       method: 'GET',
-      title: 'Next page'
+      title: 'Next page',
     };
     links.last = {
       href: `${baseUrl}${currentPath}?page=${totalPages}&limit=${limit}`,
       method: 'GET',
-      title: 'Last page'
+      title: 'Last page',
     };
   }
 
@@ -79,31 +83,31 @@ export const generateResourceLinks = (req, resource, id, additionalActions = {})
   const links = {
     self: {
       href: `${baseUrl}${resourceIdPath}`,
-      method: 'GET'
+      method: 'GET',
     },
     list: {
       href: `${baseUrl}${resourcePath}`,
       method: 'GET',
-      title: `List all ${resource}s`
+      title: `List all ${resource}s`,
     },
     update: {
       href: `${baseUrl}${resourceIdPath}`,
       method: 'PUT',
-      title: `Update ${resource}`
+      title: `Update ${resource}`,
     },
     delete: {
       href: `${baseUrl}${resourceIdPath}`,
       method: 'DELETE',
-      title: `Delete ${resource}`
-    }
+      title: `Delete ${resource}`,
+    },
   };
 
   // Add additional action links
-  Object.keys(additionalActions).forEach(action => {
+  Object.keys(additionalActions).forEach((action) => {
     links[action] = {
       href: `${baseUrl}${resourceIdPath}/${additionalActions[action].path}`,
       method: additionalActions[action].method || 'GET',
-      title: additionalActions[action].title || action
+      title: additionalActions[action].title || action,
     };
   });
 
@@ -112,10 +116,10 @@ export const generateResourceLinks = (req, resource, id, additionalActions = {})
 
 export const formatResponse = (req, data, resource, options = {}) => {
   const { id = null, page = null, totalPages = null, limit = null, additionalActions = {} } = options;
-  
+
   const response = {
     data,
-    _links: {}
+    _links: {},
   };
 
   if (id) {
@@ -132,7 +136,7 @@ export const formatResponse = (req, data, resource, options = {}) => {
       total: totalPages,
       limit: limit,
       hasNext: page < totalPages,
-      hasPrev: page > 1
+      hasPrev: page > 1,
     };
   }
 

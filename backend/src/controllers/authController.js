@@ -43,19 +43,19 @@ export const register = async (req, res, next) => {
         login: {
           path: 'login',
           method: 'POST',
-          title: 'Login'
+          title: 'Login',
         },
         profile: {
           path: 'profile',
           method: 'GET',
-          title: 'Get user profile'
-        }
-      }
+          title: 'Get user profile',
+        },
+      },
     });
 
     res.status(201).json({
       success: true,
-      ...response
+      ...response,
     });
   } catch (error) {
     next(error);
@@ -108,19 +108,19 @@ export const login = async (req, res, next) => {
         profile: {
           path: 'profile',
           method: 'GET',
-          title: 'Get user profile'
+          title: 'Get user profile',
         },
         logout: {
           path: 'logout',
           method: 'POST',
-          title: 'Logout'
-        }
-      }
+          title: 'Logout',
+        },
+      },
     });
 
     res.status(200).json({
       success: true,
-      ...response
+      ...response,
     });
   } catch (error) {
     next(error);

@@ -74,11 +74,11 @@ export const getProducts = async (req, res, next) => {
 
     const totalPages = Math.ceil(count / limit);
     const currentPage = parseInt(page);
-    
+
     const response = formatResponse(req, products, 'products', {
       page: currentPage,
       totalPages,
-      limit: parseInt(limit)
+      limit: parseInt(limit),
     });
 
     res.status(200).json({
@@ -86,7 +86,7 @@ export const getProducts = async (req, res, next) => {
       count,
       totalPages,
       currentPage,
-      ...response
+      ...response,
     });
   } catch (error) {
     next(error);
@@ -113,14 +113,14 @@ export const getProduct = async (req, res, next) => {
         addToCart: {
           path: 'cart',
           method: 'POST',
-          title: 'Add to cart'
-        }
-      }
+          title: 'Add to cart',
+        },
+      },
     });
 
     res.status(200).json({
       success: true,
-      ...response
+      ...response,
     });
   } catch (error) {
     next(error);
@@ -192,4 +192,3 @@ export const deleteProduct = async (req, res, next) => {
     next(error);
   }
 };
-
