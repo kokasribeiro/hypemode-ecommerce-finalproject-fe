@@ -207,7 +207,6 @@ export default function Checkout() {
         notes: formData.notes || undefined,
       };
 
-
       // Create order
       const response = await orderAPI.create(orderData);
 
