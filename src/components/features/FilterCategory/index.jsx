@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { categories } from '../../../data';
+import { PRODUCT_CATEGORIES as categories } from '../../../constants';
 
 const FilterCategory = ({ onFilterChange, initialSelected = [] }) => {
   const [selectedCategories, setSelectedCategories] = useState(initialSelected);

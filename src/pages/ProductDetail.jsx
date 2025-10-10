@@ -7,7 +7,7 @@ import { Star } from 'lucide-react';
 import ButtonPrimary from '../components/features/ButtonPrimary';
 import { useCart } from '../contexts/CartContext';
 import { assignProductRating, createFlyToCartAnimation } from '../utils';
-import { clothingCategories, shoesCategories, necklaceCategories, backpackCategories, sizesData } from '../data';
+import { CATEGORY_KEYWORDS, PRODUCT_SIZES as sizesData } from '../constants';
 import { productAPI } from '../utils/api/apiService';
 
 export default function ProductDetail() {
@@ -18,12 +18,12 @@ export default function ProductDetail() {
   const { addToCart } = useCart();
   const productImageRef = useRef(null);
 
-  const isClothing = product?.category && clothingCategories.includes(product.category.toLowerCase().trim());
-  const isShoes = product?.category && shoesCategories.includes(product.category.toLowerCase().trim());
+  const isClothing = product?.category && CATEGORY_KEYWORDS.clothing.includes(product.category.toLowerCase().trim());
+  const isShoes = product?.category && CATEGORY_KEYWORDS.shoes.includes(product.category.toLowerCase().trim());
   const isNecklace =
-    (product?.category && necklaceCategories.includes(product.category.toLowerCase().trim())) ||
-    (product?.name && necklaceCategories.some((word) => product.name.toLowerCase().includes(word)));
-  const isBackpack = product?.name && backpackCategories.some((word) => product.name.toLowerCase().includes(word));
+    (product?.category && CATEGORY_KEYWORDS.necklace.includes(product.category.toLowerCase().trim())) ||
+    (product?.name && CATEGORY_KEYWORDS.necklace.some((word) => product.name.toLowerCase().includes(word)));
+  const isBackpack = product?.name && CATEGORY_KEYWORDS.backpack.some((word) => product.name.toLowerCase().includes(word));
   const needsSize = isClothing || isShoes || isNecklace || isBackpack;
 
   const sizes = isShoes
