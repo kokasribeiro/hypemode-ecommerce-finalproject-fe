@@ -8,8 +8,8 @@ HypeMode é uma loja online de moda e estilo completa, desenvolvida com **React 
 
 Este projeto usa uma **API backend completa e profissional** pronta para produção!
 
-✅ **[Migração Completa - MockAPI Removida](./MIGRATION_COMPLETE.md)**  
-📖 **[Guia Completo da API](./MIGRAÇÃO_PARA_API.md)**
+✅ **Migração Completa - MockAPI Removida**  
+📖 **API Backend Integrada**
 
 **Resumo das novas funcionalidades:**
 
@@ -193,14 +193,11 @@ hypemode-ecommerce-finalproject-fe/
 │
 ├── .env                       # 🆕 Config do frontend
 ├── package.json
-├── README.md                  # Este arquivo
-└── MIGRAÇÃO_PARA_API.md      # 🆕 Guia de migração completo
+└── README.md                  # Este arquivo
 ```
 
 ## 📚 Documentação Adicional
 
-- **[✅ Migração Completa](./MIGRATION_COMPLETE.md)** - Status da migração (MockAPI removida)
-- **[Guia Completo da API](./MIGRAÇÃO_PARA_API.md)** - Explicação completa da API
 - **[Documentação da API Backend](./backend/README.md)** - Endpoints, autenticação, exemplos
 - **[Setup do Backend](./backend/SETUP.md)** - Guia passo a passo de instalação
 - **[Exemplos Práticos](./backend/EXEMPLOS_API.md)** - Como usar a API
@@ -236,3 +233,41 @@ hypemode-ecommerce-finalproject-fe/
 - Validação de inputs
 - Proteção contra SQL injection
 - CORS configurado
+
+## 🚀 Deployment para Vercel
+
+### Frontend (Vercel)
+
+1. **Push seu código para GitHub:**
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
+
+2. **Configurar no Vercel:**
+   - Vá para [vercel.com](https://vercel.com)
+   - Importe seu repositório do GitHub
+   - Configure as variáveis de ambiente:
+     - `VITE_API_URL` = URL do seu backend (ex: `https://your-backend.com/api`)
+   - Deploy!
+
+3. **Variáveis de Ambiente Necessárias:**
+   ```
+   VITE_API_URL=https://your-backend-api.com/api
+   ```
+
+### Backend (Recomendações)
+
+Para o backend, você pode usar:
+- **Railway** (recomendado para MySQL)
+- **Render**
+- **Heroku**
+- **AWS EC2**
+- **DigitalOcean**
+
+**Importante:** Certifique-se de que o backend está acessível publicamente e configure o CORS para permitir requisições do domínio do Vercel.
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT.
