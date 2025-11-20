@@ -1,3 +1,4 @@
+import { ZodError } from 'zod';
 import { formatValidationError } from './responseFormatter.js';
 
 /**
@@ -12,9 +13,10 @@ export const validate = (schema, property = 'body') => {
       req[property] = validatedData;
       next();
     } catch (error) {
-      if (error.name === 'ZodError' && error.errors) {
-        const errors = error.errors.map((err) => ({
-          field: err.path.join('.'),
+      if (error instanceof ZodError) {
+        const issues = error.issues || error.errors || [];
+        const errors = issues.map((err) => ({
+          field: Array.isArray(err.path) ? err.path.join('.') : err.path,
           message: err.message,
           code: err.code,
         }));
@@ -54,9 +56,10 @@ export const validateMultiple = (schemas) => {
       });
       next();
     } catch (error) {
-      if (error.name === 'ZodError' && error.errors) {
-        const errors = error.errors.map((err) => ({
-          field: err.path.join('.'),
+      if (error instanceof ZodError) {
+        const issues = error.issues || error.errors || [];
+        const errors = issues.map((err) => ({
+          field: Array.isArray(err.path) ? err.path.join('.') : err.path,
           message: err.message,
           code: err.code,
         }));

@@ -1,5 +1,9 @@
 import rateLimit from 'express-rate-limit';
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const noopLimiter = (req, res, next) => next();
+
 // General API rate limiting
 export const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -13,16 +17,18 @@ export const generalLimiter = rateLimit({
 });
 
 // Strict rate limiting for authentication endpoints
-export const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 login attempts per windowMs
-  message: {
-    error: 'Too many authentication attempts, please try again later.',
-    retryAfter: '15 minutes'
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export const authLimiter = isDevelopment
+  ? noopLimiter
+  : rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 5, // limit each IP to 5 login attempts per windowMs
+      message: {
+        error: 'Too many authentication attempts, please try again later.',
+        retryAfter: '15 minutes'
+      },
+      standardHeaders: true,
+      legacyHeaders: false,
+    });
 
 // Rate limiting for product creation/updates (admin operations)
 export const adminLimiter = rateLimit({

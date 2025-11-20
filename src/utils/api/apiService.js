@@ -121,13 +121,8 @@ export const productAPI = {
       return mockAPI.getAll();
     }
 
-    try {
-      const queryString = new URLSearchParams(params).toString();
-      return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
-    } catch (error) {
-      console.log('🔄 API failed, falling back to mock data:', error.message);
-      return mockAPI.getAll();
-    }
+    const queryString = new URLSearchParams(params).toString();
+    return await api.get(`/products${queryString ? `?${queryString}` : ''}`);
   },
 
   getById: async (id) => {
@@ -136,12 +131,7 @@ export const productAPI = {
       return mockAPI.getById(id);
     }
 
-    try {
-      return await api.get(`/products/${id}`);
-    } catch (error) {
-      console.log('🔄 API failed, falling back to mock data:', error.message);
-      return mockAPI.getById(id);
-    }
+    return await api.get(`/products/${id}`);
   },
 
   create: async (productData) => {
@@ -245,23 +235,13 @@ export const orderAPI = {
 // For easy migration from mockapi
 
 export const fetchProducts = async () => {
-  try {
-    const response = await productAPI.getAll();
-    return response.data || [];
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    throw error;
-  }
+  const response = await productAPI.getAll();
+  return response.data || [];
 };
 
 export const fetchProductById = async (id) => {
-  try {
-    const response = await productAPI.getById(id);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching product ${id}:`, error);
-    throw error;
-  }
+  const response = await productAPI.getById(id);
+  return response.data;
 };
 
 export default api;
