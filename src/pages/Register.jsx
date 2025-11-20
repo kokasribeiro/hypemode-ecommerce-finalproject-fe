@@ -9,7 +9,7 @@ import ButtonPrimary from '../components/features/ButtonPrimary';
 import SEO from '../components/SEO';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { useShakeAnimation } from '../hooks/useShakeAnimation';
-import { FORM_FIELDS, ERROR_MESSAGES } from '../data';
+import { FORM_FIELDS, ERROR_MESSAGES } from '../constants/validation';
 import { authAPI } from '../utils/api/apiService';
 import { useCart } from '../contexts/CartContext';
 import { toastError } from '../utils/toast';

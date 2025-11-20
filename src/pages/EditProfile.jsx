@@ -10,7 +10,7 @@ import AddressAutocomplete from '../components/features/AddressAutocomplete';
 import ButtonPrimary from '../components/features/ButtonPrimary';
 import SEO from '../components/SEO';
 import { useFormValidation } from '../hooks/useFormValidation';
-import { ERROR_MESSAGES } from '../data';
+import { ERROR_MESSAGES } from '../constants/validation';
 import { COUNTRIES } from '../data/countries';
 import { authAPI } from '../utils/api/apiService';
 

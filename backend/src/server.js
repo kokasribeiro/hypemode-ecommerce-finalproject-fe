@@ -23,9 +23,32 @@ const app = express();
 app.use(helmet());
 
 // CORS configuration
+const defaultOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:4173', // Vite preview
+  'http://127.0.0.1:4173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+];
+
+const allowedOrigins = [process.env.FRONTEND_URL, ...defaultOrigins].filter(Boolean);
+
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL || 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
+    origin: (origin, callback) => {
+      // Allow non-browser clients (like Postman) or same-origin requests
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin) || (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost'))) {
+        return callback(null, true);
+      }
+
+      console.warn(`🚫 CORS blocked request from origin: ${origin}`);
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   }),
 );
