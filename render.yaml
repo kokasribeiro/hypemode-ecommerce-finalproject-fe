@@ -3,8 +3,9 @@ services:
     name: hypemode-backend
     env: node
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    rootDir: backend
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -13,15 +14,25 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: DB_HOST
-        sync: false
+        fromDatabase:
+          name: hypemode-mysql
+          property: host
       - key: DB_PORT
-        value: 3306
+        fromDatabase:
+          name: hypemode-mysql
+          property: port
       - key: DB_USER
-        sync: false
+        fromDatabase:
+          name: hypemode-mysql
+          property: user
       - key: DB_PASSWORD
-        sync: false
+        fromDatabase:
+          name: hypemode-mysql
+          property: password
       - key: DB_NAME
-        sync: false
+        fromDatabase:
+          name: hypemode-mysql
+          property: database
       - key: FRONTEND_URL
         value: https://hypemode-ecommerce-finalproject-fe.vercel.app
 
