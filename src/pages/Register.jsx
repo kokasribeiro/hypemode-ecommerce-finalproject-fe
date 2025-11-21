@@ -131,14 +131,22 @@ export default function Register() {
       // Extract detailed error message
       let errorMessage = 'Failed to create account. Please try again.';
 
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
+      const responseData = error.response?.data;
+
+      if (responseData?.error?.details?.length) {
+        errorMessage = responseData.error.details.map((detail) => `${detail.field}: ${detail.message}`).join('\n');
+        console.log('📝 Using response.data.error.details:', errorMessage);
+      } else if (responseData?.message) {
+        errorMessage = responseData.message;
         console.log('📝 Using response.data.message:', errorMessage);
+      } else if (responseData?.error?.message) {
+        errorMessage = responseData.error.message;
+        console.log('📝 Using response.data.error.message:', errorMessage);
       } else if (error.message) {
         errorMessage = error.message;
         console.log('📝 Using error.message:', errorMessage);
-      } else if (error.response?.data) {
-        errorMessage = JSON.stringify(error.response.data);
+      } else if (responseData) {
+        errorMessage = JSON.stringify(responseData);
         console.log('📝 Using response.data as string:', errorMessage);
       }
 
