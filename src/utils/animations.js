@@ -1,4 +1,4 @@
-// Animation Utilities
+
 export const createFlyToCartAnimation = (sourceElement, productImage, onComplete) => {
   if (!sourceElement) return;
 

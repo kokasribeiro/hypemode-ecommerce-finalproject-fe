@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export const useProductFilters = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const shouldClearFilters = searchParams.get('clearFilters') === 'true';
 
   const initialCategories = () => {
@@ -91,14 +92,17 @@ export const useProductFilters = () => {
     setShowSaleOnly(false);
     setSortOption('recent');
     setPriceRange({ min: 5, max: 200 });
-  }, []);
+    
+    // Clear URL params
+    navigate('/products', { replace: true });
+  }, [navigate]);
 
   const filterAndSortProducts = useCallback(
     (products) => {
       return products
         .filter((product) => {
           const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category);
-          const saleMatch = !showSaleOnly || product.sale;
+          const saleMatch = !showSaleOnly || product.sale || product.discount;
           const priceMatch = product.price >= priceRange.min && product.price <= priceRange.max;
           return categoryMatch && saleMatch && priceMatch;
         })
