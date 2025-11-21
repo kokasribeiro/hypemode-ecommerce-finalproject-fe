@@ -79,7 +79,7 @@ export const authAPI = {
   register: async (userData) => {
     try {
       console.log('🚀 API Service - Register attempt:', userData);
-      
+
       // Use mock data if in production without backend
       if (useMockData) {
         console.log('⚠️ Using mock registration (no backend configured)');
@@ -89,11 +89,11 @@ export const authAPI = {
           email: userData.email,
         };
         const mockToken = 'mock-jwt-token-' + Date.now();
-        
+
         localStorage.setItem('token', mockToken);
         localStorage.setItem('user', JSON.stringify(mockUser));
         window.dispatchEvent(new Event('userChanged'));
-        
+
         return {
           success: true,
           data: {
@@ -102,7 +102,7 @@ export const authAPI = {
           },
         };
       }
-      
+
       const response = await api.post('/auth/register', userData);
       console.log('📡 API Service - Register response:', response);
 
@@ -122,7 +122,7 @@ export const authAPI = {
       return response;
     } catch (error) {
       console.error('❌ Register API error:', error);
-      
+
       // Fallback to mock if backend fails
       if (useMockData || error.code === 'ERR_NETWORK') {
         console.log('⚠️ Backend unavailable, using mock registration');
@@ -132,11 +132,11 @@ export const authAPI = {
           email: userData.email,
         };
         const mockToken = 'mock-jwt-token-' + Date.now();
-        
+
         localStorage.setItem('token', mockToken);
         localStorage.setItem('user', JSON.stringify(mockUser));
         window.dispatchEvent(new Event('userChanged'));
-        
+
         return {
           success: true,
           data: {
@@ -145,7 +145,7 @@ export const authAPI = {
           },
         };
       }
-      
+
       throw error;
     }
   },
@@ -153,7 +153,7 @@ export const authAPI = {
   login: async (email, password, rememberMe = false) => {
     try {
       console.log('🔐 Login attempt:', { email, rememberMe });
-      
+
       // Use mock data if in production without backend
       if (useMockData) {
         console.log('⚠️ Using mock authentication (no backend configured)');
@@ -163,11 +163,11 @@ export const authAPI = {
           email: email,
         };
         const mockToken = 'mock-jwt-token-' + Date.now();
-        
+
         localStorage.setItem('token', mockToken);
         localStorage.setItem('user', JSON.stringify(mockUser));
         window.dispatchEvent(new Event('userChanged'));
-        
+
         return {
           success: true,
           data: {
@@ -176,7 +176,7 @@ export const authAPI = {
           },
         };
       }
-      
+
       const response = await api.post('/auth/login', { email, password, rememberMe });
 
       console.log('📡 Login response:', response);
@@ -222,7 +222,7 @@ export const authAPI = {
       return response;
     } catch (error) {
       console.error('❌ Login API error:', error);
-      
+
       // Fallback to mock if backend fails
       if (useMockData || error.code === 'ERR_NETWORK') {
         console.log('⚠️ Backend unavailable, using mock authentication');
@@ -232,11 +232,11 @@ export const authAPI = {
           email: email,
         };
         const mockToken = 'mock-jwt-token-' + Date.now();
-        
+
         localStorage.setItem('token', mockToken);
         localStorage.setItem('user', JSON.stringify(mockUser));
         window.dispatchEvent(new Event('userChanged'));
-        
+
         return {
           success: true,
           data: {
@@ -245,7 +245,7 @@ export const authAPI = {
           },
         };
       }
-      
+
       throw error;
     }
   },
