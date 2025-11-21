@@ -1,8 +1,3 @@
-/**
- * Users Repository Interface
- * Defines the contract for user data access
- * Following Repository Pattern from Clean Architecture
- */
 export class UsersRepository {
   async findById(id) {
     throw new Error('Method findById() must be implemented');

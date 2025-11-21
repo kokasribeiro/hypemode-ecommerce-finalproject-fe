@@ -1,10 +1,5 @@
 import { ResourceNotFoundError } from './errors/resource-not-found-error.js';
 
-/**
- * Get Product Use Case
- * Handles fetching a single product by ID
- * Following Single Responsibility Principle
- */
 export class GetProductUseCase {
   constructor(productsRepository) {
     this.productsRepository = productsRepository;

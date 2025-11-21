@@ -1,8 +1,3 @@
-/**
- * Get Products Use Case
- * Handles fetching products with filters and pagination
- * Following Single Responsibility Principle
- */
 export class GetProductsUseCase {
   constructor(productsRepository) {
     this.productsRepository = productsRepository;

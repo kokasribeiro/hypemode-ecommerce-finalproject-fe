@@ -3,9 +3,6 @@ import { makeGetProductsUseCase } from '../use-cases/factories/make-get-products
 import { makeGetProductUseCase } from '../use-cases/factories/make-get-product-use-case.js';
 import { ResourceNotFoundError } from '../use-cases/errors/resource-not-found-error.js';
 
-// @desc    Get all products with filters
-// @route   GET /api/products
-// @access  Public
 export const getProducts = async (req, res, next) => {
   try {
     const {
@@ -22,7 +19,6 @@ export const getProducts = async (req, res, next) => {
       sort = '-createdAt',
     } = req.query;
 
-    // Parse sort parameter
     let sortField = 'createdAt';
     let sortOrder = 'DESC';
     if (sort.startsWith('-')) {
@@ -33,7 +29,6 @@ export const getProducts = async (req, res, next) => {
       sortOrder = 'ASC';
     }
 
-    // Use GetProductsUseCase following Clean Architecture
     const getProductsUseCase = makeGetProductsUseCase();
     const { products, pagination } = await getProductsUseCase.execute({
       category,
@@ -68,12 +63,8 @@ export const getProducts = async (req, res, next) => {
   }
 };
 
-// @desc    Get single product
-// @route   GET /api/products/:id
-// @access  Public
 export const getProduct = async (req, res, next) => {
   try {
-    // Use GetProductUseCase following Clean Architecture
     const getProductUseCase = makeGetProductUseCase();
     const product = await getProductUseCase.execute(req.params.id);
 
@@ -103,9 +94,6 @@ export const getProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Create product (Admin only)
-// @route   POST /api/products
-// @access  Private/Admin
 export const createProduct = async (req, res, next) => {
   try {
     const getProductsUseCase = makeGetProductsUseCase();
@@ -120,9 +108,6 @@ export const createProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Update product (Admin only)
-// @route   PUT /api/products/:id
-// @access  Private/Admin
 export const updateProduct = async (req, res, next) => {
   try {
     const getProductsUseCase = makeGetProductsUseCase();
@@ -144,9 +129,6 @@ export const updateProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Delete product (Admin only)
-// @route   DELETE /api/products/:id
-// @access  Private/Admin
 export const deleteProduct = async (req, res, next) => {
   try {
     const getProductsUseCase = makeGetProductsUseCase();

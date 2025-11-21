@@ -1,10 +1,6 @@
 import { User } from '../../models/index.js';
 import { UsersRepository } from '../users-repository.js';
 
-/**
- * Sequelize implementation of UsersRepository
- * Handles all database operations for users using Sequelize ORM
- */
 export class SequelizeUsersRepository extends UsersRepository {
   async findById(id) {
     const user = await User.findByPk(id, {

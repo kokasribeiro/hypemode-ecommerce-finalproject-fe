@@ -5,14 +5,10 @@ import { makeAuthenticateUseCase } from '../use-cases/factories/make-authenticat
 import { UserAlreadyExistsError } from '../use-cases/errors/user-already-exists-error.js';
 import { InvalidCredentialsError } from '../use-cases/errors/invalid-credentials-error.js';
 
-// @desc    Register new user
-// @route   POST /api/auth/register
-// @access  Public
 export const register = async (req, res, next) => {
   const { name, email, password, phone, address, city, postalCode, country } = req.body;
 
   try {
-    // Use RegisterUseCase following Clean Architecture
     const registerUseCase = makeRegisterUseCase();
     const { user, token } = await registerUseCase.execute({
       name,
@@ -57,14 +53,10 @@ export const register = async (req, res, next) => {
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
 export const login = async (req, res, next) => {
   const { email, password, rememberMe } = req.body;
 
   try {
-    // Use AuthenticateUseCase following Clean Architecture
     const authenticateUseCase = makeAuthenticateUseCase();
     const { user, token } = await authenticateUseCase.execute({
       email,
@@ -104,9 +96,6 @@ export const login = async (req, res, next) => {
   }
 };
 
-// @desc    Get current logged in user
-// @route   GET /api/auth/me
-// @access  Private
 export const getMe = async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id, {
@@ -122,9 +111,6 @@ export const getMe = async (req, res, next) => {
   }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/auth/profile
-// @access  Private
 export const updateProfile = async (req, res, next) => {
   try {
     const { name, email, phone, address, city, postalCode, country } = req.body;
