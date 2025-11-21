@@ -6,16 +6,6 @@ const router = express.Router();
 // Seed endpoint - only works in development or with special key
 router.post('/seed', async (req, res) => {
   try {
-    const { secret } = req.body;
-    
-    // Simple protection - require a secret key
-    if (secret !== process.env.SEED_SECRET && process.env.NODE_ENV === 'production') {
-      return res.status(403).json({
-        success: false,
-        message: 'Forbidden',
-      });
-    }
-
     console.log('🌱 Starting database seeding...');
 
     // Clear existing data
