@@ -13,31 +13,33 @@ services:
         value: 3000
       - key: JWT_SECRET
         generateValue: true
+      - key: DB_DIALECT
+        value: postgres
       - key: DB_HOST
         fromDatabase:
-          name: hypemode-mysql
+          name: hypemode-postgres
           property: host
       - key: DB_PORT
         fromDatabase:
-          name: hypemode-mysql
+          name: hypemode-postgres
           property: port
       - key: DB_NAME
         fromDatabase:
-          name: hypemode-mysql
+          name: hypemode-postgres
           property: database
       - key: DB_USER
         fromDatabase:
-          name: hypemode-mysql
+          name: hypemode-postgres
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: hypemode-mysql
+          name: hypemode-postgres
           property: password
       - key: FRONTEND_URL
         value: https://hypemode-ecommerce-finalproject-fe.vercel.app
 
 databases:
-  - name: hypemode-mysql
+  - name: hypemode-postgres
     plan: free
     databaseName: hypemode_ecommerce
     user: hypemode_user
