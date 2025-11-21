@@ -4,8 +4,30 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Use DATABASE_URL if available (Render provides this automatically)
-const sequelize = process.env.DATABASE_URL
-  ? new Sequelize(process.env.DATABASE_URL, {
+let sequelize;
+
+if (process.env.DATABASE_URL) {
+  // Parse DATABASE_URL and force MySQL dialect
+  const databaseUrl = process.env.DATABASE_URL.replace(/^postgres:/, 'mysql:');
+  sequelize = new Sequelize(databaseUrl, {
+    dialect: 'mysql',
+    dialectModule: require('mysql2'),
+    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+  });
+} else {
+  sequelize = new Sequelize(
+    process.env.DB_NAME || 'hypemode_ecommerce',
+    process.env.DB_USER || 'root',
+    process.env.DB_PASSWORD || '',
+    {
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 3306,
       dialect: 'mysql',
       logging: process.env.NODE_ENV === 'development' ? console.log : false,
       pool: {
@@ -14,24 +36,9 @@ const sequelize = process.env.DATABASE_URL
         acquire: 30000,
         idle: 10000,
       },
-    })
-  : new Sequelize(
-      process.env.DB_NAME || 'hypemode_ecommerce',
-      process.env.DB_USER || 'root',
-      process.env.DB_PASSWORD || '',
-      {
-        host: process.env.DB_HOST || 'localhost',
-        port: process.env.DB_PORT || 3306,
-        dialect: 'mysql',
-        logging: process.env.NODE_ENV === 'development' ? console.log : false,
-        pool: {
-          max: 5,
-          min: 0,
-          acquire: 30000,
-          idle: 10000,
-        },
-      },
-    );
+    },
+  );
+}
 
 export const testConnection = async () => {
   try {
