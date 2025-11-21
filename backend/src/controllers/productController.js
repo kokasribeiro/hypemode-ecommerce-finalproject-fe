@@ -1,6 +1,7 @@
-import { Product } from '../models/index.js';
-import { Op } from 'sequelize';
 import { formatResponse } from '../utils/hateoas.js';
+import { makeGetProductsUseCase } from '../use-cases/factories/make-get-products-use-case.js';
+import { makeGetProductUseCase } from '../use-cases/factories/make-get-product-use-case.js';
+import { ResourceNotFoundError } from '../use-cases/errors/resource-not-found-error.js';
 
 // @desc    Get all products with filters
 // @route   GET /api/products
@@ -21,71 +22,45 @@ export const getProducts = async (req, res, next) => {
       sort = '-createdAt',
     } = req.query;
 
-    // Build filter conditions
-    const where = { active: true };
-
-    if (category) {
-      where.category = category;
-    }
-
-    if (search) {
-      where[Op.or] = [{ name: { [Op.like]: `%${search}%` } }, { description: { [Op.like]: `%${search}%` } }];
-    }
-
-    if (minPrice || maxPrice) {
-      where.price = {};
-      if (minPrice) where.price[Op.gte] = minPrice;
-      if (maxPrice) where.price[Op.lte] = maxPrice;
-    }
-
-    if (discount === 'true') {
-      where.discount = true;
-    }
-
-    if (featured === 'true') {
-      where.featured = true;
-    }
-
-    if (newArrival === 'true') {
-      where.newArrival = true;
-    }
-
-    if (bestSeller === 'true') {
-      where.bestSeller = true;
-    }
-
-    // Sorting
-    let order = [];
+    // Parse sort parameter
+    let sortField = 'createdAt';
+    let sortOrder = 'DESC';
     if (sort.startsWith('-')) {
-      order.push([sort.substring(1), 'DESC']);
+      sortField = sort.substring(1);
+      sortOrder = 'DESC';
     } else {
-      order.push([sort, 'ASC']);
+      sortField = sort;
+      sortOrder = 'ASC';
     }
 
-    // Pagination
-    const offset = (page - 1) * limit;
-
-    const { count, rows: products } = await Product.findAndCountAll({
-      where,
-      order,
-      limit: parseInt(limit),
-      offset: parseInt(offset),
+    // Use GetProductsUseCase following Clean Architecture
+    const getProductsUseCase = makeGetProductsUseCase();
+    const { products, pagination } = await getProductsUseCase.execute({
+      category,
+      search,
+      minPrice,
+      maxPrice,
+      discount: discount === 'true' ? true : undefined,
+      featured: featured === 'true' ? true : undefined,
+      newArrival: newArrival === 'true' ? true : undefined,
+      bestSeller: bestSeller === 'true' ? true : undefined,
+      page,
+      limit,
+      sort: sortField,
+      order: sortOrder,
     });
-
-    const totalPages = Math.ceil(count / limit);
-    const currentPage = parseInt(page);
 
     const response = formatResponse(req, products, 'products', {
-      page: currentPage,
-      totalPages,
-      limit: parseInt(limit),
+      page: pagination.page,
+      totalPages: pagination.pages,
+      limit: pagination.limit,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      count,
-      totalPages,
-      currentPage,
+      count: pagination.total,
+      totalPages: pagination.pages,
+      currentPage: pagination.page,
       ...response,
     });
   } catch (error) {
@@ -98,14 +73,9 @@ export const getProducts = async (req, res, next) => {
 // @access  Public
 export const getProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByPk(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: 'Product not found',
-      });
-    }
+    // Use GetProductUseCase following Clean Architecture
+    const getProductUseCase = makeGetProductUseCase();
+    const product = await getProductUseCase.execute(req.params.id);
 
     const response = formatResponse(req, product, 'products', {
       id: product.id,
@@ -118,11 +88,17 @@ export const getProduct = async (req, res, next) => {
       },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       ...response,
     });
   } catch (error) {
+    if (error instanceof ResourceNotFoundError) {
+      return res.status(404).json({
+        success: false,
+        message: error.message,
+      });
+    }
     next(error);
   }
 };
@@ -132,9 +108,10 @@ export const getProduct = async (req, res, next) => {
 // @access  Private/Admin
 export const createProduct = async (req, res, next) => {
   try {
-    const product = await Product.create(req.body);
+    const getProductsUseCase = makeGetProductsUseCase();
+    const product = await getProductsUseCase.productsRepository.create(req.body);
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       data: product,
     });
@@ -148,7 +125,8 @@ export const createProduct = async (req, res, next) => {
 // @access  Private/Admin
 export const updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByPk(req.params.id);
+    const getProductsUseCase = makeGetProductsUseCase();
+    const product = await getProductsUseCase.productsRepository.update(req.params.id, req.body);
 
     if (!product) {
       return res.status(404).json({
@@ -157,9 +135,7 @@ export const updateProduct = async (req, res, next) => {
       });
     }
 
-    await product.update(req.body);
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: product,
     });
@@ -173,7 +149,8 @@ export const updateProduct = async (req, res, next) => {
 // @access  Private/Admin
 export const deleteProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByPk(req.params.id);
+    const getProductsUseCase = makeGetProductsUseCase();
+    const product = await getProductsUseCase.productsRepository.delete(req.params.id);
 
     if (!product) {
       return res.status(404).json({
@@ -182,9 +159,7 @@ export const deleteProduct = async (req, res, next) => {
       });
     }
 
-    await product.destroy();
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Product deleted successfully',
     });
