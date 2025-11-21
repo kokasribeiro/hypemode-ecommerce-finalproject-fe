@@ -1,4 +1,3 @@
-
 export const shuffleArray = (array) => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -18,7 +17,7 @@ export const sortByRating = (products) => {
 };
 
 export const getSaleProducts = (products) => {
-  return products.filter((product) => product.sale);
+  return products.filter((product) => product.sale || product.discount);
 };
 
 export const capitalizeWords = (str) => {

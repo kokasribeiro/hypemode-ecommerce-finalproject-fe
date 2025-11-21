@@ -72,7 +72,7 @@ const SizeSelector = ({ sizes, selectedSize, onSizeToggle }) => (
 );
 
 const PriceDisplay = ({ product, titleWhite }) => {
-  if (product.sale) {
+  if (product.sale || product.discount) {
     const salePrice = calculateSalePrice(product.price, product.id);
     return (
       <div className='flex items-center space-x-2'>
@@ -133,7 +133,7 @@ const ProductCard = ({ className, product, titleWhite }) => {
             className='w-full h-72 object-cover cursor-pointer transition-transform duration-500 ease-in-out hover:scale-110'
             onClick={handleProductClick}
           />
-          {product.sale && (
+          {(product.sale || product.discount) && (
             <div className='absolute top-0 right-0 bg-red-600 border border-black p-1 m-2'>
               <p className='text-white text-sm font-bold'>ON SALE</p>
             </div>
