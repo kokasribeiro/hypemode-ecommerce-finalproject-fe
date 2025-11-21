@@ -70,7 +70,6 @@ export default function EditProfile() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Validate single field
     if (value) {
       validateSingleField(name, value, formData);
     }
@@ -90,7 +89,6 @@ export default function EditProfile() {
     try {
       console.log('🚀 Updating profile with data:', formData);
 
-      // Update profile via backend API
       const response = await authAPI.updateProfile(formData);
 
       console.log('📡 Update profile response:', response);
@@ -98,7 +96,6 @@ export default function EditProfile() {
       if (response.success) {
         console.log('✅ Profile updated successfully:', response.data);
 
-        // Update localStorage with new data
         const updatedUser = response.data;
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);

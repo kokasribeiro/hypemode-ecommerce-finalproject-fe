@@ -12,19 +12,16 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const isAuthenticated = authAPI.isAuthenticated();
 
-  // Load cart on mount
   useEffect(() => {
     loadCart();
   }, []);
 
-  // Load cart from backend or localStorage
+  // Load cart from backend (if authenticated) or localStorage
   const loadCart = async () => {
     try {
       if (isAuthenticated) {
-        // Load from backend if logged in
         const response = await cartAPI.get();
         const backendCart = response.data || [];
-        // Transform backend cart to match frontend format
         const transformedCart = backendCart.map((item) => ({
           id: item.Product.id,
           name: item.Product.name,
@@ -39,13 +36,11 @@ export const CartProvider = ({ children }) => {
         }));
         setCart(transformedCart);
       } else {
-        // Load from localStorage if not logged in
         const savedCart = localStorage.getItem('cart');
         setCart(savedCart ? JSON.parse(savedCart) : []);
       }
     } catch (error) {
       console.error('Error loading cart:', error);
-      // Fallback to localStorage
       const savedCart = localStorage.getItem('cart');
       setCart(savedCart ? JSON.parse(savedCart) : []);
     } finally {
@@ -53,7 +48,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Save to localStorage for non-authenticated users
   useEffect(() => {
     if (!isAuthenticated && !loading) {
       try {
@@ -67,12 +61,9 @@ export const CartProvider = ({ children }) => {
   const addToCart = async (product, selectedSize) => {
     try {
       if (isAuthenticated) {
-        // Add to backend
         await cartAPI.add(product.id, 1, selectedSize, null);
-        // Reload cart from backend
         await loadCart();
       } else {
-        // Add to localStorage
         setCart((currentCart) => {
           const existingItemIndex = currentCart.findIndex(
             (item) => item.id === product.id && item.selectedSize === selectedSize,
@@ -92,7 +83,6 @@ export const CartProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
-      // Fallback to localStorage
       setCart((currentCart) => {
         const existingItemIndex = currentCart.findIndex(
           (item) => item.id === product.id && item.selectedSize === selectedSize,

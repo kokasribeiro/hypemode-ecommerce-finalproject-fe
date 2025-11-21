@@ -3,12 +3,10 @@ import { mockAPI } from './mockData.js';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-// Check if we're in production and no backend URL is set
 const isProduction = import.meta.env.PROD;
 const hasBackendURL = import.meta.env.VITE_API_URL;
 const useMockData = isProduction && !hasBackendURL;
 
-// Debug logging
 console.log('🔍 API Debug:', {
   isProduction,
   hasBackendURL,
@@ -16,7 +14,6 @@ console.log('🔍 API Debug:', {
   API_BASE_URL,
 });
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -24,7 +21,7 @@ const api = axios.create({
   },
 });
 
-// Monitor localStorage changes for debugging
+// Token management: Automatically adds JWT token to all API requests
 if (typeof window !== 'undefined') {
   const originalSetItem = localStorage.setItem;
   const originalRemoveItem = localStorage.removeItem;
@@ -45,8 +42,6 @@ if (typeof window !== 'undefined') {
     originalRemoveItem.apply(this, arguments);
   };
 }
-
-// Add token to requests if available
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -63,7 +58,7 @@ api.interceptors.request.use(
   },
 );
 
-// Handle response errors
+// Response interceptor: Handles 401 errors and clears auth data
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
@@ -72,21 +67,13 @@ api.interceptors.response.use(
     console.log('🔍 Error response data:', error.response?.data);
 
     if (error.response?.status === 401) {
-      // Token expired or invalid
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      // Redirect to login if needed
-      if (window.location.pathname !== '/login') {
-        // window.location.href = '/login';
-      }
     }
 
-    // Return the full error object so we can access response.data
     return Promise.reject(error);
   },
 );
-
-// ==================== AUTH ENDPOINTS ====================
 
 export const authAPI = {
   register: async (userData) => {
@@ -95,7 +82,7 @@ export const authAPI = {
       const response = await api.post('/auth/register', userData);
       console.log('📡 API Service - Register response:', response);
 
-      // The interceptor returns response.data, so response IS the backend response
+      // Save user authentication data to localStorage
       if (response && response.data && response.data.token && response.data.user) {
         const token = response.data.token;
         const user = response.data.user;
@@ -106,7 +93,6 @@ export const authAPI = {
         console.log('✅ Register - Token saved:', localStorage.getItem('token') ? 'YES' : 'NO');
         console.log('✅ Register - User saved:', localStorage.getItem('user') ? 'YES' : 'NO');
 
-        // Dispatch custom event to notify components that user registered/logged in
         window.dispatchEvent(new Event('userChanged'));
       }
       return response;
@@ -125,8 +111,7 @@ export const authAPI = {
       console.log('📡 response.success:', response.success);
       console.log('📡 response.data:', response.data);
 
-      // The interceptor returns response.data, so response IS the backend response
-      // Backend returns: { success: true, data: { user, token } }
+      // Save JWT token and user data to localStorage for persistent authentication
       if (response && response.success && response.data && response.data.token && response.data.user) {
         const token = response.data.token;
         const user = response.data.user;
@@ -134,18 +119,14 @@ export const authAPI = {
         console.log('💾 SAVING TOKEN:', token.substring(0, 30) + '...');
         console.log('💾 SAVING USER:', user.email);
 
-        // Clear any existing data first
         localStorage.removeItem('token');
         localStorage.removeItem('user');
 
-        // Save to localStorage SYNCHRONOUSLY
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
 
-        // Force a small delay to ensure write completes
         await new Promise((resolve) => setTimeout(resolve, 50));
 
-        // Verify it was saved
         const savedToken = localStorage.getItem('token');
         const savedUser = localStorage.getItem('user');
 
@@ -156,7 +137,6 @@ export const authAPI = {
           console.log('✅✅✅ LOGIN SUCCESSFUL - Token and user CONFIRMED saved!');
           console.log('🔑 Saved token:', savedToken.substring(0, 40) + '...');
 
-          // Dispatch custom event to notify components (like Navbar) that user logged in
           window.dispatchEvent(new Event('userChanged'));
         } else {
           console.error('❌ FAILED to save to localStorage!');

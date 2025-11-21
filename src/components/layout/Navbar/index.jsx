@@ -40,7 +40,6 @@ export default function Navbar() {
     loadProducts();
   }, []);
 
-  // Check if user is logged in
   useEffect(() => {
     const checkUser = () => {
       const token = localStorage.getItem('token');
@@ -60,13 +59,9 @@ export default function Navbar() {
       }
     };
 
-    // Check on mount
     checkUser();
 
-    // Listen for storage changes (when user logs in/out in another tab or after login)
     window.addEventListener('storage', checkUser);
-    
-    // Custom event for same-tab login/logout
     window.addEventListener('userChanged', checkUser);
 
     return () => {

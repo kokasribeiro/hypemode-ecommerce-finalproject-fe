@@ -14,7 +14,6 @@ const Footer = () => {
 
     checkAuth();
 
-    // Listen for auth changes
     window.addEventListener('userChanged', checkAuth);
     return () => window.removeEventListener('userChanged', checkAuth);
   }, []);

@@ -14,7 +14,6 @@ export default function Checkout() {
   const [orderId, setOrderId] = useState(null);
 
   const [formData, setFormData] = useState({
-    // Shipping Information
     fullName: '',
     email: '',
     phone: '',
@@ -23,20 +22,17 @@ export default function Checkout() {
     postalCode: '',
     country: '',
 
-    // Payment Information
     cardNumber: '',
     cardName: '',
     expiryDate: '',
     cvv: '',
 
-    // Additional
     notes: '',
   });
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // Check if user is logged in
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
 
@@ -66,7 +62,6 @@ export default function Checkout() {
   }, [navigate]);
 
   useEffect(() => {
-    // Redirect if cart is empty
     if (cart.length === 0 && !orderComplete) {
       navigate('/cart');
     }

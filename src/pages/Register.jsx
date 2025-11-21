@@ -68,7 +68,6 @@ export default function Register() {
     if (!isValid) {
       console.log('❌ Validation errors:', validationErrors);
 
-      // Show specific error messages
       const errorMessages = Object.entries(validationErrors)
         .filter(([_, error]) => error)
         .map(([field, error]) => `${field}: ${error}`)
@@ -93,7 +92,6 @@ export default function Register() {
         username: formData.username,
       });
 
-      // Register via backend API
       const response = await authAPI.register({
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
@@ -112,7 +110,6 @@ export default function Register() {
       if (response.success) {
         console.log('✅ Registration successful:', response.data.user);
 
-        // Sincronizar carrinho do localStorage com o backend
         await syncCartOnLogin();
 
         setRegistrationSuccess(true);
@@ -128,7 +125,6 @@ export default function Register() {
       console.error('❌ Error response:', error.response);
       console.error('❌ Error message:', error.message);
 
-      // Extract detailed error message
       let errorMessage = 'Failed to create account. Please try again.';
 
       const responseData = error.response?.data;
@@ -150,7 +146,6 @@ export default function Register() {
         console.log('📝 Using response.data as string:', errorMessage);
       }
 
-      // Check for specific errors
       if (errorMessage.includes('already exists') || errorMessage.includes('Duplicate')) {
         errorMessage = 'This email is already registered. Please use another email or login.';
       }

@@ -57,13 +57,11 @@ export default function Login() {
     }
 
     try {
-      // Login via backend API (with rememberMe flag)
       const response = await authAPI.login(formData.email, formData.password, rememberMe);
 
       if (response.success) {
         console.log('✅ Login successful:', response.data.user);
 
-        // Wait a bit to ensure token is saved
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         const savedToken = localStorage.getItem('token');
@@ -74,7 +72,6 @@ export default function Login() {
         );
         console.log('🔍 User after login:', savedUser ? 'EXISTS' : 'MISSING');
 
-        // Save email if "Remember Me" is checked
         if (rememberMe) {
           localStorage.setItem('rememberedEmail', formData.email);
           localStorage.setItem('rememberMe', 'true');
@@ -84,7 +81,7 @@ export default function Login() {
           localStorage.removeItem('rememberMe');
         }
 
-        // Sincronizar carrinho do localStorage com o backend
+        // Sync local cart with backend after login
         if (savedToken) {
           console.log('🛒 Starting cart sync...');
           try {
@@ -92,7 +89,6 @@ export default function Login() {
             console.log('✅ Cart sync completed');
           } catch (error) {
             console.error('❌ Cart sync failed:', error);
-            // Don't block login if cart sync fails
           }
         } else {
           console.warn('⚠️ Skipping cart sync - no token found');

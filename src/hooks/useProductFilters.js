@@ -93,7 +93,6 @@ export const useProductFilters = () => {
     setSortOption('recent');
     setPriceRange({ min: 5, max: 200 });
     
-    // Clear URL params
     navigate('/products', { replace: true });
   }, [navigate]);
 
