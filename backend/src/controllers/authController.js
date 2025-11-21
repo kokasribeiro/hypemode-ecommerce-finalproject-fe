@@ -1,25 +1,20 @@
 import { User } from '../models/index.js';
-import generateToken from '../utils/generateToken.js';
 import { formatResponse } from '../utils/hateoas.js';
+import { makeRegisterUseCase } from '../use-cases/factories/make-register-use-case.js';
+import { makeAuthenticateUseCase } from '../use-cases/factories/make-authenticate-use-case.js';
+import { UserAlreadyExistsError } from '../use-cases/errors/user-already-exists-error.js';
+import { InvalidCredentialsError } from '../use-cases/errors/invalid-credentials-error.js';
 
 // @desc    Register new user
 // @route   POST /api/auth/register
 // @access  Public
 export const register = async (req, res, next) => {
+  const { name, email, password, phone, address, city, postalCode, country } = req.body;
+
   try {
-    const { name, email, password, phone, address, city, postalCode, country } = req.body;
-
-    // Check if user exists
-    const userExists = await User.findOne({ where: { email } });
-    if (userExists) {
-      return res.status(400).json({
-        success: false,
-        message: 'User already exists with this email',
-      });
-    }
-
-    // Create user
-    const user = await User.create({
+    // Use RegisterUseCase following Clean Architecture
+    const registerUseCase = makeRegisterUseCase();
+    const { user, token } = await registerUseCase.execute({
       name,
       email,
       password,
@@ -30,13 +25,7 @@ export const register = async (req, res, next) => {
       country,
     });
 
-    // Generate token
-    const token = generateToken(user.id);
-
-    const userData = {
-      user: user.toSafeObject(),
-      token,
-    };
+    const userData = { user, token };
 
     const response = formatResponse(req, userData, 'auth', {
       additionalActions: {
@@ -53,11 +42,17 @@ export const register = async (req, res, next) => {
       },
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       ...response,
     });
   } catch (error) {
+    if (error instanceof UserAlreadyExistsError) {
+      return res.status(409).json({
+        success: false,
+        message: error.message,
+      });
+    }
     next(error);
   }
 };
@@ -66,42 +61,18 @@ export const register = async (req, res, next) => {
 // @route   POST /api/auth/login
 // @access  Public
 export const login = async (req, res, next) => {
+  const { email, password, rememberMe } = req.body;
+
   try {
-    const { email, password, rememberMe } = req.body;
+    // Use AuthenticateUseCase following Clean Architecture
+    const authenticateUseCase = makeAuthenticateUseCase();
+    const { user, token } = await authenticateUseCase.execute({
+      email,
+      password,
+      rememberMe,
+    });
 
-    // Validate input
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide email and password',
-      });
-    }
-
-    // Check for user
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Your username or password are wrong, try again',
-      });
-    }
-
-    // Check password
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(401).json({
-        success: false,
-        message: 'Your username or password are wrong, try again',
-      });
-    }
-
-    // Generate token (30 days if rememberMe, otherwise 7 days)
-    const token = generateToken(user.id, rememberMe);
-
-    const userData = {
-      user: user.toSafeObject(),
-      token,
-    };
+    const userData = { user, token };
 
     const response = formatResponse(req, userData, 'auth', {
       additionalActions: {
@@ -118,11 +89,17 @@ export const login = async (req, res, next) => {
       },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       ...response,
     });
   } catch (error) {
+    if (error instanceof InvalidCredentialsError) {
+      return res.status(401).json({
+        success: false,
+        message: error.message,
+      });
+    }
     next(error);
   }
 };
