@@ -77,7 +77,7 @@ export const BENEFITS_DATA = [
   },
   {
     title: 'Free Delivery',
-    subtitle: 'For all order over 80$',
+    subtitle: 'For all order over 80€',
     icon: 'truck',
   },
 ];
