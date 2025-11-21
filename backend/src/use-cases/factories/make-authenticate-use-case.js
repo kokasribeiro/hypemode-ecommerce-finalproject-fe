@@ -1,4 +1,4 @@
-import { SequelizeUsersRepository } from '../../repositories/sequelize/sequelize-users-repository.js';
+import { SequelizeUsersRepository } from '../../lib/sequelize/sequelize-users-repository.js';
 import { AuthenticateUseCase } from '../authenticate-use-case.js';
 
 export function makeAuthenticateUseCase() {

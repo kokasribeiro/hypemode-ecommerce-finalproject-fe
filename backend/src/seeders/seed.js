@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import sequelize, { testConnection, syncDatabase } from '../config/database.js';
-import { User, Product } from '../models/index.js';
+import sequelize, { testConnection, syncDatabase } from '../lib/sequelize/database.js';
+import { User, Product } from '../lib/sequelize/index.js';
 import bcrypt from 'bcryptjs';
 
 dotenv.config();

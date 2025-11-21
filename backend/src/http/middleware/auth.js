@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models/index.js';
+import { User } from '../../lib/sequelize/index.js';
 
 export const protect = async (req, res, next) => {
   try {
@@ -18,8 +18,9 @@ export const protect = async (req, res, next) => {
     }
 
     try {
-      // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      // Verify token - use same secret as generateToken
+      const jwtSecret = process.env.JWT_SECRET || 'dev-secret-key';
+      const decoded = jwt.verify(token, jwtSecret);
 
       // Get user from token
       req.user = await User.findByPk(decoded.id, {
@@ -35,6 +36,7 @@ export const protect = async (req, res, next) => {
 
       next();
     } catch (error) {
+      console.error('Token verification error:', error.message);
       return res.status(401).json({
         success: false,
         message: 'Token is not valid',

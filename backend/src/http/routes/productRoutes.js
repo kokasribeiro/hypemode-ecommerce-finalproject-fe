@@ -13,7 +13,7 @@ import {
   updateProductSchema,
   productQuerySchema,
   idParamSchema,
-} from '../schemas/validationSchemas.js';
+} from '../../schemas/validationSchemas.js';
 
 const router = express.Router();
 

@@ -63,6 +63,17 @@ export default function Login() {
       if (response.success) {
         console.log('✅ Login successful:', response.data.user);
 
+        // Wait a bit to ensure token is saved
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        const savedToken = localStorage.getItem('token');
+        const savedUser = localStorage.getItem('user');
+        console.log(
+          '🔍 Token after login:',
+          savedToken ? 'EXISTS (' + savedToken.substring(0, 20) + '...)' : 'MISSING',
+        );
+        console.log('🔍 User after login:', savedUser ? 'EXISTS' : 'MISSING');
+
         // Save email if "Remember Me" is checked
         if (rememberMe) {
           localStorage.setItem('rememberedEmail', formData.email);
@@ -74,10 +85,31 @@ export default function Login() {
         }
 
         // Sincronizar carrinho do localStorage com o backend
-        await syncCartOnLogin();
+        if (savedToken) {
+          console.log('🛒 Starting cart sync...');
+          try {
+            await syncCartOnLogin();
+            console.log('✅ Cart sync completed');
+          } catch (error) {
+            console.error('❌ Cart sync failed:', error);
+            // Don't block login if cart sync fails
+          }
+        } else {
+          console.warn('⚠️ Skipping cart sync - no token found');
+        }
 
-        // Show success and navigate
-        toastLoginSuccess(navigate);
+        // Final check before navigation
+        const finalToken = localStorage.getItem('token');
+        const finalUser = localStorage.getItem('user');
+
+        if (finalToken && finalUser) {
+          console.log('🎉 READY TO NAVIGATE - Token confirmed:', finalToken.substring(0, 20) + '...');
+          // Show success and navigate
+          toastLoginSuccess(navigate);
+        } else {
+          console.error('❌ CANNOT NAVIGATE - Token missing!');
+          toastError('Login failed - please try again');
+        }
       } else {
         toastError(response.message || 'Login failed');
       }

@@ -42,18 +42,37 @@ export default function Navbar() {
 
   // Check if user is logged in
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
+    const checkUser = () => {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
 
-    if (token && userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+      if (token && userData) {
+        try {
+          setUser(JSON.parse(userData));
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setUser(null);
+        }
+      } else {
+        setUser(null);
       }
-    }
+    };
+
+    // Check on mount
+    checkUser();
+
+    // Listen for storage changes (when user logs in/out in another tab or after login)
+    window.addEventListener('storage', checkUser);
+    
+    // Custom event for same-tab login/logout
+    window.addEventListener('userChanged', checkUser);
+
+    return () => {
+      window.removeEventListener('storage', checkUser);
+      window.removeEventListener('userChanged', checkUser);
+    };
   }, []);
 
   useEffect(() => {
@@ -236,7 +255,7 @@ export default function Navbar() {
                                   />
                                   <div className='flex-1 min-w-0'>
                                     <p className='text-sm font-medium text-gray-900 truncate'>{product.name}</p>
-                                    <p className='text-sm text-gray-500'>${product.price}</p>
+                                    <p className='text-sm text-gray-500'>{product.price} €</p>
                                   </div>
                                 </div>
                               ))}

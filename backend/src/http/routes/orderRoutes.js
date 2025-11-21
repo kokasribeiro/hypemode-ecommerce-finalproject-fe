@@ -10,7 +10,7 @@ import {
 } from '../controllers/orderController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { validateBody, validateParams, sanitizeInput } from '../middleware/validation.js';
-import { createOrderSchema, idParamSchema } from '../schemas/validationSchemas.js';
+import { createOrderSchema, idParamSchema } from '../../schemas/validationSchemas.js';
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
-import { Product } from '../../models/index.js';
-import { ProductsRepository } from '../products-repository.js';
+import { Product } from './index.js';
+import { ProductsRepository } from '../../repositories/products-repository.js';
 import { Op } from 'sequelize';
 
 export class SequelizeProductsRepository extends ProductsRepository {

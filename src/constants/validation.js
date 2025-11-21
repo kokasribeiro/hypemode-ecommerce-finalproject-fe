@@ -2,7 +2,7 @@
 export const VALIDATION = {
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   PASSWORD_UPPERCASE_REGEX: /[A-Z]/,
-  PASSWORD_SPECIAL_CHAR_REGEX: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/,
+  PASSWORD_SPECIAL_CHAR_REGEX: /[@$!%*?&#.]/,
   MIN_PASSWORD_LENGTH: 8,
   MIN_AGE_REQUIREMENT: 16,
 };

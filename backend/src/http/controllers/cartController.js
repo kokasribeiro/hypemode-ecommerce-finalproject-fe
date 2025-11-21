@@ -1,4 +1,4 @@
-import { Cart, Product } from '../models/index.js';
+import { Cart, Product } from '../../lib/sequelize/index.js';
 
 // @desc    Get user cart
 // @route   GET /api/cart

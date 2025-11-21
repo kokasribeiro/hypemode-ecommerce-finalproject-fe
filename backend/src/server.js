@@ -3,15 +3,14 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import sequelize, { testConnection, syncDatabase } from './config/database.js';
-import errorHandler from './middleware/errorHandler.js';
-import { generalLimiter, authLimiter, adminLimiter, cartLimiter } from './middleware/rateLimiter.js';
+import sequelize, { testConnection, syncDatabase } from './lib/sequelize/database.js';
+import errorHandler from './http/middleware/errorHandler.js';
+import { generalLimiter, authLimiter, adminLimiter, cartLimiter } from './http/middleware/rateLimiter.js';
 
-// Import routes
-import authRoutes from './routes/authRoutes.js';
-import productRoutes from './routes/productRoutes.js';
-import cartRoutes from './routes/cartRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';
+import authRoutes from './http/routes/authRoutes.js';
+import productRoutes from './http/routes/productRoutes.js';
+import cartRoutes from './http/routes/cartRoutes.js';
+import orderRoutes from './http/routes/orderRoutes.js';
 
 // Load environment variables
 dotenv.config();

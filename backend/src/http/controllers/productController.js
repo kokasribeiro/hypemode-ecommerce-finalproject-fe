@@ -1,7 +1,7 @@
-import { formatResponse } from '../utils/hateoas.js';
-import { makeGetProductsUseCase } from '../use-cases/factories/make-get-products-use-case.js';
-import { makeGetProductUseCase } from '../use-cases/factories/make-get-product-use-case.js';
-import { ResourceNotFoundError } from '../use-cases/errors/resource-not-found-error.js';
+import { formatResponse } from '../../utils/hateoas.js';
+import { makeGetProductsUseCase } from '../../use-cases/factories/make-get-products-use-case.js';
+import { makeGetProductUseCase } from '../../use-cases/factories/make-get-product-use-case.js';
+import { ResourceNotFoundError } from '../../use-cases/errors/resource-not-found-error.js';
 
 export const getProducts = async (req, res, next) => {
   try {

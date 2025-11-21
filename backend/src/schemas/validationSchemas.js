@@ -1,18 +1,14 @@
 import { z } from 'zod';
 
-const isProduction = process.env.NODE_ENV === 'production';
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
-const passwordMessage = 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character';
-
-const withPasswordRules = (schema) => {
-  return isProduction ? schema.regex(passwordRegex, passwordMessage) : schema;
-};
-
 // User validation schemas
 export const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Name must be less than 50 characters'),
   email: z.string().email('Invalid email format'),
-  password: withPasswordRules(z.string().min(8, 'Password must be at least 8 characters')),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one uppercase letter')
+    .refine((val) => /[@$!%*?&#.]/.test(val), 'Password must contain at least one special character'),
   phone: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
@@ -43,7 +39,11 @@ export const updateProfileSchema = z.object({
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, 'Current password is required'),
-    newPassword: withPasswordRules(z.string().min(8, 'Password must be at least 8 characters')),
+    newPassword: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .refine((val) => /[A-Z]/.test(val), 'Password must contain at least one uppercase letter')
+      .refine((val) => /[@$!%*?&#.]/.test(val), 'Password must contain at least one special character'),
     confirmPassword: z.string().min(1, 'Password confirmation is required'),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {

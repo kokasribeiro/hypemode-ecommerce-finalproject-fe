@@ -2,7 +2,7 @@ import express from 'express';
 import { getCart, addToCart, updateCartItem, removeFromCart, clearCart } from '../controllers/cartController.js';
 import { protect } from '../middleware/auth.js';
 import { validateBody, validateParams, sanitizeInput } from '../middleware/validation.js';
-import { addToCartSchema, updateCartItemSchema, idParamSchema } from '../schemas/validationSchemas.js';
+import { addToCartSchema, updateCartItemSchema, idParamSchema } from '../../schemas/validationSchemas.js';
 
 const router = express.Router();
 

@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LayoutContainer from '../LayoutContainer';
 
 const Footer = () => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem('token');
+      setIsLoggedIn(!!token);
+    };
+
+    checkAuth();
+
+    // Listen for auth changes
+    window.addEventListener('userChanged', checkAuth);
+    return () => window.removeEventListener('userChanged', checkAuth);
+  }, []);
 
   const handleMyAccountClick = () => {
-    navigate('/login');
+    if (isLoggedIn) {
+      navigate('/profile');
+    } else {
+      navigate('/login');
+    }
   };
 
   const handleMyCartClick = () => {

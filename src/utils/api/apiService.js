@@ -24,12 +24,37 @@ const api = axios.create({
   },
 });
 
+// Monitor localStorage changes for debugging
+if (typeof window !== 'undefined') {
+  const originalSetItem = localStorage.setItem;
+  const originalRemoveItem = localStorage.removeItem;
+
+  localStorage.setItem = function (key, value) {
+    if (key === 'token') {
+      console.log('📝 localStorage.setItem("token"):', value.substring(0, 30) + '...');
+      console.trace('Set token from:');
+    }
+    originalSetItem.apply(this, arguments);
+  };
+
+  localStorage.removeItem = function (key) {
+    if (key === 'token') {
+      console.warn('🗑️ localStorage.removeItem("token") called!');
+      console.trace('Remove token from:');
+    }
+    originalRemoveItem.apply(this, arguments);
+  };
+}
+
 // Add token to requests if available
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('🔑 Token added to request:', config.url, '- Token:', token.substring(0, 20) + '...');
+    } else {
+      console.log('⚠️ No token found for request:', config.url);
     }
     return config;
   },
@@ -65,28 +90,95 @@ api.interceptors.response.use(
 
 export const authAPI = {
   register: async (userData) => {
-    console.log('🚀 API Service - Register attempt:', userData);
-    const response = await api.post('/auth/register', userData);
-    console.log('📡 API Service - Register response:', response);
-    if (response.data?.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    try {
+      console.log('🚀 API Service - Register attempt:', userData);
+      const response = await api.post('/auth/register', userData);
+      console.log('📡 API Service - Register response:', response);
+
+      // The interceptor returns response.data, so response IS the backend response
+      if (response && response.data && response.data.token && response.data.user) {
+        const token = response.data.token;
+        const user = response.data.user;
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+
+        console.log('✅ Register - Token saved:', localStorage.getItem('token') ? 'YES' : 'NO');
+        console.log('✅ Register - User saved:', localStorage.getItem('user') ? 'YES' : 'NO');
+
+        // Dispatch custom event to notify components that user registered/logged in
+        window.dispatchEvent(new Event('userChanged'));
+      }
+      return response;
+    } catch (error) {
+      console.error('❌ Register API error:', error);
+      throw error;
     }
-    return response;
   },
 
   login: async (email, password, rememberMe = false) => {
-    const response = await api.post('/auth/login', { email, password, rememberMe });
-    if (response.data?.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    try {
+      console.log('🔐 Login attempt:', { email, rememberMe });
+      const response = await api.post('/auth/login', { email, password, rememberMe });
+
+      console.log('📡 Login response:', response);
+      console.log('📡 response.success:', response.success);
+      console.log('📡 response.data:', response.data);
+
+      // The interceptor returns response.data, so response IS the backend response
+      // Backend returns: { success: true, data: { user, token } }
+      if (response && response.success && response.data && response.data.token && response.data.user) {
+        const token = response.data.token;
+        const user = response.data.user;
+
+        console.log('💾 SAVING TOKEN:', token.substring(0, 30) + '...');
+        console.log('💾 SAVING USER:', user.email);
+
+        // Clear any existing data first
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        // Save to localStorage SYNCHRONOUSLY
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+
+        // Force a small delay to ensure write completes
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        // Verify it was saved
+        const savedToken = localStorage.getItem('token');
+        const savedUser = localStorage.getItem('user');
+
+        console.log('✅ Token saved?', savedToken === token ? 'YES ✓' : 'NO ✗');
+        console.log('✅ User saved?', savedUser ? 'YES ✓' : 'NO ✗');
+
+        if (savedToken === token && savedUser) {
+          console.log('✅✅✅ LOGIN SUCCESSFUL - Token and user CONFIRMED saved!');
+          console.log('🔑 Saved token:', savedToken.substring(0, 40) + '...');
+
+          // Dispatch custom event to notify components (like Navbar) that user logged in
+          window.dispatchEvent(new Event('userChanged'));
+        } else {
+          console.error('❌ FAILED to save to localStorage!');
+          console.error('Expected token:', token.substring(0, 40));
+          console.error('Saved token:', savedToken ? savedToken.substring(0, 40) : 'NULL');
+        }
+      } else {
+        console.error('❌ Invalid response structure:', response);
+      }
+
+      return response;
+    } catch (error) {
+      console.error('❌ Login API error:', error);
+      throw error;
     }
-    return response;
   },
 
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    // Dispatch custom event to notify components that user logged out
+    window.dispatchEvent(new Event('userChanged'));
   },
 
   getMe: async () => {
@@ -95,6 +187,10 @@ export const authAPI = {
 
   updateProfile: async (profileData) => {
     return await api.put('/auth/profile', profileData);
+  },
+
+  changePassword: async (passwordData) => {
+    return await api.put('/auth/change-password', passwordData);
   },
 
   getCurrentUser: () => {

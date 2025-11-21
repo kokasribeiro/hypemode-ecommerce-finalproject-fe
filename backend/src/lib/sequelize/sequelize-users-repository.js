@@ -1,5 +1,5 @@
-import { User } from '../../models/index.js';
-import { UsersRepository } from '../users-repository.js';
+import { User } from './index.js';
+import { UsersRepository } from '../../repositories/users-repository.js';
 
 export class SequelizeUsersRepository extends UsersRepository {
   async findById(id) {

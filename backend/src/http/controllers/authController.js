@@ -1,9 +1,10 @@
-import { User } from '../models/index.js';
-import { formatResponse } from '../utils/hateoas.js';
-import { makeRegisterUseCase } from '../use-cases/factories/make-register-use-case.js';
-import { makeAuthenticateUseCase } from '../use-cases/factories/make-authenticate-use-case.js';
-import { UserAlreadyExistsError } from '../use-cases/errors/user-already-exists-error.js';
-import { InvalidCredentialsError } from '../use-cases/errors/invalid-credentials-error.js';
+import { User } from '../../lib/sequelize/index.js';
+import { formatResponse } from '../../utils/hateoas.js';
+import { makeRegisterUseCase } from '../../use-cases/factories/make-register-use-case.js';
+import { makeAuthenticateUseCase } from '../../use-cases/factories/make-authenticate-use-case.js';
+import { UserAlreadyExistsError } from '../../use-cases/errors/user-already-exists-error.js';
+import { InvalidCredentialsError } from '../../use-cases/errors/invalid-credentials-error.js';
+import bcrypt from 'bcryptjs';
 
 export const register = async (req, res, next) => {
   const { name, email, password, phone, address, city, postalCode, country } = req.body;
@@ -140,6 +141,41 @@ export const updateProfile = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: user.toSafeObject(),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect',
+      });
+    }
+
+    // Don't hash here - the beforeUpdate hook in the User model will do it
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password changed successfully',
     });
   } catch (error) {
     next(error);
