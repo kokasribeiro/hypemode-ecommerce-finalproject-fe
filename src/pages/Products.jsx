@@ -14,7 +14,7 @@ import { useProductFilters } from '../hooks/useProductFilters';
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [displayCount, setDisplayCount] = useState(9);
+  const [displayCount, setDisplayCount] = useState(999);
 
   const {
     selectedCategories,

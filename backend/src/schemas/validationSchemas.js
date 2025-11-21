@@ -164,7 +164,7 @@ export const productQuerySchema = z.object({
     .optional(),
   limit: z
     .string()
-    .transform((val) => parseInt(val) || 20)
+    .transform((val) => parseInt(val) || 100)
     .optional(),
   sort: z.string().optional(),
 });

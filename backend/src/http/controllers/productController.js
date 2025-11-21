@@ -15,7 +15,7 @@ export const getProducts = async (req, res, next) => {
       newArrival,
       bestSeller,
       page = 1,
-      limit = 20,
+      limit = 100,
       sort = '-createdAt',
     } = req.query;
 
