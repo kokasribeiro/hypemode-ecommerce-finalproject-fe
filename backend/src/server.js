@@ -11,6 +11,7 @@ import authRoutes from './http/routes/authRoutes.js';
 import productRoutes from './http/routes/productRoutes.js';
 import cartRoutes from './http/routes/cartRoutes.js';
 import orderRoutes from './http/routes/orderRoutes.js';
+import seedRoutes from './http/routes/seedRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -79,6 +80,7 @@ app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartLimiter, cartRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api', seedRoutes);
 
 // 404 handler
 app.use((req, res) => {
