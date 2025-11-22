@@ -153,12 +153,15 @@ cd ..
 npm run dev  # Roda na porta 5173
 ```
 
-**Credenciais de teste após seed:**
+**Credenciais de teste:**
 
-- Admin: `admin@hypemode.com` / `Admin123!`
-- User: `john@example.com` / `User123!`
+- **Admin:** `admin@hypemode.com` / `Admin123!`
+- **User:** `toni@gmail.com` / `Ton12345.`
+- **Test:** `test@test.com` / `Test123!`
 
-📖 **Guia detalhado:** `backend/SETUP.md`
+📖 **Guia detalhado:** `backend/SETUP.md`  
+📚 **Guia para Professor:** `PROFESSOR_README.md`  
+⚡ **Teste Rápido:** `QUICK_TEST.md`
 
 ## Estrutura de Pastas
 
@@ -200,15 +203,23 @@ hypemode-ecommerce-finalproject-fe/
 
 - **[Documentação da API Backend](./backend/README.md)** - Endpoints, autenticação, exemplos
 - **[Setup do Backend](./backend/SETUP.md)** - Guia passo a passo de instalação
-- **[Exemplos Práticos](./backend/EXEMPLOS_API.md)** - Como usar a API
+- **[Arquitetura do Backend](./backend/ARCHITECTURE.md)** - Clean Architecture e padrões utilizados
 
-## 🎯 Próximos Passos
+## 🧪 Status de Testes
 
-1. **Testar a API Backend** - Siga o guia em `backend/SETUP.md`
-2. **Explorar os Endpoints** - Veja a documentação em `backend/README.md`
-3. **Adicionar Produtos** - Use as credenciais de admin para gerenciar produtos
-4. **Implementar Pagamentos** - Configure o Stripe (opcional)
-5. **Criar Interface Admin** - Desenvolva um painel de administração
+### **✅ Testado e Funcionando (Localhost)**
+
+- ✅ Backend rodando em `http://localhost:3000`
+- ✅ Frontend rodando em `http://localhost:5173`
+- ✅ 30 produtos carregados no MySQL
+- ✅ Login/Registro funcionando
+- ✅ Carrinho persistente
+- ✅ Filtros e busca
+- ✅ Checkout completo
+- ✅ Perfil de usuário
+- ✅ Mudança de senha
+
+---
 
 ## 🛠️ Tecnologias
 
@@ -233,44 +244,3 @@ hypemode-ecommerce-finalproject-fe/
 - Validação de inputs
 - Proteção contra SQL injection
 - CORS configurado
-
-## 🚀 Deployment para Vercel
-
-### Frontend (Vercel)
-
-1. **Push seu código para GitHub:**
-
-   ```bash
-   git add .
-   git commit -m "Ready for deployment"
-   git push origin main
-   ```
-
-2. **Configurar no Vercel:**
-
-   - Vá para [vercel.com](https://vercel.com)
-   - Importe seu repositório do GitHub
-   - Configure as variáveis de ambiente:
-     - `VITE_API_URL` = URL do seu backend (ex: `https://your-backend.com/api`)
-   - Deploy!
-
-3. **Variáveis de Ambiente Necessárias:**
-   ```
-   VITE_API_URL=https://your-backend-api.com/api
-   ```
-
-### Backend (Recomendações)
-
-Para o backend, você pode usar:
-
-- **Railway** (recomendado para MySQL)
-- **Render**
-- **Heroku**
-- **AWS EC2**
-- **DigitalOcean**
-
-**Importante:** Certifique-se de que o backend está acessível publicamente e configure o CORS para permitir requisições do domínio do Vercel.
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT.
